@@ -58,7 +58,7 @@ const TripGeniePreview = () => {
               <Button 
                 variant="heritage" 
                 size="lg" 
-                className="group shadow-glow hover:shadow-strong"
+                className="group mt-5 shadow-glow hover:shadow-strong"
               >
                 <Bot className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform" />
                 Chat with Trip Genie

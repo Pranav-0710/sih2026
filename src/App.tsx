@@ -21,6 +21,12 @@ import Transport from "./pages/Transport";
 import NotFound from "./pages/NotFound";
 import GenzCorner from "./pages/GenzCorner";
 import sosIcon from "@/assets/sos.png";
+import Explore from "./pages/Explore";
+import Weather from "./pages/Weather";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Cookies from "./pages/Cookies";
+import Profile from "./pages/Profile";
 
 import AdminRoute from "./components/AdminRoute";
 
@@ -67,6 +73,12 @@ const MainLayout = () => {
         <Route path="/transport" element={<Transport />} />
         <Route path="/funscapes" element={<ArVrExperience />} />
         <Route path="/genzcorner" element={<GenzCorner />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/weather" element={<Weather />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/cookies" element={<Cookies />} />
+        <Route path="/profile" element={<Profile />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

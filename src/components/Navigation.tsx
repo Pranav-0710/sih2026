@@ -39,13 +39,13 @@ export function Navigation() {
   ).filter(item => !item.adminOnly || (item.adminOnly && role === 'admin'));
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm">
       <div className="container flex h-14 items-center">
         <Link to="/" className="mr-6 flex items-center space-x-2">
           <div className="bg-gradient-hero p-2 rounded-lg shadow-soft">
             <MapPin className="h-6 w-6 text-white" />
           </div>
-          <span className="hidden font-bold sm:inline-block">Smart Tourism</span>
+          <span className="font-bold">Smart Tourism</span>
         </Link>
 
         {isMobile ? (
@@ -132,10 +132,10 @@ export function Navigation() {
                     ) : (
                       <Button
                         variant="default"
-                        onClick={() => navigate('/auth')}
+                        asChild
                         className="w-full"
                       >
-                        Get Started
+                        <Link to="/auth">Get Started</Link>
                       </Button>
                     )}
                   </div>
@@ -220,7 +220,9 @@ export function Navigation() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">Profile</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

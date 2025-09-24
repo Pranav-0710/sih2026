@@ -11,6 +11,9 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
+  updateUser: (data: any) => Promise<any>;
+  updateUserEmail: (email: string) => Promise<any>;
+  reauthenticate: () => Promise<any>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -21,6 +24,9 @@ export const AuthContext = createContext<AuthContextType>({
   signUp: async () => ({ error: null }),
   signIn: async () => ({ error: null }),
   signOut: async () => {},
+  updateUser: async () => ({ error: null }),
+  updateUserEmail: async () => ({ error: null }),
+  reauthenticate: async () => ({ error: null }),
 });
 
 export const useAuth = () => {
@@ -147,6 +153,21 @@ export const useAuthState = () => {
     }
   };
 
+  const updateUser = async (data: any) => {
+    const { error } = await supabase.auth.updateUser(data);
+    return { error };
+  };
+
+  const updateUserEmail = async (email: string) => {
+    const { error } = await supabase.auth.updateUser({ email });
+    return { error };
+  };
+
+  const reauthenticate = async () => {
+    const { error } = await supabase.auth.reauthenticate();
+    return { error };
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -177,5 +198,8 @@ export const useAuthState = () => {
     signUp,
     signIn,
     signOut,
+    updateUser,
+    updateUserEmail,
+    reauthenticate,
   };
 };

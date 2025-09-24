@@ -215,7 +215,7 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
             <p className="mt-4 text-center text-sm text-muted-foreground">
-              Admin users can access additional features after logging in.
+              
             </p>
           </CardContent>
         </Card>
