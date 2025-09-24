@@ -1,408 +1,407 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, Users, MapPin, Clock, IndianRupee, Star } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import Navigation from '@/components/Navigation';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ethers } from "ethers";
 
-interface TravelPackage {
-  id: string;
+// --- TYPE DEFINITIONS ---
+interface Package {
+  id: number;
   title: string;
-  description: string;
-  category: string;
-  duration_days: number;
+  provider: "Goibibo" | "MakeMyTrip" | "Yatra" | "Cleartrip";
   price: number;
-  max_participants: number;
-  includes: any;
-  difficulty_level: string;
-  is_active: boolean;
-  rating: number;
-  review_count: number;
-  profiles: {
-    full_name: string | null;
-  } | null;
+  description: string;
+  image: string;
+  bookingLink: string;
 }
 
-interface UserBooking {
-  id: string;
-  booking_date: string;
-  participants: number;
-  total_amount: number;
-  status: string;
-  travel_packages: {
-    title: string;
-    duration_days: number;
-  };
-}
+// --- MOCK DATA ---
+const travelPackages: Package[] = [
+  {
+    id: 1,
+    title: "Ranchi Heritage Tour – 3 Days",
+    provider: "Goibibo",
+    price: 15000,
+    description: "Explore the rich history of Ranchi with guided tours to its most iconic heritage sites.",
+    image: "/images/spots/jagannath.jpg",
+    bookingLink: "https://www.goibibo.com/hotels/hotels-in-ranchi-ct/",
+  },
+  {
+    id: 2,
+    title: "Netarhat Sunrise Escape – 2 Days",
+    provider: "MakeMyTrip",
+    price: 12000,
+    description: "Witness the breathtaking sunrise at Netarhat, the 'Queen of Chotanagpur'.",
+    image: "/images/spots/netarhat.jpg",
+    bookingLink: "https://www.makemytrip.com/hotels/netarhat-hotels.html",
+  },
+  {
+    id: 3,
+    title: "Betla National Park Safari – 4 Days",
+    provider: "Yatra",
+    price: 25000,
+    description: "An adventurous safari through the dense forests of Betla, home to diverse wildlife.",
+    image: "/images/spots/betla.jpg",
+    bookingLink: "https://www.yatra.com/hotels/hotels-in-betla-national-park",
+  },
+  {
+    id: 4,
+    title: "Deoghar Spiritual Journey – 3 Days",
+    provider: "Cleartrip",
+    price: 18000,
+    description: "A spiritual retreat to the sacred city of Deoghar, visiting Baidyanath Dham.",
+    image: "/images/spots/baidyanath.jpg",
+    bookingLink: "https://www.cleartrip.com/hotels/india/deoghar/",
+  },
+  {
+    id: 5,
+    title: "Hazaribagh Wildlife Sanctuary – 2 Days",
+    provider: "Goibibo",
+    price: 13000,
+    description: "Discover the serene beauty and wildlife of Hazaribagh Sanctuary.",
+    image: "/images/spots/hazaribagh.jpg",
+    bookingLink: "https://www.goibibo.com/hotels/hotels-in-hazaribagh-ct/",
+  },
+  {
+    id: 6,
+    title: "Dassam & Jonha Falls Tour – 1 Day",
+    provider: "MakeMyTrip",
+    price: 5000,
+    description: "A day trip to the stunning Dassam and Jonha waterfalls.",
+    image: "/images/spots/dassam.jpg",
+    bookingLink: "https://www.makemytrip.com/activities/india/ranchi/day-trip-to-jonha-and-dassam-falls-from-ranchi.html",
+  },
+  {
+    id: 7,
+    title: "Parasnath Hills Trek – 3 Days",
+    provider: "Yatra",
+    price: 20000,
+    description: "A challenging and rewarding trek to the sacred Parasnath Hills.",
+    image: "/images/spots/parasnath.jpg",
+    bookingLink: "https://www.yatra.com/india-tour-packages/parasnath-hills",
+  },
+  {
+    id: 8,
+    title: "Shikharji Jain Pilgrimage – 4 Days",
+    provider: "Cleartrip",
+    price: 22000,
+    description: "A pilgrimage to the holy site of Shikharji for the Jain community.",
+    image: "/images/spots/shikharji.jpg",
+    bookingLink: "https://www.cleartrip.com/hotels/india/shikharji/",
+  },
+  {
+    id: 9,
+    title: "Hundru Falls Adventure – 1 Day",
+    provider: "Goibibo",
+    price: 6000,
+    description: "Experience the majestic Hundru Falls and its surrounding natural beauty.",
+    image: "/images/spots/hundru.jpg",
+    bookingLink: "https://www.goibibo.com/destinations/ranchi/places-to-visit-in-ranchi/hundru-falls-13052347341/",
+  },
+  {
+    id: 10,
+    title: "Jagannath Temple Darshan – 2 Days",
+    provider: "MakeMyTrip",
+    price: 9000,
+    description: "A peaceful visit to the historic Jagannath Temple in Ranchi.",
+    image: "/images/spots/jagannath.jpg",
+    bookingLink: "https://www.makemytrip.com/hotels/ranchi-hotels.html",
+  },
+];
 
-const Bookings = () => {
-  const [packages, setPackages] = useState<TravelPackage[]>([]);
-  const [userBookings, setUserBookings] = useState<UserBooking[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPackage, setSelectedPackage] = useState<TravelPackage | null>(null);
-  const [bookingData, setBookingData] = useState({
-    date: '',
-    participants: 1,
-    phone: '',
-    requests: ''
-  });
-  const { user } = useAuth();
-  const { toast } = useToast();
+// --- HELPER COMPONENTS ---
 
-  useEffect(() => {
-    fetchPackages();
-    if (user) {
-      fetchUserBookings();
-    }
-  }, [user]);
-
-  const fetchPackages = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('travel_packages')
-        .select(`
-          *,
-          profiles (
-            full_name
-          )
-        `)
-        .eq('is_active', true)
-        .order('rating', { ascending: false });
-
-      if (error) throw error;
-      setPackages(data || []);
-    } catch (error) {
-      console.error('Error fetching packages:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load travel packages",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchUserBookings = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('bookings')
-        .select(`
-          *,
-          travel_packages (
-            title,
-            duration_days
-          )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setUserBookings(data || []);
-    } catch (error) {
-      console.error('Error fetching bookings:', error);
-    }
-  };
-
-  const handleBookPackage = async () => {
-    if (!user) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to book packages",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!selectedPackage || !bookingData.date) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const totalAmount = selectedPackage.price * bookingData.participants;
-
-      const { error } = await supabase
-        .from('bookings')
-        .insert([{
-          user_id: user.id,
-          package_id: selectedPackage.id,
-          booking_date: bookingData.date,
-          participants: bookingData.participants,
-          total_amount: totalAmount,
-          contact_phone: bookingData.phone,
-          special_requests: bookingData.requests || null,
-        }]);
-
-      if (error) throw error;
-
-      toast({
-        title: "Booking confirmed!",
-        description: "Your booking has been successfully created",
-      });
-
-      setSelectedPackage(null);
-      setBookingData({ date: '', participants: 1, phone: '', requests: '' });
-      fetchUserBookings();
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      toast({
-        title: "Booking failed",
-        description: "Failed to create booking. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      heritage: 'bg-amber-100 text-amber-800 border-amber-300',
-      nature: 'bg-green-100 text-green-800 border-green-300',
-      culture: 'bg-purple-100 text-purple-800 border-purple-300',
-      adventure: 'bg-red-100 text-red-800 border-red-300',
-      pilgrimage: 'bg-blue-100 text-blue-800 border-blue-300',
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-300';
-  };
-
-  const getStatusColor = (status: string) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      confirmed: 'bg-green-100 text-green-800 border-green-300',
-      completed: 'bg-blue-100 text-blue-800 border-blue-300',
-      cancelled: 'bg-red-100 text-red-800 border-red-300',
-    };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-300';
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
-          </div>
-        </div>
+const PackageCard = ({ packageInfo, onBook }: { packageInfo: Package; onBook: (pkg: Package) => void; }) => (
+  <motion.div
+    layout
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.8 }}
+    transition={{ duration: 0.3 }}
+    className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-1 transition-transform duration-300"
+  >
+    <img className="w-full h-48 object-cover" src={packageInfo.image} alt={packageInfo.title} />
+    <div className="p-6">
+      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{packageInfo.title}</h3>
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-sm font-semibold text-blue-500 dark:text-blue-400">{packageInfo.provider}</span>
+        <span className="text-lg font-bold text-green-600 dark:text-green-400">
+          ₹{packageInfo.price.toLocaleString("en-IN")}
+        </span>
       </div>
-    );
-  }
+      <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{packageInfo.description}</p>
+      <button
+        onClick={() => onBook(packageInfo)}
+        className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300"
+      >
+        Book Now
+      </button>
+    </div>
+  </motion.div>
+);
+
+const PaymentModal = ({
+  pkg,
+  onClose,
+  walletAddress,
+  connectWallet,
+}: {
+  pkg: Package | null;
+  onClose: () => void;
+  walletAddress: string | null;
+  connectWallet: () => Promise<void>;
+}) => {
+  const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const [txHash, setTxHash] = useState("");
+
+  if (!pkg) return null;
+
+  const handlePayment = async () => {
+    if (!walletAddress) {
+      alert("Please connect your wallet first.");
+      return;
+    }
+    try {
+      setPaymentStatus("processing");
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      
+      // Convert INR to a mock ETH value (e.g., 1 ETH = 2,50,000 INR for test)
+      const ethValue = (pkg.price / 250000).toFixed(6);
+      
+      const tx = await signer.sendTransaction({
+        to: "0x000000000000000000000000000000000000dEaD", // Replace with a recipient address
+        value: ethers.parseEther(ethValue),
+      });
+
+      await tx.wait();
+      setTxHash(tx.hash);
+      setPaymentStatus("success");
+
+      // Redirect after a short delay
+      setTimeout(() => {
+        window.open(pkg.bookingLink, "_blank");
+        onClose();
+      }, 3000);
+
+    } catch (error) {
+      console.error("Payment failed:", error);
+      setPaymentStatus("error");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Travel Packages */}
-          <div className="lg:col-span-2">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-foreground mb-2">Travel Packages</h1>
-              <p className="text-muted-foreground">
-                Discover curated experiences crafted by local experts
-              </p>
-            </div>
-
-            <div className="grid gap-6">
-              {packages.map((pkg) => (
-                <Card key={pkg.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge className={getCategoryColor(pkg.category)}>
-                            {pkg.category}
-                          </Badge>
-                          <Badge variant="outline">{pkg.difficulty_level}</Badge>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-primary">₹{pkg.price}</div>
-                        <div className="text-sm text-muted-foreground">per person</div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">{pkg.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>{pkg.duration_days} days</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-primary" />
-                        <span>Max {pkg.max_participants} people</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Star className="h-4 w-4 text-primary" />
-                        <span>{pkg.rating}/5 ({pkg.review_count} reviews)</span>
-                      </div>
-                      {pkg.profiles && (
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-primary" />
-                          <span>by {pkg.profiles.full_name}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {Array.isArray(pkg.includes) && pkg.includes.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold text-sm mb-2">Includes:</h4>
-                        <ul className="text-sm text-muted-foreground space-y-1">
-                          {pkg.includes.slice(0, 3).map((item: string, index: number) => (
-                            <li key={index}>• {item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button 
-                          variant="heritage" 
-                          className="w-full"
-                          onClick={() => setSelectedPackage(pkg)}
-                        >
-                          Book Now
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Book {pkg.title}</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor="date">Travel Date</Label>
-                              <Input
-                                id="date"
-                                type="date"
-                                value={bookingData.date}
-                                onChange={(e) => setBookingData(prev => ({...prev, date: e.target.value}))}
-                                min={new Date().toISOString().split('T')[0]}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="participants">Participants</Label>
-                              <Input
-                                id="participants"
-                                type="number"
-                                min="1"
-                                max={pkg.max_participants}
-                                value={bookingData.participants}
-                                onChange={(e) => setBookingData(prev => ({...prev, participants: parseInt(e.target.value) || 1}))}
-                              />
-                            </div>
-                          </div>
-                          
-                          <div>
-                            <Label htmlFor="phone">Contact Phone</Label>
-                            <Input
-                              id="phone"
-                              type="tel"
-                              placeholder="Your phone number"
-                              value={bookingData.phone}
-                              onChange={(e) => setBookingData(prev => ({...prev, phone: e.target.value}))}
-                            />
-                          </div>
-                          
-                          <div>
-                            <Label htmlFor="requests">Special Requests (Optional)</Label>
-                            <Input
-                              id="requests"
-                              placeholder="Any special requirements..."
-                              value={bookingData.requests}
-                              onChange={(e) => setBookingData(prev => ({...prev, requests: e.target.value}))}
-                            />
-                          </div>
-                          
-                          <div className="bg-accent p-4 rounded-lg">
-                            <div className="flex justify-between items-center font-semibold">
-                              <span>Total Amount:</span>
-                              <span>₹{pkg.price * bookingData.participants}</span>
-                            </div>
-                          </div>
-                          
-                          <Button onClick={handleBookPackage} className="w-full" variant="heritage">
-                            Confirm Booking
-                          </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 50, opacity: 0 }}
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md m-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Confirm Booking</h2>
+          <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{pkg.title}</h3>
+            <p className="text-gray-500 dark:text-gray-400">{pkg.provider}</p>
+            <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">
+              ₹{pkg.price.toLocaleString("en-IN")}
+            </p>
           </div>
 
-          {/* User Bookings Sidebar */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Bookings</CardTitle>
-                <CardDescription>Manage your travel plans</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {user ? (
-                  userBookings.length > 0 ? (
-                    <div className="space-y-4">
-                      {userBookings.map((booking) => (
-                        <div key={booking.id} className="border rounded-lg p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-sm">{booking.travel_packages.title}</h4>
-                            <Badge className={getStatusColor(booking.status)}>
-                              {booking.status}
-                            </Badge>
-                          </div>
-                          <div className="text-sm text-muted-foreground space-y-1">
-                            <div className="flex items-center gap-2">
-                              <Calendar className="h-3 w-3" />
-                              {new Date(booking.booking_date).toLocaleDateString()}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Users className="h-3 w-3" />
-                              {booking.participants} participants
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <IndianRupee className="h-3 w-3" />
-                              ₹{booking.total_amount}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground text-center py-4">
-                      No bookings yet. Book your first adventure!
+          <div className="space-y-4">
+            {paymentStatus === "idle" && (
+              <>
+                {walletAddress ? (
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      Connected: {`${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}`}
                     </p>
-                  )
+                    <button
+                      onClick={handlePayment}
+                      className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                    >
+                      Pay with Crypto
+                    </button>
+                  </div>
                 ) : (
-                  <p className="text-muted-foreground text-center py-4">
-                    Sign in to view your bookings
-                  </p>
+                  <button
+                    onClick={connectWallet}
+                    className="w-full bg-yellow-500 text-black py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
+                  >
+                    Connect Wallet
+                  </button>
                 )}
-              </CardContent>
-            </Card>
+              </>
+            )}
+
+            {paymentStatus === "processing" && (
+              <div className="text-center">
+                <p className="text-blue-500">Processing payment...</p>
+                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mt-2"></div>
+              </div>
+            )}
+
+            {paymentStatus === "success" && (
+              <div className="text-center text-green-500">
+                <p className="font-semibold">Payment Successful!</p>
+                <p className="text-xs break-all">Tx: {txHash}</p>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">Redirecting to {pkg.provider}...</p>
+              </div>
+            )}
+
+            {paymentStatus === "error" && (
+              <div className="text-center text-red-500">
+                <p className="font-semibold">Payment Failed</p>
+                <p className="text-sm">Please try again or check your wallet.</p>
+                <button
+                  onClick={() => setPaymentStatus("idle")}
+                  className="mt-2 px-4 py-1 bg-gray-200 dark:bg-gray-700 rounded-md text-sm"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
           </div>
-        </div>
-      </div>
-    </div>
+          <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
-export default Bookings;
+
+// --- MAIN COMPONENT ---
+export default function Bookings() {
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "">("");
+  const [filterProvider, setFilterProvider] = useState<string>("");
+  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum === "undefined") {
+      alert("MetaMask is not installed. Please install it to use this feature.");
+      return;
+    }
+    try {
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      setWalletAddress(accounts[0]);
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+      alert("Failed to connect wallet. Please check the console for details.");
+    }
+  };
+
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", (accounts: string[]) => {
+        if (accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+        } else {
+          setWalletAddress(null);
+        }
+      });
+    }
+  }, []);
+
+  const handleBookNow = (pkg: Package) => {
+    setSelectedPackage(pkg);
+  };
+
+  const closeModal = () => {
+    setSelectedPackage(null);
+  };
+
+  const filteredAndSortedPackages = useMemo(() => {
+    let result = [...travelPackages];
+
+    if (filterProvider) {
+      result = result.filter((p) => p.provider === filterProvider);
+    }
+
+    if (sortOrder) {
+      result.sort((a, b) =>
+        sortOrder === "asc" ? a.price - b.price : b.price - a.price
+      );
+    }
+
+    return result;
+  }, [sortOrder, filterProvider]);
+
+  const providers = useMemo(() => [...new Set(travelPackages.map(p => p.provider))], []);
+
+  return (
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <header className="bg-white dark:bg-gray-800 shadow-md py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Journey Hub: Jharkhand</h1>
+          <p className="mt-1 text-lg text-gray-600 dark:text-gray-300">Curated travel packages for your next adventure.</p>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Filter and Sort Bar */}
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-8 flex flex-col sm:flex-row gap-4 items-center">
+          <div className="flex-1 w-full sm:w-auto">
+            <label htmlFor="sort-price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Sort by Price
+            </label>
+            <select
+              id="sort-price"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc" | "")}
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="">Default</option>
+              <option value="asc">Low to High</option>
+              <option value="desc">High to Low</option>
+            </select>
+          </div>
+          <div className="flex-1 w-full sm:w-auto">
+            <label htmlFor="filter-provider" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Filter by Provider
+            </label>
+            <select
+              id="filter-provider"
+              value={filterProvider}
+              onChange={(e) => setFilterProvider(e.target.value)}
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="">All Providers</option>
+              {providers.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Packages Grid */}
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence>
+            {filteredAndSortedPackages.map((pkg) => (
+              <PackageCard key={pkg.id} packageInfo={pkg} onBook={handleBookNow} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </main>
+
+      {/* Payment Modal */}
+      <AnimatePresence>
+        {selectedPackage && (
+          <PaymentModal
+            pkg={selectedPackage}
+            onClose={closeModal}
+            walletAddress={walletAddress}
+            connectWallet={connectWallet}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
