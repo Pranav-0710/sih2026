@@ -1,0 +1,268 @@
+
+.genz-corner-theme {
+  --background: oklch(0.98 0.01 120); /* Light green-tinted white */
+  --foreground: oklch(0.15 0.02 40); /* Deep brown-black */
+  --card: oklch(0.96 0.02 120); /* Light card with green tint */
+  --card-foreground: oklch(0.2 0.02 40);
+  --popover: oklch(0.98 0.01 120);
+  --popover-foreground: oklch(0.15 0.02 40);
+  --primary: oklch(0.55 0.2 140); /* Forest green */
+  --primary-foreground: oklch(0.98 0.01 120);
+  --secondary: oklch(0.65 0.25 60); /* Terracotta orange */
+  --secondary-foreground: oklch(0.98 0.01 120);
+  --muted: oklch(0.92 0.02 120);
+  --muted-foreground: oklch(0.5 0.02 40);
+  --accent: oklch(0.7 0.2 80); /* Golden yellow */
+  --accent-foreground: oklch(0.15 0.02 40);
+  --destructive: oklch(0.65 0.25 15); /* Bright red */
+  --destructive-foreground: oklch(0.98 0.01 120);
+  --border: oklch(0.88 0.02 120);
+  --input: oklch(0.96 0.01 120);
+  --ring: oklch(0.55 0.2 140 / 0.3);
+  --chart-1: oklch(0.55 0.2 140); /* Forest green */
+  --chart-2: oklch(0.65 0.25 60); /* Terracotta */
+  --chart-3: oklch(0.7 0.2 80); /* Golden */
+  --chart-4: oklch(0.45 0.15 40); /* Earth brown */
+  --chart-5: oklch(0.6 0.18 160); /* Sage green */
+  --radius: 1rem;
+
+  /* Added Jharkhand-specific earthy Gen Z color variables */
+  --jharkhand-forest: oklch(0.55 0.2 140);
+  --jharkhand-terracotta: oklch(0.65 0.25 60);
+  --jharkhand-gold: oklch(0.7 0.2 80);
+  --jharkhand-earth: oklch(0.45 0.15 40);
+  --jharkhand-sage: oklch(0.6 0.18 160);
+  --jharkhand-stone: oklch(0.75 0.05 40);
+  --pastel-forest: oklch(0.85 0.1 140);
+  --pastel-terracotta: oklch(0.9 0.12 60);
+  --pastel-gold: oklch(0.92 0.1 80);
+  --pastel-earth: oklch(0.88 0.08 40);
+}
+
+.dark .genz-corner-theme {
+  /* Dark mode with earthy tones */
+  --background: oklch(0.12 0.02 40);
+  --foreground: oklch(0.92 0.01 50);
+  --card: oklch(0.16 0.02 40);
+  --card-foreground: oklch(0.92 0.01 50);
+  --popover: oklch(0.12 0.02 40);
+  --popover-foreground: oklch(0.92 0.01 50);
+  --primary: oklch(0.55 0.15 140);
+  --primary-foreground: oklch(0.12 0.02 40);
+  --secondary: oklch(0.65 0.12 25);
+  --secondary-foreground: oklch(0.12 0.02 40);
+  --muted: oklch(0.2 0.02 40);
+  --muted-foreground: oklch(0.65 0.02 50);
+  --accent: oklch(0.75 0.15 70);
+  --accent-foreground: oklch(0.12 0.02 40);
+  --destructive: oklch(0.65 0.15 15);
+  --destructive-foreground: oklch(0.92 0.01 50);
+  --border: oklch(0.24 0.02 40);
+  --input: oklch(0.2 0.02 40);
+  --ring: oklch(0.55 0.15 140 / 0.3);
+  --chart-1: oklch(0.55 0.15 140);
+  --chart-2: oklch(0.65 0.12 25);
+  --chart-3: oklch(0.75 0.15 70);
+  --chart-4: oklch(0.5 0.12 180);
+  --chart-5: oklch(0.7 0.1 100);
+  --sidebar: oklch(0.16 0.02 40);
+  --sidebar-foreground: oklch(0.92 0.01 50);
+  --sidebar-primary: oklch(0.55 0.15 140);
+  --sidebar-primary-foreground: oklch(0.92 0.01 50);
+  --sidebar-accent: oklch(0.75 0.15 70);
+  --sidebar-accent-foreground: oklch(0.12 0.02 40);
+  --sidebar-border: oklch(0.24 0.02 40);
+  --sidebar-ring: oklch(0.55 0.15 140 / 0.3);
+}
+
+/* Updated animations for Jharkhand earthy Gen Z aesthetic */
+@keyframes earthy-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--jharkhand-forest), 0 0 40px var(--jharkhand-terracotta);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    box-shadow: 0 0 30px var(--jharkhand-terracotta), 0 0 50px var(--jharkhand-gold);
+    filter: hue-rotate(30deg);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--jharkhand-gold), 0 0 45px var(--jharkhand-sage);
+    filter: hue-rotate(60deg);
+  }
+  75% {
+    box-shadow: 0 0 35px var(--jharkhand-sage), 0 0 55px var(--jharkhand-earth);
+    filter: hue-rotate(90deg);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes earthy-border {
+  0% {
+    border-color: var(--jharkhand-forest);
+  }
+  25% {
+    border-color: var(--jharkhand-terracotta);
+  }
+  50% {
+    border-color: var(--jharkhand-gold);
+  }
+  75% {
+    border-color: var(--jharkhand-sage);
+  }
+  100% {
+    border-color: var(--jharkhand-forest);
+  }
+}
+
+@keyframes path-draw {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-earthy-glow {
+  animation: earthy-glow 3s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.animate-earthy-border {
+  animation: earthy-border 2s linear infinite;
+}
+
+.animate-path-draw {
+  animation: path-draw 2s ease-in-out forwards;
+}
+
+/* Gen Z sticker-style badges */
+.sticker-badge {
+  background: linear-gradient(135deg, var(--jharkhand-forest), var(--jharkhand-terracotta));
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 20px var(--jharkhand-forest);
+  position: relative;
+  overflow: hidden;
+}
+
+.sticker-badge::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(45deg);
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Doodle-style curved paths */
+.journey-path {
+  stroke: url(#earthy-gradient);
+  stroke-width: 4;
+  stroke-dasharray: 10, 5;
+  fill: none;
+  filter: drop-shadow(0 0 8px rgba(85, 107, 47, 0.5));
+}
+
+/* Gen Z gradient backgrounds */
+.gen-z-bg {
+  background: linear-gradient(
+    135deg,
+    var(--pastel-forest) 0%,
+    var(--pastel-terracotta) 25%,
+    var(--pastel-gold) 50%,
+    var(--pastel-earth) 75%,
+    var(--jharkhand-stone) 100%
+  );
+}
+
+.gen-z-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Cultural pattern backgrounds inspired by tribal art */
+.jharkhand-pattern {
+  background-image: radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(218, 165, 32, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 40% 80%, rgba(34, 139, 34, 0.05) 0%, transparent 30%),
+    linear-gradient(135deg, transparent 30%, rgba(160, 82, 45, 0.03) 40%, transparent 50%);
+}
+
+/* Organic shapes and tribal motifs */
+.tribal-accent {
+  position: relative;
+}
+
+.tribal-accent::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(139, 69, 19, 0.1) 35%,
+    transparent 40%,
+    transparent 60%,
+    rgba(218, 165, 32, 0.1) 65%,
+    transparent 70%
+  );
+  border-radius: 50% 30% 60% 40%;
+  z-index: -1;
+}

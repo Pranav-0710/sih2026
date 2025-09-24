@@ -1,0 +1,182 @@
+[
+  {
+    "id": "betla-national-park",
+    "name": "Betla National Park",
+    "description": "A national park in Jharkhand, India, known for its diverse wildlife.",
+    "thumbnail": "/vr-assets/public/betla-national-park-forest-with-tigers-and-elephan.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Betla_National_Park",
+    "top": "20%",
+    "left": "15%"
+  },
+  {
+    "id": "dassam-falls",
+    "name": "Dassam Falls",
+    "description": "A picturesque waterfall near Ranchi, where the Kanchi River cascades.",
+    "thumbnail": "/src/assets/dassam_falls.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Dassam_Falls",
+    "top": "60%",
+    "left": "60%"
+  },
+  {
+    "id": "hundru-falls",
+    "name": "Hundru Falls",
+    "description": "One of the highest waterfalls in Jharkhand, created on the Subarnarekha River.",
+    "thumbnail": "/src/assets/hundru_falls.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Hundru_Falls",
+    "top": "55%",
+    "left": "65%"
+  },
+  {
+    "id": "netarhat",
+    "name": "Netarhat",
+    "description": "A hill station known as the 'Queen of Chotanagpur' for its scenic beauty.",
+    "thumbnail": "/vr-assets/public/netarhat-sunrise-point-with-hills-and-valleys-gold.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Netarhat",
+    "top": "30%",
+    "left": "10%"
+  },
+  {
+    "id": "parasnath-hill",
+    "name": "Parasnath Hill",
+    "description": "The highest mountain in Jharkhand, a significant pilgrimage site for Jains.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Parasnath_Hill",
+    "top": "40%",
+    "left": "80%"
+  },
+  {
+    "id": "baidyanath-temple",
+    "name": "Baidyanath Temple",
+    "description": "One of the twelve Jyotirlingas, a revered Hindu temple complex in Deoghar.",
+    "thumbnail": "/src/assets/baidyanath_temple.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Baidyanath_Jyotirlinga",
+    "top": "15%",
+    "left": "75%"
+  },
+  {
+    "id": "jagannath-temple-ranchi",
+    "name": "Jagannath Temple, Ranchi",
+    "description": "A 17th-century temple dedicated to Lord Jagannath, located in Ranchi.",
+    "thumbnail": "/src/assets/jagannath_temple_ranchi.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Jagannath_Temple,_Ranchi",
+    "top": "70%",
+    "left": "50%"
+  },
+  {
+    "id": "rajrappa-temple",
+    "name": "Rajrappa Temple",
+    "description": "A famous Hindu pilgrimage site known for the Chinnamasta Temple.",
+    "thumbnail": "/src/assets/rajrappa_temple.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rajrappa",
+    "top": "65%",
+    "left": "70%"
+  },
+  {
+    "id": "tagore-hill",
+    "name": "Tagore Hill",
+    "description": "A serene hill in Ranchi, associated with Rabindranath Tagore.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Tagore_Hill",
+    "top": "72%",
+    "left": "52%"
+  },
+  {
+    "id": "jonha-falls",
+    "name": "Jonha Falls",
+    "description": "Also known as Gautamdhara, a beautiful waterfall near Ranchi.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Jonha_Falls",
+    "top": "62%",
+    "left": "62%"
+  },
+  {
+    "id": "hirni-falls",
+    "name": "Hirni Falls",
+    "description": "A scenic waterfall located in a dense forest area of West Singhbhum.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Hirni_Falls",
+    "top": "75%",
+    "left": "40%"
+  },
+  {
+    "id": "dalma-wildlife-sanctuary",
+    "name": "Dalma Wildlife Sanctuary",
+    "description": "Home to elephants, deer, and other wildlife, located near Jamshedpur.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Dalma_Wildlife_Sanctuary",
+    "top": "80%",
+    "left": "85%"
+  },
+  {
+    "id": "ghatshila",
+    "name": "Ghatshila",
+    "description": "A town known for its natural beauty, forests, and the Subarnarekha River.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Ghatshila",
+    "top": "85%",
+    "left": "90%"
+  },
+  {
+    "id": "jubilee-park",
+    "name": "Jubilee Park, Jamshedpur",
+    "description": "A large urban park in Jamshedpur, often called the 'Lungs of the City'.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Jubilee_Park,_Jamshedpur",
+    "top": "78%",
+    "left": "80%"
+  },
+  {
+    "id": "dimna-lake",
+    "name": "Dimna Lake",
+    "description": "An artificial reservoir near Jamshedpur, popular for boating and picnics.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Dimna_Lake",
+    "top": "82%",
+    "left": "82%"
+  },
+  {
+    "id": "kanke-dam",
+    "name": "Kanke Dam",
+    "description": "A dam and reservoir in Ranchi, offering scenic views and recreational activities.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Kanke_Dam",
+    "top": "68%",
+    "left": "55%"
+  },
+  {
+    "id": "rock-garden-ranchi",
+    "name": "Rock Garden, Ranchi",
+    "description": "A unique garden built from the rocks of Gonda Hill, featuring sculptures.",
+    "thumbnail": "/vr-assets/public/ranchi-city-skyline-with-rock-garden-and-jagannath.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rock_Garden,_Ranchi",
+    "top": "70%",
+    "left": "53%"
+  },
+  {
+    "id": "patratu-valley",
+    "name": "Patratu Valley",
+    "description": "A scenic valley with winding roads and lush greenery, popular for drives.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Patratu_Valley",
+    "top": "60%",
+    "left": "45%"
+  },
+  {
+    "id": "mccluskieganj",
+    "name": "McCluskieganj",
+    "description": "A quaint Anglo-Indian village known for its colonial bungalows.",
+    "thumbnail": "/public/placeholder.svg",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/McCluskieganj",
+    "top": "50%",
+    "left": "30%"
+  },
+  {
+    "id": "lodh-falls",
+    "name": "Lodh Falls",
+    "description": "The highest waterfall in Jharkhand, also known as Burhagagh Falls.",
+    "thumbnail": "/vr-assets/public/lodh-falls-waterfall-cascading-through-green-fores.png",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Lodh_Falls",
+    "top": "25%",
+    "left": "20%"
+  }
+]
