@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Play, StopCircle } from "lucide-react";
-import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 import { useWeather } from "@/hooks/useWeather";
 
 const spots = [
@@ -205,8 +205,7 @@ export const Heritage: React.FC = () => {
   );
 
   return (
-    <>
-      <Navigation />
+    <PageLayout>
       <div
         className="relative w-full min-h-screen bg-cover bg-center"
         style={{ backgroundImage: "url(/images/map.png)" }}
@@ -382,7 +381,7 @@ export const Heritage: React.FC = () => {
           </motion.div>
         </div>
       </div>
-    </>
+    </PageLayout>
   );
 };
 

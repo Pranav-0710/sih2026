@@ -23,7 +23,7 @@ import {
   Building,
 } from "lucide-react"
 import "@/styles/GenzCorner.css";
-import Navigation from "@/components/Navigation"
+import PageLayout from "@/components/PageLayout"
 
 interface RoadmapSpot {
   id: number
@@ -512,8 +512,7 @@ export default function GenzCorner() {
   }
 
   return (
-    <>
-    <Navigation />
+    <PageLayout>
     <section className="py-16 gen-z-bg min-h-screen relative overflow-hidden genz-corner-theme">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full opacity-20 animate-float"></div>
@@ -701,6 +700,6 @@ export default function GenzCorner() {
         )}
       </div>
     </section>
-    </>
+    </PageLayout>
   )
 }

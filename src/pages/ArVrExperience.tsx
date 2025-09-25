@@ -1,13 +1,14 @@
-import Navigation from "@/components/Navigation";
-
+import PageLayout from "@/components/PageLayout";
 import { GamesHub } from "@/components/funscapes/GamesHub";
+import { useParams } from "react-router-dom";
 
 const ArVrExperience = () => {
+  const { gameId } = useParams<{ gameId: string }>();
+
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <GamesHub />
-    </div>
+    <PageLayout>
+      <GamesHub initialGameId={gameId} />
+    </PageLayout>
   );
 };
 

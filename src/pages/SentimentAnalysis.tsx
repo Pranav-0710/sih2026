@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Brain, TrendingUp, TrendingDown, Minus, BarChart3, Heart, MessageSquare, Loader2 } from "lucide-react";
+import PageLayout from "@/components/PageLayout";
 
 interface SentimentResult {
   sentiment: 'positive' | 'negative' | 'neutral';
@@ -145,6 +146,7 @@ const SentimentAnalysis = () => {
   };
 
   return (
+    <PageLayout>
     <div className="min-h-screen bg-background">
       <Navigation />
       
@@ -412,6 +414,7 @@ const SentimentAnalysis = () => {
         </Tabs>
       </main>
     </div>
+    </PageLayout>
   );
 };
 

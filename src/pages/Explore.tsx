@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 
 const videos = [
   {
@@ -30,8 +30,7 @@ const videos = [
 
 const Explore = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <PageLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
@@ -62,7 +61,7 @@ const Explore = () => {
           ))}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

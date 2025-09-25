@@ -98,20 +98,19 @@ export function VRExperience() {
 
   return (
     <>
-    <Navigation />
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-blue-50 to-emerald-50 dark:from-slate-900 dark:via-blue-900 dark:to-emerald-900">
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23059669' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }}></div>
+      <div className="relative min-h-screen overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-blue-50 to-emerald-50 dark:from-slate-900 dark:via-blue-900 dark:to-emerald-900">
+          <div className="absolute inset-0 opacity-40">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23059669' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+              backgroundSize: '60px 60px'
+            }}></div>
+          </div>
         </div>
-      </div>
 
-      {/* Location Preview Cards */}
-      <section className="relative py-24 px-4">
+        {/* Location Preview Cards */}
+        <section className="relative py-12 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-20 animate-fade-in-up">
@@ -244,7 +243,7 @@ const locations = [
     type: "Capital City",
     description:
       "Explore the vibrant capital with its Rock Garden, serene lakes, and the magnificent Jagannath Temple.",
-    image: "/vr-assets/public/ranchi-city-skyline-with-rock-garden-and-jagannath.png",
+    image: "/vr-assets/ranchi-city-skyline-with-rock-garden-and-jagannath.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/81d9645406fd4473fdfe69d9c41dbb33",
     audioTracks: [
       {
@@ -335,7 +334,7 @@ const locations = [
     type: "Hill Station",
     description:
       "Witness breathtaking sunrise views from the Queen of Chotanagpur, surrounded by rolling hills and valleys.",
-    image: "/vr-assets/public/netarhat-sunrise-point-with-hills-and-valleys-gold.jpg",
+    image: "/vr-assets/netarhat-sunrise-point-with-hills-and-valleys-gold.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/63ea828f078df2aaf7f997646152a55e",
     audioTracks: [
       {
@@ -390,7 +389,7 @@ const locations = [
     name: "Betla National Park",
     type: "Wildlife Sanctuary",
     description: "Embark on a virtual safari through dense forests home to tigers, elephants, and diverse wildlife.",
-    image: "/vr-assets/public/betla-national-park-forest-with-tigers-and-elephan.jpg",
+    image: "/vr-assets/betla-national-park-forest-with-tigers-and-elephan.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/7844f8170cf5ee2ff867e0974acd2c05",
     audioTracks: [
       {
@@ -454,7 +453,7 @@ const locations = [
     name: "Hazaribagh",
     type: "Lake District",
     description: "Discover the tranquil beauty of Hazaribagh Lake surrounded by scenic hills and wildlife sanctuary.",
-    image: "/vr-assets/public/hazaribagh-lake-with-surrounding-hills-and-peacefu.jpg",
+    image: "/vr-assets/hazaribagh-lake-with-surrounding-hills-and-peacefu.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/c0440d5e3eb80297993af103a3a20740",
     hotspots: [
       {
@@ -482,7 +481,7 @@ const locations = [
     name: "Tribal Villages",
     type: "Cultural Heritage",
     description: "Immerse yourself in authentic tribal life, traditional crafts, and age-old customs.",
-    image: "/vr-assets/public/jharkhand-tribal-village-with-traditional-huts-and.jpg",
+    image: "/vr-assets/jharkhand-tribal-village-with-traditional-huts-and.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/5659f214dc39b2452317dc1d14810297",
     hotspots: [
       {
@@ -520,7 +519,7 @@ const locations = [
     name: "Lodh Falls",
     type: "Natural Wonder",
     description: "Experience the thundering beauty of Jharkhand's highest waterfall cascading through lush forests.",
-    image: "/vr-assets/public/lodh-falls-waterfall-cascading-through-green-fores.jpg",
+    image: "/vr-assets/lodh-falls-waterfall-cascading-through-green-fores.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/7cc0b02cfcdeeab983e00eedf2ed47b9",
     hotspots: [
       {

@@ -1,9 +1,8 @@
-import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 
 const Privacy = () => {
   return (
-    <>
-    <Navigation />
+    <PageLayout>
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
       <p className="mb-4">
@@ -30,7 +29,7 @@ const Privacy = () => {
         <li>To send periodic emails regarding your order or other products and services.</li>
       </ul>
     </main>
-    </>
+    </PageLayout>
   );
 };
 

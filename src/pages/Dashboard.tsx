@@ -6,6 +6,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 
 const bookingData = [
   { month: 'January', bookings: 65, revenue: 12000 },
@@ -127,10 +128,11 @@ const Dashboard = () => {
 
   return (
     <>
+    <PageLayout>
     <Navigation />
     <div className="container mx-auto p-4">
       
-      <h1 className="text-3xl font-bold mb-4">Bookings Dashboard</h1>
+      <h1 className="text-3xl font-bold mt-15% mb-4">Bookings Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <Card>
           <CardHeader>
@@ -333,6 +335,7 @@ const Dashboard = () => {
         </Card>
       </div>
     </div>
+    </PageLayout>
     </>
   );
 };

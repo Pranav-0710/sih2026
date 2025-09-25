@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Trophy, Star, Users, Target, Award, Clock, Utensils, Paintbrush } from "lucide-react"
 import { Leaderboard } from "@/components/funscapes/Leaderboard"
 import { GameCard } from "@/components/funscapes/GameCard"
+import { useNavigate } from "react-router-dom"
 import { HiddenAnimalGame } from "@/components/funscapes/games/HiddenAnimalGame"
 import { TribalArtifactHunt } from "@/components/funscapes/games/TribalArtifactHunt"
 import { FestivalDanceOff } from "@/components/funscapes/games/FestivalDanceOff"
@@ -13,6 +14,7 @@ import { TimeTraveler } from "@/components/funscapes/games/TimeTraveler"
 import { FoodExplorer } from "@/components/funscapes/games/FoodExplorer"
 import { CavePainting } from "@/components/funscapes/games/CavePainting"
 import { CertificateSystem } from "@/components/funscapes/CertificateSystem"
+import PageLayout from "@/components/PageLayout"
 
 const games = [
   {
@@ -100,15 +102,24 @@ const games = [
 interface GameProgress {
   userScore: number
   gamesCompleted: string[]
-  gameStats: Record<string, any>
+  gameStats: Record<string, unknown>
 }
 
-export function GamesHub() {
-  const [selectedGame, setSelectedGame] = useState<string | null>(null)
+interface GamesHubProps {
+  initialGameId?: string;
+}
+
+export function GamesHub({ initialGameId }: GamesHubProps) {
+  const navigate = useNavigate()
+  const [selectedGame, setSelectedGame] = useState<string | null>(initialGameId || null)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [showCertificates, setShowCertificates] = useState(false)
   const [userScore, setUserScore] = useState(0)
   const [gamesCompleted, setGamesCompleted] = useState<string[]>([])
+
+  useEffect(() => {
+    setSelectedGame(initialGameId || null)
+  }, [initialGameId])
 
   useEffect(() => {
     const savedProgress = sessionStorage.getItem("jharkhand-games-progress")
@@ -144,11 +155,24 @@ export function GamesHub() {
       return prev
     })
   }
+  
+  const navigateToGame = (gameId: string) => {
+    navigate(`/funscapes/${gameId}`)
+  }
+  
+  const navigateBack = () => {
+    navigate('/funscapes')
+  }
+  
+  const handleGameCompleteAndNavigateBack = (gameId: string) => {
+    handleGameComplete(gameId)
+    navigateBack()
+  }
 
   if (selectedGame === "hidden-animal") {
     return (
       <HiddenAnimalGame
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("hidden-animal")}
       />
@@ -158,7 +182,7 @@ export function GamesHub() {
   if (selectedGame === "tribal-hunt") {
     return (
       <TribalArtifactHunt
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("tribal-hunt")}
       />
@@ -168,7 +192,7 @@ export function GamesHub() {
   if (selectedGame === "dance-off") {
     return (
       <FestivalDanceOff
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("dance-off")}
       />
@@ -178,7 +202,7 @@ export function GamesHub() {
   if (selectedGame === "wildlife-trivia") {
     return (
       <WildlifeTrivia
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("wildlife-trivia")}
       />
@@ -188,7 +212,7 @@ export function GamesHub() {
   if (selectedGame === "eco-explorer") {
     return (
       <EcoExplorer
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("eco-explorer")}
       />
@@ -198,7 +222,7 @@ export function GamesHub() {
   if (selectedGame === "time-traveler") {
     return (
       <TimeTraveler
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("time-traveler")}
       />
@@ -208,7 +232,7 @@ export function GamesHub() {
   if (selectedGame === "food-explorer") {
     return (
       <FoodExplorer
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("food-explorer")}
       />
@@ -218,7 +242,7 @@ export function GamesHub() {
   if (selectedGame === "cave-painting") {
     return (
       <CavePainting
-        onBack={() => setSelectedGame(null)}
+        onBack={navigateBack}
         onScoreUpdate={handleScoreUpdate}
         onGameComplete={() => handleGameComplete("cave-painting")}
       />
@@ -236,6 +260,7 @@ export function GamesHub() {
   }
 
   return (
+    <PageLayout>
     <div className="container mx-auto px-4 py-8">
       {/* Header Section */}
       <div className="text-center mb-12">
@@ -270,7 +295,7 @@ export function GamesHub() {
       {/* Games Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
         {games.map((game) => (
-          <GameCard key={game.id} game={game} onPlay={() => setSelectedGame(game.id)} />
+          <GameCard key={game.id} game={game} onPlay={() => navigateToGame(game.id)} />
         ))}
       </div>
 
@@ -314,5 +339,6 @@ export function GamesHub() {
         </CardContent>
       </Card>
     </div>
+    </PageLayout>
   )
 }

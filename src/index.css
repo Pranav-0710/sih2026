@@ -276,9 +276,18 @@
     padding-top: 6rem;
   }
 
+  /* Page content class for proper navbar spacing */
+  .page-content {
+    padding-top: 7rem; /* Adjusted for navbar height plus some spacing */
+  }
+
   @media (max-width: 768px) {
     .navbar-offset {
       padding-top: 5rem;
+    }
+    
+    .page-content {
+      padding-top: 6rem;
     }
   }
 }

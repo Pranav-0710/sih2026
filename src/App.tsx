@@ -28,6 +28,16 @@ import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import Profile from "./pages/Profile";
 
+// Funscapes game pages
+import HiddenAnimalPage from "./pages/funscapes/HiddenAnimalPage";
+import TribalArtifactHuntPage from "./pages/funscapes/TribalArtifactHuntPage";
+import FestivalDanceOffPage from "./pages/funscapes/FestivalDanceOffPage";
+import WildlifeTriviaPage from "./pages/funscapes/WildlifeTriviaPage";
+import EcoExplorerPage from "./pages/funscapes/EcoExplorerPage";
+import TimeTravelerPage from "./pages/funscapes/TimeTravelerPage";
+import FoodExplorerPage from "./pages/funscapes/FoodExplorerPage";
+import CavePaintingPage from "./pages/funscapes/CavePaintingPage";
+
 import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
@@ -72,6 +82,7 @@ const MainLayout = () => {
         <Route path="/ar-vr-experience" element={<VRExperiencePage />} />
         <Route path="/transport" element={<Transport />} />
         <Route path="/funscapes" element={<ArVrExperience />} />
+        <Route path="/funscapes/:gameId" element={<ArVrExperience />} />
         <Route path="/genzcorner" element={<GenzCorner />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/weather" element={<Weather />} />

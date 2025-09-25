@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ethers } from "ethers";
-import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 // --- TYPE DEFINITIONS ---
 interface Package {
   id: number;
@@ -339,10 +339,9 @@ export default function Bookings() {
   const providers = useMemo(() => [...new Set(travelPackages.map(p => p.provider))], []);
 
   return (
-    <>
-    <Navigation />
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <header className="bg-gray-50 dark:bg-gray-800  py-6 px-4 sm:px-6 lg:px-8">
+    <PageLayout>
+    <div>
+      <header className="py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Journey Hub: Jharkhand</h1>
           <p className="mt-1 text-lg text-gray-600 dark:text-gray-300">Curated travel packages for your next adventure.</p>
@@ -405,6 +404,6 @@ export default function Bookings() {
         )}
       </AnimatePresence>
     </div>
-    </>
+    </PageLayout>
   );
 }

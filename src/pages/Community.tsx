@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PageLayout from "@/components/PageLayout";
 import {
   Card,
   CardContent,
@@ -202,6 +203,7 @@ const Community = () => {
   }
 
   return (
+    <PageLayout>
     <div className="min-h-screen bg-background">
       <Navigation />
 
@@ -402,6 +404,7 @@ const Community = () => {
         )}
       </div>
     </div>
+    </PageLayout>
   );
 };
 

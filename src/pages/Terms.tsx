@@ -1,9 +1,10 @@
 import Navigation from "@/components/Navigation";
-
+import PageLayout from "@/components/PageLayout";
 const Terms = () => {
   return (
-    <><Navigation />
-    <main className="container mx-auto px-4 py-8">
+    <PageLayout>
+      <Navigation />
+      <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Terms of Service</h1>
       <p className="mb-4">
         Please read these terms of service carefully before using our website.
@@ -25,7 +26,7 @@ const Terms = () => {
         The entire communication with us is electronic. Every time you send us an email or visit our website, you are going to be communicating with us. You hereby consent to receive communications from us. If you subscribe to the news on our website, you are going to receive regular emails from us. We will continue to communicate with you by posting news and notices on our website and by sending you emails. You also agree that all notices, disclosures, agreements and other communications we provide to you electronically meet the legal requirements that such communications be in writing.
       </p>
     </main>
-    </>
+    </PageLayout>
   );
 };
 

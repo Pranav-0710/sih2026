@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import Navigation from "@/components/Navigation";
+import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Footer from "@/components/Footer";
@@ -68,8 +68,7 @@ const Profile = () => {
   }
 
   return (
-    <>
-    <Navigation />
+    <PageLayout>
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Profile</h1>
       <div className="grid gap-4 md:grid-cols-2">
@@ -110,7 +109,7 @@ const Profile = () => {
         </Card>
       </div>
     </main>
-    </>
+    </PageLayout>
   );
 };
 

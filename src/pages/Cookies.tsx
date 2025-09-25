@@ -1,10 +1,10 @@
 import Navigation from "@/components/Navigation";
-
+import PageLayout from "@/components/PageLayout";
 const Cookies = () => {
   return (
-    <>
-    <Navigation />
-    
+    <PageLayout>
+      <Navigation />
+
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Cookie Policy</h1>
       <p className="mb-4">
@@ -23,7 +23,7 @@ const Cookies = () => {
         You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of the this site. Therefore it is recommended that you do not disable cookies.
       </p>
     </main>
-    </>
+    </PageLayout>
   );
 };
 

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import { useToast } from '@/hooks/use-toast';
+import PageLayout from '@/components/PageLayout';
 
 const Emergency = () => {
   const [currentLocation, setCurrentLocation] = useState<{lat: number, lng: number} | null>(null);
@@ -167,6 +168,7 @@ const Emergency = () => {
   };
 
   return (
+    <PageLayout>
     <div className="min-h-screen bg-background">
       <Navigation />
       
@@ -372,6 +374,7 @@ const Emergency = () => {
         </Card>
       </div>
     </div>
+    </PageLayout>
   );
 };
 
