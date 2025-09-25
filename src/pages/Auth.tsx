@@ -1,21 +1,37 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MapPin, Mail, Lock, User, Mountain, Trees, Star, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  MapPin,
+  Mail,
+  Lock,
+  User,
+  Mountain,
+  Trees,
+  Star,
+  ArrowRight,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-jharkhand.png";
 
-
 const Auth = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, signUp, user } = useAuth();
@@ -23,7 +39,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -44,7 +60,7 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
       options: {
         redirectTo: window.location.origin,
       },
@@ -57,23 +73,22 @@ const Auth = () => {
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-heritage/5 via-background to-accent/5"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.3),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(255,119,198,0.3),transparent_50%)]"></div>
-      
+
       <div className="relative z-10 min-h-screen flex">
-        
         {/* Left Side - Image/Branding */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
         >
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${heroImage})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-heritage/90 via-heritage/70 to-heritage/50"></div>
           </div>
-          
+
           <div className="relative z-10 flex flex-col justify-center items-start p-16 text-white">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -90,13 +105,13 @@ const Auth = () => {
                   <p className="text-white/90 text-lg">Jharkhand</p>
                 </div>
               </div>
-              
+
               <h2 className="text-4xl font-bold mb-4 leading-tight">
                 Discover the Soul of <br />
                 <span className="text-accent">Jharkhand</span>
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Embark on a journey through ancient forests, tribal heritage, 
+                Embark on a journey through ancient forests, tribal heritage,
                 and hidden waterfalls in India's untamed wilderness.
               </p>
             </motion.div>
@@ -130,14 +145,13 @@ const Auth = () => {
         </motion.div>
 
         {/* Right Side - Auth Form */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           className="w-full lg:w-1/2 flex items-center justify-center p-8"
         >
           <div className="w-full max-w-md">
-            
             {/* Mobile Logo */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -149,7 +163,9 @@ const Auth = () => {
                 <Mountain className="h-8 w-8 text-heritage" />
               </div>
               <div className="ml-3">
-                <h1 className="text-2xl font-bold text-foreground">Smart Tourism</h1>
+                <h1 className="text-2xl font-bold text-foreground">
+                  Smart Tourism
+                </h1>
                 <p className="text-muted-foreground">Jharkhand</p>
               </div>
             </motion.div>
@@ -168,18 +184,31 @@ const Auth = () => {
                     Sign in to explore Jharkhand's heritage and culture
                   </CardDescription>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-6">
                   <Tabs defaultValue="signin" className="w-full">
                     <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted/50">
-                      <TabsTrigger value="signin" className="text-sm font-medium">Sign In</TabsTrigger>
-                      <TabsTrigger value="signup" className="text-sm font-medium">Sign Up</TabsTrigger>
+                      <TabsTrigger
+                        value="signin"
+                        className="text-sm font-medium"
+                      >
+                        Sign In
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="signup"
+                        className="text-sm font-medium"
+                      >
+                        Sign Up
+                      </TabsTrigger>
                     </TabsList>
-                    
+
                     <TabsContent value="signin" className="space-y-4">
                       <form onSubmit={handleSignIn} className="space-y-5">
                         <div className="space-y-2">
-                          <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                          <Label
+                            htmlFor="email"
+                            className="text-sm font-medium text-foreground"
+                          >
                             Email Address
                           </Label>
                           <div className="relative">
@@ -195,9 +224,12 @@ const Auth = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="space-y-2">
-                          <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                          <Label
+                            htmlFor="password"
+                            className="text-sm font-medium text-foreground"
+                          >
                             Password
                           </Label>
                           <div className="relative">
@@ -226,7 +258,7 @@ const Auth = () => {
                             </Button>
                           </div>
                         </div>
-                        
+
                         <Button
                           type="submit"
                           className="w-full h-11 bg-heritage hover:bg-heritage/90 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg"
@@ -245,7 +277,7 @@ const Auth = () => {
                           )}
                         </Button>
                       </form>
-                      
+
                       <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
                           <span className="w-full border-t border-border/50" />
@@ -256,7 +288,7 @@ const Auth = () => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <Button
                         onClick={handleGoogleSignIn}
                         className="w-full h-11 bg-background border border-border/50 hover:bg-muted/50 text-foreground font-medium rounded-lg transition-all duration-200"
@@ -284,11 +316,14 @@ const Auth = () => {
                         Sign in with Google
                       </Button>
                     </TabsContent>
-                    
+
                     <TabsContent value="signup" className="space-y-4">
                       <form onSubmit={handleSignUp} className="space-y-5">
                         <div className="space-y-2">
-                          <Label htmlFor="fullName" className="text-sm font-medium text-foreground">
+                          <Label
+                            htmlFor="fullName"
+                            className="text-sm font-medium text-foreground"
+                          >
                             Full Name
                           </Label>
                           <div className="relative">
@@ -304,9 +339,12 @@ const Auth = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="space-y-2">
-                          <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                          <Label
+                            htmlFor="email"
+                            className="text-sm font-medium text-foreground"
+                          >
                             Email Address
                           </Label>
                           <div className="relative">
@@ -322,9 +360,12 @@ const Auth = () => {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="space-y-2">
-                          <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                          <Label
+                            htmlFor="password"
+                            className="text-sm font-medium text-foreground"
+                          >
                             Password
                           </Label>
                           <div className="relative">
@@ -354,7 +395,7 @@ const Auth = () => {
                             </Button>
                           </div>
                         </div>
-                        
+
                         <Button
                           type="submit"
                           className="w-full h-11 bg-heritage hover:bg-heritage/90 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg"
@@ -373,7 +414,7 @@ const Auth = () => {
                           )}
                         </Button>
                       </form>
-                      
+
                       <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
                           <span className="w-full border-t border-border/50" />
@@ -384,7 +425,7 @@ const Auth = () => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <Button
                         onClick={handleGoogleSignIn}
                         className="w-full h-11 bg-background border border-border/50 hover:bg-muted/50 text-foreground font-medium rounded-lg transition-all duration-200"
@@ -413,7 +454,7 @@ const Auth = () => {
                       </Button>
                     </TabsContent>
                   </Tabs>
-                  
+
                   <div className="text-center pt-4">
                     <p className="text-xs text-muted-foreground">
                       By continuing, you agree to our{" "}
