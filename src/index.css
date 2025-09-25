@@ -154,7 +154,40 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-transparent text-foreground;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  main {
+    background-color: transparent;
+  }
+
+  /* Set the root background to transparent to let the pseudo-element show through */
+  html, body, #root {
+    @apply bg-transparent;
+  }
+
+  /* Add a pseudo-element for the cinematic background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* A subtle, luxurious gradient */
+    background: linear-gradient(160deg, hsl(120 40% 97%) 0%, hsl(35 80% 97%) 50%, hsl(0 0% 100%) 100%);
+    z-index: -1; /* Place it behind the content */
+    background-attachment: fixed;
+  }
+
+  .dark body::before {
+     /* A deep, cinematic dark gradient */
+     background: linear-gradient(160deg, hsl(140 20% 8%) 0%, hsl(30 25% 8%) 50%, hsl(20 25% 6%) 100%);
+  }
+
+  .large-font {
+    font-size: 18px;
   }
 }
 
@@ -176,11 +209,5 @@
     --tw-prose-pre-bg: transparent;
     --tw-prose-th-borders: theme(colors.white);
     --tw-prose-td-borders: theme(colors.white);
-  }
-}
-
-@layer base {
-  .large-font {
-    font-size: 18px;
   }
 }

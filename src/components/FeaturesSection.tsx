@@ -11,54 +11,22 @@ import {
   Camera
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import heritageImage from "@/assets/heritage-site.png";
-import tribalImage from "@/assets/tribal-culture.png";
-import natureImage from "@/assets/nature-wildlife.png";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const colorMap = {
-  heritage: {
-    bg: "bg-orange-100",
-    text: "text-orange-500",
-  },
-  cultural: {
-    bg: "bg-blue-100",
-    text: "text-blue-500",
-  },
-  accent: {
-    bg: "bg-yellow-100",
-    text: "text-yellow-500",
-  },
-  nature: {
-    bg: "bg-green-100",
-    text: "text-green-500",
-  },
-  destructive: {
-    bg: "bg-red-100",
-    text: "text-red-500",
-  },
-  primary: {
-    bg: "bg-purple-100",
-    text: "text-purple-500",
-  },
-};
-
-const FeaturesSection = () => {
-  const features = [
+const features = [
     {
       icon: Bot,
       title: "Trip Genie AI",
       description: "Your personal AI travel assistant that creates customized itineraries based on your interests, budget, and travel style.",
-      color: "heritage",
-      image: null,
+      color: "primary",
       path: "/trip-genie"
     },
     {
       icon: MapPin,
       title: "Cultural Heritage Hub",
       description: "Explore 50+ heritage sites with interactive maps, audio stories, and 360° virtual tours of ancient temples and tribal art.",
-      color: "cultural",
-      image: heritageImage,
+      color: "heritage",
       path: "/heritage"
     },
     {
@@ -66,7 +34,6 @@ const FeaturesSection = () => {
       title: "FunScapes",
       description: "Learn through interactive quizzes and earn badges for discovering Jharkhand's rich history and tribal traditions.",
       color: "accent",
-      image: null,
       path: "/funscapes"
     },
     {
@@ -74,7 +41,6 @@ const FeaturesSection = () => {
       title: "Community Wall",
       description: "Connect with fellow travelers, share experiences, and discover hidden gems recommended by locals.",
       color: "nature",
-      image: tribalImage,
       path: "/community"
     },
     {
@@ -82,110 +48,99 @@ const FeaturesSection = () => {
       title: "Emergency Assistance",
       description: "24/7 safety support with SOS button, emergency contacts, and real-time location sharing for remote areas.",
       color: "destructive",
-      image: null,
       path: "/emergency"
     },
     {
       icon: Calendar,
       title: "Gen-Z Corner",
       description: "A vibrant space for the young and trendy, offering unique experiences, digital content, and interactive challenges tailored for Gen-Z travelers.",
-      color: "primary",
-      image: natureImage,
+      color: "cultural",
       path: "/genzcorner"
     }
   ];
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const FeatureCard = ({ feature, index }) => {
+  const iconColorVariants = {
+    primary: "bg-primary/10 text-primary",
+    heritage: "bg-heritage/10 text-heritage",
+    accent: "bg-accent/10 text-accent",
+    nature: "bg-nature/10 text-nature",
+    destructive: "bg-destructive/10 text-destructive",
+    cultural: "bg-cultural/10 text-cultural",
   };
 
   return (
-    <section className="py-20 bg-gradient-subtle">
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 text-primary mb-4">
-            <Compass className="h-4 w-4" />
-            <span className="text-sm font-medium">Explore Our Features</span>
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="h-full"
+    >
+      <Card className="h-full flex flex-col rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+        <CardHeader>
+          <div className={cn("w-14 h-14 rounded-lg flex items-center justify-center mb-4", iconColorVariants[feature.color])}>
+            <feature.icon className="w-7 h-7" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Everything You Need for the Perfect{" "}
-            <span className="text-primary">Jharkhand Experience</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From AI-powered trip planning to emergency assistance, we've got you covered 
-            at every step of your cultural and natural exploration.
+          <CardTitle className="text-xl font-bold text-gray-900">{feature.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col flex-grow">
+          <p className="text-gray-600 leading-relaxed mb-6">
+            {feature.description}
           </p>
+          <div className="mt-auto">
+            <Button asChild variant="outline" className="font-semibold">
+              <Link to={feature.path}>
+                Explore
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
+const FeaturesSection = () => {
+  return (
+    <section className="py-24 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+            <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 text-primary mb-4">
+              <Compass className="h-5 w-5" />
+              <span className="font-semibold">Explore Our Features</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+              Everything for Your Perfect Trip
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              From AI-powered planning to 24/7 safety, we've got you covered at every step of your cultural and natural exploration of Jharkhand.
+            </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card 
-                className="group hover:shadow-strong transition-all duration-500 hover:-translate-y-1 border-0 shadow-soft overflow-hidden h-full"
-              >
-                {feature.image && (
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={feature.image} 
-                      alt={feature.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                )}
-                <CardHeader className="pb-3">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <div className={`p-2 rounded-lg ${colorMap[feature.color]?.bg}`}>
-                      <feature.icon className={`h-5 w-5 ${colorMap[feature.color]?.text}`} />
-                    </div>
-                    <CardTitle className="text-lg font-semibold text-foreground">
-                      {feature.title}
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {feature.description}
-                  </p>
-                  {feature.path ? (
-                    <Link to={feature.path}>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="text-primary hover:text-primary-foreground hover:bg-primary p-0 h-auto font-medium group"
-                      >
-                        Learn More
-                        <Compass className="ml-1 h-3 w-3 group-hover:rotate-12 transition-transform" />
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-primary hover:text-primary-foreground hover:bg-primary p-0 h-auto font-medium group"
-                    >
-                      Learn More
-                      <Compass className="ml-1 h-3 w-3 group-hover:rotate-12 transition-transform" />
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
+            <FeatureCard key={index} feature={feature} index={index} />
           ))}
         </div>
 
-        <div className="text-center mt-16">
-          <Button variant="hero" size="lg" className="group">
-            <Camera className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-            Start Exploring Now
-          </Button>
+        <div className="text-center mt-20">
+            <Button
+              size="lg"
+              asChild
+              className="font-bold text-lg px-8 py-6 rounded-2xl bg-gradient-to-r from-primary to-nature text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+            >
+              <Link to="/explore">
+                <Camera className="h-6 w-6 mr-3" />
+                Start Exploring Now
+              </Link>
+            </Button>
         </div>
       </div>
     </section>

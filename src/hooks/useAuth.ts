@@ -106,19 +106,9 @@ export const useAuthState = () => {
       // managed securely on the backend or directly in Supabase user metadata.
       const adminEmails = ['pranavkanth07@gmail.com', 'mukundangopalachary@gmail.com'];
       if (data.user && adminEmails.includes(data.user.email || '')) {
-        // Update user metadata to set role as admin
-        const { error: updateError } = await supabase.auth.updateUser({
-          data: { role: 'admin' }
-        });
-
-        if (updateError) {
-          console.error("Error updating user role to admin:", updateError);
-          toast({
-            title: "Role Update Error",
-            description: updateError.message,
-            variant: "destructive",
-          });
-        }
+        setRole('admin');
+      } else if (data.user) {
+        setRole(data.user.user_metadata?.role || 'user');
       }
 
       toast({
@@ -140,6 +130,7 @@ export const useAuthState = () => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      setRole(null);
       toast({
         title: "Signed out",
         description: "You have been successfully signed out",
@@ -174,7 +165,16 @@ export const useAuthState = () => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        setRole(session?.user?.user_metadata?.role as string || null);
+        if (event === 'SIGNED_OUT') {
+          setRole(null);
+        } else if (session?.user) {
+          const adminEmails = ['pranavkanth07@gmail.com', 'mukundangopalachary@gmail.com'];
+          if (adminEmails.includes(session.user.email || '')) {
+            setRole('admin');
+          } else {
+            setRole(session.user.user_metadata?.role || 'user');
+          }
+        }
         setLoading(false);
       }
     );
@@ -183,7 +183,14 @@ export const useAuthState = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setRole(session?.user?.user_metadata?.role as string || null);
+      if (session?.user) {
+        const adminEmails = ['pranavkanth07@gmail.com', 'mukundangopalachary@gmail.com'];
+        if (adminEmails.includes(session.user.email || '')) {
+          setRole('admin');
+        } else {
+          setRole(session.user.user_metadata?.role || 'user');
+        }
+      }
       setLoading(false);
     });
 
