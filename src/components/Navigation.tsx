@@ -7,7 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
 
@@ -28,12 +33,12 @@ const navItems = [
   { name: "Community", path: "/community" },
 ];
 
-const NavLinkItem = ({ to, children, className }) => (
+const NavLinkItem = ({ to, children, className = "" }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
       cn(
-        "relative group font-medium transition-colors hover:text-foreground",
+        "relative group font-medium transition-all duration-300 hover:text-foreground px-1 py-1",
         isActive ? "text-foreground" : "text-foreground/70",
         className
       )
@@ -53,64 +58,175 @@ export function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const mobileNavItems = navItems.flatMap(item =>
-    item.isDropdown ? item.dropdownItems : item
-  ).filter(item => !item.adminOnly || (item.adminOnly && role === 'admin'));
+  const mobileNavItems = navItems.reduce((acc, item) => {
+    if (item.isDropdown && item.dropdownItems) {
+      return [...acc, ...item.dropdownItems];
+    } else if (!item.isDropdown && item.path) {
+      return [...acc, { name: item.name, path: item.path }];
+    }
+    return acc;
+  }, [] as { name: string; path: string }[]);
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300 ease-in-out",
-        scrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-white/10 shadow-md"
-          : "bg-transparent"
+        "fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500 ease-out",
+        scrolled ? "w-[95%] max-w-6xl" : "w-[98%] max-w-7xl"
       )}
     >
-      <div className="container flex h-20 items-center">
-        <Link to="/" className="mr-6 flex items-center space-x-2">
-          <div className="bg-gradient-to-br from-nature to-primary p-2.5 rounded-xl shadow-soft">
-            <MapPin className="h-6 w-6 text-white" />
+      <div
+        className={cn(
+          "flex items-center px-6 py-3 rounded-2xl transition-all duration-500 ease-out floating-navbar",
+          scrolled
+            ? "bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong h-16"
+            : "bg-background/60 backdrop-blur-md border border-border/30 shadow-soft h-18"
+        )}
+      >
+        <Link to="/" className="flex items-center space-x-3">
+          <div
+            className={cn(
+              "bg-gradient-to-br from-nature to-primary rounded-xl shadow-soft transition-all duration-300",
+              scrolled ? "p-2" : "p-2.5"
+            )}
+          >
+            <MapPin
+              className={cn(
+                "text-white transition-all duration-300",
+                scrolled ? "h-5 w-5" : "h-6 w-6"
+              )}
+            />
           </div>
-          <span className="font-semibold text-lg">Jharkhand Tour</span>
+          <span
+            className={cn(
+              "font-bold bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent transition-all duration-300",
+              scrolled ? "text-lg" : "text-xl"
+            )}
+          >
+            JharVirasat
+          </span>
         </Link>
 
         {isMobile ? (
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-auto text-foreground/80">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="pr-0 bg-background/90 backdrop-blur-xl">
-              {/* Mobile Menu Content - styling can be enhanced here */}
-            </SheetContent>
-          </Sheet>
+          <div className="flex items-center space-x-2 ml-auto">
+            <ModeToggle />
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="pr-0 bg-background/95 backdrop-blur-xl border-r border-border/50 rounded-r-2xl"
+              >
+                <div className="flex flex-col space-y-4 py-4">
+                  <Link to="/" className="flex items-center space-x-3 px-4">
+                    <div className="bg-gradient-to-br from-nature to-primary p-2 rounded-xl shadow-soft">
+                      <MapPin className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="font-bold text-lg bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent">
+                      Jharkhand Tour
+                    </span>
+                  </Link>
+                  <div className="flex flex-col space-y-2 px-4">
+                    <Link
+                      to="/"
+                      className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                    >
+                      Home
+                    </Link>
+                    {mobileNavItems.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.path}
+                        className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    {role === "admin" && (
+                      <Link
+                        to="/dashboard"
+                        className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                  </div>
+                  <div className="px-4 pt-4 border-t border-border/50">
+                    {user ? (
+                      <div className="space-y-2">
+                        <Link
+                          to="/profile"
+                          className="block py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                        >
+                          Profile
+                        </Link>
+                        <Button
+                          onClick={signOut}
+                          variant="ghost"
+                          className="w-full justify-start py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-destructive/10"
+                        >
+                          Sign Out
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={() => navigate("/auth")}
+                        className="w-full font-semibold py-2 px-4 rounded-xl bg-gradient-to-r from-primary to-nature text-white shadow-soft hover:shadow-medium transition-all duration-300 transform hover:-translate-y-0.5"
+                      >
+                        Get Started
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         ) : (
           <>
             <div className="flex-1 flex justify-center">
-              <nav className="flex items-center space-x-8 text-sm">
+              <nav
+                className={cn(
+                  "flex items-center space-x-6 text-sm transition-all duration-300",
+                  scrolled ? "space-x-4" : "space-x-6"
+                )}
+              >
                 <NavLinkItem to="/">Home</NavLinkItem>
                 {navItems.map((item) => {
-                  if (item.adminOnly && role !== 'admin') return null;
                   return item.isDropdown ? (
                     <DropdownMenu key={item.name}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="relative group font-medium text-foreground/70 transition-colors hover:text-foreground">
+                        <Button
+                          variant="ghost"
+                          className="relative group font-medium text-foreground/70 transition-all duration-300 hover:text-foreground hover:bg-primary/10 rounded-xl px-3 py-2"
+                        >
                           {item.name}
-                          <ChevronDown className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
+                          <ChevronDown className="h-4 w-4 ml-1 transition-transform duration-300 group-data-[state=open]:rotate-180" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-white/50 backdrop-blur-lg border-none shadow-xl rounded-xl">
-                        {item.dropdownItems.map((dropdownItem) => (
-                          <DropdownMenuItem key={dropdownItem.name} asChild className="p-0">
-                            <Link to={dropdownItem.path} className="font-medium px-3 py-2 transition-colors hover:bg-black/5">
+                      <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
+                        {item.dropdownItems?.map((dropdownItem) => (
+                          <DropdownMenuItem
+                            key={dropdownItem.name}
+                            asChild
+                            className="p-0"
+                          >
+                            <Link
+                              to={dropdownItem.path}
+                              className="font-medium px-3 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-foreground/70 hover:text-foreground w-full"
+                            >
                               {dropdownItem.name}
                             </Link>
                           </DropdownMenuItem>
@@ -118,30 +234,55 @@ export function Navigation() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
-                    <NavLinkItem key={item.name} to={item.path}>{item.name}</NavLinkItem>
+                    <NavLinkItem key={item.name} to={item.path || "#"}>
+                      {item.name}
+                    </NavLinkItem>
                   );
                 })}
-                {role === 'admin' && <NavLinkItem to="/dashboard">Dashboard</NavLinkItem>}
+                {role === "admin" && (
+                  <NavLinkItem to="/dashboard">Dashboard</NavLinkItem>
+                )}
               </nav>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <ModeToggle />
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="font-medium text-foreground/70">
+                    <Button
+                      variant="ghost"
+                      className="font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 rounded-xl px-3 py-2 transition-all duration-300"
+                    >
                       {user.user_metadata?.full_name || user.email}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-white/50 backdrop-blur-lg border-none shadow-xl rounded-xl">
-                    <DropdownMenuItem asChild><Link to="/profile">Profile</Link></DropdownMenuItem>
-                    <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
+                  <DropdownMenuContent
+                    align="end"
+                    className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1"
+                  >
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/profile"
+                        className="font-medium px-3 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-foreground/70 hover:text-foreground w-full"
+                      >
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={signOut}
+                      className="font-medium px-3 py-2 rounded-lg transition-all duration-300 hover:bg-destructive/10 text-foreground/70 hover:text-destructive cursor-pointer"
+                    >
+                      Sign Out
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <Button
-                  onClick={() => navigate('/auth')}
-                  className="font-semibold px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-nature text-white shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-px"
+                  onClick={() => navigate("/auth")}
+                  className={cn(
+                    "font-semibold rounded-xl bg-gradient-to-r from-primary to-nature text-white shadow-soft hover:shadow-medium transition-all duration-300 transform hover:-translate-y-0.5",
+                    scrolled ? "px-4 py-2 text-sm" : "px-6 py-2 text-sm"
+                  )}
                 >
                   Get Started
                 </Button>

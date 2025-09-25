@@ -23,7 +23,7 @@
     /* Primary - Deep Forest Green (Jharkhand's forests) */
     --primary: 140 45% 25%;
     --primary-foreground: 0 0% 100%;
-    
+
     /* Secondary - Warm Earth Tones */
     --secondary: 35 25% 90%;
     --secondary-foreground: 20 15% 15%;
@@ -58,11 +58,32 @@
     --radius: 0.75rem;
 
     /* Beautiful gradients inspired by Jharkhand's landscapes */
-    --gradient-hero: linear-gradient(135deg, hsl(140 45% 25%) 0%, hsl(120 40% 45%) 50%, hsl(45 90% 55%) 100%);
-    --gradient-cultural: linear-gradient(135deg, hsl(280 60% 45%) 0%, hsl(25 85% 60%) 100%);
-    --gradient-nature: linear-gradient(135deg, hsl(120 40% 45%) 0%, hsl(140 45% 25%) 100%);
-    --gradient-heritage: linear-gradient(135deg, hsl(45 90% 55%) 0%, hsl(35 80% 60%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(40 20% 99%) 0%, hsl(42 15% 97%) 100%);
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(140 45% 25%) 0%,
+      hsl(120 40% 45%) 50%,
+      hsl(45 90% 55%) 100%
+    );
+    --gradient-cultural: linear-gradient(
+      135deg,
+      hsl(280 60% 45%) 0%,
+      hsl(25 85% 60%) 100%
+    );
+    --gradient-nature: linear-gradient(
+      135deg,
+      hsl(120 40% 45%) 0%,
+      hsl(140 45% 25%) 100%
+    );
+    --gradient-heritage: linear-gradient(
+      135deg,
+      hsl(45 90% 55%) 0%,
+      hsl(35 80% 60%) 100%
+    );
+    --gradient-subtle: linear-gradient(
+      180deg,
+      hsl(40 20% 99%) 0%,
+      hsl(42 15% 97%) 100%
+    );
 
     /* Elegant shadows with warm tones */
     --shadow-soft: 0 4px 20px -4px hsl(140 45% 25% / 0.1);
@@ -125,11 +146,32 @@
     --ring: 120 40% 55%;
 
     /* Dark mode gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(120 40% 55%) 0%, hsl(140 45% 45%) 50%, hsl(45 90% 65%) 100%);
-    --gradient-cultural: linear-gradient(135deg, hsl(280 60% 65%) 0%, hsl(25 85% 65%) 100%);
-    --gradient-nature: linear-gradient(135deg, hsl(120 40% 55%) 0%, hsl(140 45% 45%) 100%);
-    --gradient-heritage: linear-gradient(135deg, hsl(45 90% 65%) 0%, hsl(35 80% 70%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(20 25% 10%) 0%, hsl(20 25% 8%) 100%);
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(120 40% 55%) 0%,
+      hsl(140 45% 45%) 50%,
+      hsl(45 90% 65%) 100%
+    );
+    --gradient-cultural: linear-gradient(
+      135deg,
+      hsl(280 60% 65%) 0%,
+      hsl(25 85% 65%) 100%
+    );
+    --gradient-nature: linear-gradient(
+      135deg,
+      hsl(120 40% 55%) 0%,
+      hsl(140 45% 45%) 100%
+    );
+    --gradient-heritage: linear-gradient(
+      135deg,
+      hsl(45 90% 65%) 0%,
+      hsl(35 80% 70%) 100%
+    );
+    --gradient-subtle: linear-gradient(
+      180deg,
+      hsl(20 25% 10%) 0%,
+      hsl(20 25% 8%) 100%
+    );
 
     /* Dark mode shadows */
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
@@ -155,7 +197,7 @@
 
   body {
     @apply bg-transparent text-foreground;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
   }
 
   main {
@@ -163,27 +205,39 @@
   }
 
   /* Set the root background to transparent to let the pseudo-element show through */
-  html, body, #root {
+  html,
+  body,
+  #root {
     @apply bg-transparent;
   }
 
   /* Add a pseudo-element for the cinematic background */
   body::before {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     /* A subtle, luxurious gradient */
-    background: linear-gradient(160deg, hsl(120 40% 97%) 0%, hsl(35 80% 97%) 50%, hsl(0 0% 100%) 100%);
+    background: linear-gradient(
+      160deg,
+      hsl(120 40% 97%) 0%,
+      hsl(35 80% 97%) 50%,
+      hsl(0 0% 100%) 100%
+    );
     z-index: -1; /* Place it behind the content */
     background-attachment: fixed;
   }
 
   .dark body::before {
-     /* A deep, cinematic dark gradient */
-     background: linear-gradient(160deg, hsl(140 20% 8%) 0%, hsl(30 25% 8%) 50%, hsl(20 25% 6%) 100%);
+    /* A deep, cinematic dark gradient */
+    background: linear-gradient(
+      160deg,
+      hsl(140 20% 8%) 0%,
+      hsl(30 25% 8%) 50%,
+      hsl(20 25% 6%) 100%
+    );
   }
 
   .large-font {
@@ -209,5 +263,22 @@
     --tw-prose-pre-bg: transparent;
     --tw-prose-th-borders: theme(colors.white);
     --tw-prose-td-borders: theme(colors.white);
+  }
+
+  /* Floating navbar styles */
+  .floating-navbar {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Ensure proper spacing for fixed navbar */
+  .navbar-offset {
+    padding-top: 6rem;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-offset {
+      padding-top: 5rem;
+    }
   }
 }

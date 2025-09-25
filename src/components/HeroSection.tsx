@@ -1,110 +1,212 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Play, Calendar, Users, Award } from "lucide-react";
 import heroImage from "@/assets/hero-jharkhand.png";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+import { motion, useScroll, useTransform } from "framer-motion";
+import { TypeWriter } from "./TypeWriter";
+import { useRef } from "react";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 blur-sm"
-        style={{ backgroundImage: `url(${heroImage})` }}
+    <section
+      ref={ref}
+      id="home"
+      className="relative min-h-screen overflow-hidden"
+    >
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
+        style={{
+          backgroundImage: `url(${heroImage})`,
+          y,
+          opacity,
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-      </div>
-
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 container mx-auto px-4 text-center text-white"
-      >
-        <motion.div variants={itemVariants} className="mb-6 inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 border border-white/20 shadow-soft">
-          <Sparkles className="h-5 w-5 text-heritage" />
-          <span className="text-sm font-medium">Experience Jharkhand's Hidden Treasures</span>
-        </motion.div>
-
-        <motion.h1 
-          variants={itemVariants} 
-          className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight"
-        >
-          Discover the <span className="text-heritage">Soul</span> of Jharkhand
-        </motion.h1>
-
-        <motion.p 
-          variants={itemVariants} 
-          className="text-lg md:text-xl text-white/80 mb-10 max-w-3xl mx-auto leading-relaxed"
-        >
-          Immerse yourself in tribal culture, explore ancient heritage sites, and experience the untamed wilderness with our AI-powered travel companion.
-        </motion.p>
-
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <Button
-            size="lg"
-            onClick={() => navigate('/trip-genie')}
-            className="font-bold text-lg px-8 py-6 rounded-2xl bg-gradient-to-r from-primary to-nature text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 animate-button-glow"
-          >
-            <Sparkles className="h-6 w-6 mr-3" />
-            Plan Your Magical Trip
-          </Button>
-          <Button 
-            variant="outline"
-            size="lg"
-            className="font-bold text-lg px-8 py-6 rounded-2xl bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
-            onClick={() => navigate('/heritage')}
-          >
-            <MapPin className="h-6 w-6 mr-3" />
-            Explore Heritage
-          </Button>
-        </motion.div>
-
-        <motion.div 
-          variants={containerVariants} 
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
-        >
-          <motion.div variants={itemVariants} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-soft">
-            <div className="text-4xl font-bold text-heritage">50+</div>
-            <div className="text-white/80 mt-2">Heritage Sites</div>
-          </motion.div>
-          <motion.div variants={itemVariants} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-soft">
-            <div className="text-4xl font-bold text-heritage">15+</div>
-            <div className="text-white/80 mt-2">Tribal Communities</div>
-          </motion.div>
-          <motion.div variants={itemVariants} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-soft">
-            <div className="text-4xl font-bold text-heritage">200+</div>
-            <div className="text-white/80 mt-2">Local Guides</div>
-          </motion.div>
-        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/60"></div>
       </motion.div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center items-start pt-2">
-          <motion.div 
-            className="w-1.5 h-3 bg-white/80 rounded-full"
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex items-center">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-white space-y-8">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-heritage/20 border border-heritage/30 rounded-full backdrop-blur-sm"
+              >
+                <Award className="h-4 w-4 text-heritage" />
+                <span className="text-sm font-medium text-heritage">
+                  Official Tourism Partner
+                </span>
+              </motion.div>
+
+              {/* Main Heading */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="space-y-4"
+              >
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                  Discover the Soul of{" "}
+                  <span className="block">
+                    <TypeWriter
+                      text="Jharkhand"
+                      speed={150}
+                      delay={1500}
+                      className="bg-gradient-to-r from-heritage to-accent bg-clip-text text-transparent"
+                    />
+                  </span>
+                </h1>
+                <p className="text-xl text-gray-200 max-w-xl leading-relaxed">
+                  Journey through ancient forests, discover tribal heritage, and
+                  explore hidden waterfalls in India's untamed wilderness.
+                </p>
+              </motion.div>
+
+              {/* Action Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Button
+                  onClick={() => navigate("/trip-genie")}
+                  size="lg"
+                  className="group bg-heritage hover:bg-heritage/90 text-black font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                >
+                  Start Your Journey
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => navigate("/heritage")}
+                  className="border-2 border-white/30 text-black hover:bg-white/10 font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                >
+                  <Play className="mr-2 h-5 w-5" />
+                  Watch Preview
+                </Button>
+              </motion.div>
+
+              {/* Quick Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="grid grid-cols-3 gap-6 pt-8"
+              >
+                <div className="text-center lg:text-left">
+                  <div className="text-2xl font-bold text-heritage">50+</div>
+                  <div className="text-sm text-gray-300">Heritage Sites</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-2xl font-bold text-heritage">15+</div>
+                  <div className="text-sm text-gray-300">Tribal Villages</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-2xl font-bold text-heritage">1000+</div>
+                  <div className="text-sm text-gray-300">Happy Travelers</div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Content - Feature Cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="lg:ml-auto space-y-6 max-w-md"
+            >
+              {/* Quick Tour Card */}
+              <div
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer"
+                onClick={() => navigate("/trip-genie")}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 bg-heritage/20 rounded-xl flex items-center justify-center">
+                    <Calendar className="h-6 w-6 text-heritage" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white">
+                      Quick 3-Day Tour
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      Perfect for first-time visitors
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Group Travel Card */}
+              <div
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer"
+                onClick={() => navigate("/community")}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 bg-accent/20 rounded-xl flex items-center justify-center">
+                    <Users className="h-6 w-6 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white">
+                      Group Adventures
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      Join fellow travelers
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Adventure Highlight */}
+              <div className="bg-gradient-to-br from-heritage/20 to-accent/20 backdrop-blur-md rounded-2xl p-6 border border-heritage/30">
+                <div className="text-center">
+                  <h3 className="font-bold text-white text-lg mb-2">
+                    Experience Authentic Jharkhand
+                  </h3>
+                  <p className="text-gray-300 text-sm mb-4">
+                    From tribal festivals to hidden waterfalls
+                  </p>
+                  <div className="flex items-center justify-center gap-2 text-heritage font-semibold">
+                    <span>Explore Now</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      {/* <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <motion.div
+          className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center items-start pt-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+        >
+          <motion.div
+            className="w-1.5 h-3 bg-white/60 rounded-full"
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
           />
-        </div>
-      </div>
+        </motion.div>
+      </div> */}
     </section>
   );
 };

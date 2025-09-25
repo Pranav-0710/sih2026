@@ -1,16 +1,22 @@
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Send, Sparkles, MapPin, Clock, DollarSign, Heart } from 'lucide-react';
-import { HfInference } from '@huggingface/inference';
-import { useToast } from '@/hooks/use-toast';
-import Navigation from '@/components/Navigation';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Send, Sparkles, MapPin, Clock, DollarSign, Heart } from "lucide-react";
+import { HfInference } from "@huggingface/inference";
+import { useToast } from "@/hooks/use-toast";
+import Navigation from "@/components/Navigation";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 interface Message {
   id: string;
@@ -24,26 +30,33 @@ const hf = new HfInference(import.meta.env.VITE_HUGGINGFACE_API_KEY);
 const TripGenie = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      content: "Hello! I'm Trip Genie, your AI travel companion for exploring the beautiful state of Jharkhand. I can help you plan the perfect trip based on your interests, budget, and time. What would you like to discover today? 🌟",
+      id: "1",
+      content:
+        "Hello! I'm Trip Genie, your AI travel companion for exploring the beautiful state of Jharkhand. I can help you plan the perfect trip based on your interests, budget, and time. What would you like to discover today? 🌟",
       isBot: true,
       timestamp: new Date(),
-    }
+    },
   ]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [preferences, setPreferences] = useState({
-    budget: '',
-    duration: '',
+    budget: "",
+    duration: "",
     interests: [] as string[],
-    location: ''
+    location: "",
   });
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const interestOptions = [
-    'Heritage Sites', 'Nature & Wildlife', 'Adventure', 'Tribal Culture', 
-    'Photography', 'Spiritual', 'Food & Cuisine', 'Festivals'
+    "Heritage Sites",
+    "Nature & Wildlife",
+    "Adventure",
+    "Tribal Culture",
+    "Photography",
+    "Spiritual",
+    "Food & Cuisine",
+    "Festivals",
   ];
 
   const scrollToBottom = () => {
@@ -64,35 +77,44 @@ const TripGenie = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
     setIsLoading(true);
 
     try {
-      const systemPrompt = `You are Trip Genie, an AI travel assistant specialized in Jharkhand tourism. You help visitors discover the rich cultural heritage, natural beauty, and tribal traditions of Jharkhand.\n\nKey knowledge about Jharkhand:\n- Famous heritage sites: Jagannath Temple Ranchi, Rajrappa Temple, Deoghar Baidyanath Temple\n- Natural attractions: Hundru Falls, Dassam Falls, Betla National Park, Netarhat, Palamau Tiger Reserve\n- Tribal culture: Santhal, Munda, Oraon tribes with unique festivals like Karma, Sarhul, Tusu\n- Adventure activities: Trekking in Parasnath Hills, river rafting, wildlife safaris\n- Cultural experiences: Tribal dance performances, handicraft workshops, village stays\n- Best time: October to March for most places\n- Local cuisine: Thekua, Pittha, Dhuska, tribal honey, bamboo shoot dishes\n\nGuidelines:\n1. Always prioritize Jharkhand destinations and experiences\n2. Consider the user's budget, duration, and interests\n3. Provide practical information: costs, best times to visit, transportation\n4. Include cultural immersion opportunities\n5. Suggest heritage sites based on user interests\n6. Be enthusiastic and informative\n7. Format responses in a conversational, helpful manner\n8. Include approximate costs in INR\n9. Suggest 2-3 day itineraries when appropriate\n\nCurrent request context:\nBudget: ${preferences.budget || 'Not specified'}\nDuration: ${preferences.duration || 'Not specified'} \nInterests: ${preferences.interests.join(', ') || 'General tourism'}\nLocation preference: ${preferences.location || 'Anywhere in Jharkhand'}`;
+      const systemPrompt = `You are Trip Genie, an AI travel assistant specialized in Jharkhand tourism. You help visitors discover the rich cultural heritage, natural beauty, and tribal traditions of Jharkhand.\n\nKey knowledge about Jharkhand:\n- Famous heritage sites: Jagannath Temple Ranchi, Rajrappa Temple, Deoghar Baidyanath Temple\n- Natural attractions: Hundru Falls, Dassam Falls, Betla National Park, Netarhat, Palamau Tiger Reserve\n- Tribal culture: Santhal, Munda, Oraon tribes with unique festivals like Karma, Sarhul, Tusu\n- Adventure activities: Trekking in Parasnath Hills, river rafting, wildlife safaris\n- Cultural experiences: Tribal dance performances, handicraft workshops, village stays\n- Best time: October to March for most places\n- Local cuisine: Thekua, Pittha, Dhuska, tribal honey, bamboo shoot dishes\n\nGuidelines:\n1. Always prioritize Jharkhand destinations and experiences\n2. Consider the user's budget, duration, and interests\n3. Provide practical information: costs, best times to visit, transportation\n4. Include cultural immersion opportunities\n5. Suggest heritage sites based on user interests\n6. Be enthusiastic and informative\n7. Format responses in a conversational, helpful manner\n8. Include approximate costs in INR\n9. Suggest 2-3 day itineraries when appropriate\n\nCurrent request context:\nBudget: ${
+        preferences.budget || "Not specified"
+      }\nDuration: ${preferences.duration || "Not specified"} \nInterests: ${
+        preferences.interests.join(", ") || "General tourism"
+      }\nLocation preference: ${
+        preferences.location || "Anywhere in Jharkhand"
+      }`;
 
       const response = await hf.chatCompletion({
         model: "meta-llama/Llama-3.3-70B-Instruct",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: inputMessage }
+          { role: "user", content: inputMessage },
         ],
         max_tokens: 1000,
       });
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: response.choices[0].message?.content || "Sorry, I couldn't generate a response.",
+        content:
+          response.choices[0].message?.content ||
+          "Sorry, I couldn't generate a response.",
         isBot: true,
         timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error('Trip Genie error:', error);
+      console.error("Trip Genie error:", error);
       toast({
         title: "Error",
-        description: "Failed to get response from Trip Genie. Please try again.",
+        description:
+          "Failed to get response from Trip Genie. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -101,11 +123,11 @@ const TripGenie = () => {
   };
 
   const toggleInterest = (interest: string) => {
-    setPreferences(prev => ({
+    setPreferences((prev) => ({
       ...prev,
       interests: prev.interests.includes(interest)
-        ? prev.interests.filter(i => i !== interest)
-        : [...prev.interests, interest]
+        ? prev.interests.filter((i) => i !== interest)
+        : [...prev.interests, interest],
     }));
   };
 
@@ -114,13 +136,13 @@ const TripGenie = () => {
     "Best waterfalls to visit in monsoon",
     "Tribal culture experiences in Jharkhand",
     "Adventure activities under ₹5000",
-    "Family-friendly places near Jamshedpur"
+    "Family-friendly places near Jamshedpur",
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-24">
       <Navigation />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Preferences Sidebar */}
@@ -138,14 +160,23 @@ const TripGenie = () => {
                     <DollarSign className="h-4 w-4" />
                     Budget Range
                   </label>
-                  <Select value={preferences.budget} onValueChange={(value) => setPreferences(prev => ({...prev, budget: value}))}>
+                  <Select
+                    value={preferences.budget}
+                    onValueChange={(value) =>
+                      setPreferences((prev) => ({ ...prev, budget: value }))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select budget" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="under-5000">Under ₹5,000</SelectItem>
-                      <SelectItem value="5000-15000">₹5,000 - ₹15,000</SelectItem>
-                      <SelectItem value="15000-30000">₹15,000 - ₹30,000</SelectItem>
+                      <SelectItem value="5000-15000">
+                        ₹5,000 - ₹15,000
+                      </SelectItem>
+                      <SelectItem value="15000-30000">
+                        ₹15,000 - ₹30,000
+                      </SelectItem>
                       <SelectItem value="above-30000">Above ₹30,000</SelectItem>
                     </SelectContent>
                   </Select>
@@ -156,7 +187,12 @@ const TripGenie = () => {
                     <Clock className="h-4 w-4" />
                     Duration
                   </label>
-                  <Select value={preferences.duration} onValueChange={(value) => setPreferences(prev => ({...prev, duration: value}))}>
+                  <Select
+                    value={preferences.duration}
+                    onValueChange={(value) =>
+                      setPreferences((prev) => ({ ...prev, duration: value }))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select duration" />
                     </SelectTrigger>
@@ -177,7 +213,12 @@ const TripGenie = () => {
                   <Input
                     placeholder="e.g. Ranchi, Jamshedpur"
                     value={preferences.location}
-                    onChange={(e) => setPreferences(prev => ({...prev, location: e.target.value}))}
+                    onChange={(e) =>
+                      setPreferences((prev) => ({
+                        ...prev,
+                        location: e.target.value,
+                      }))
+                    }
                   />
                 </div>
 
@@ -190,7 +231,11 @@ const TripGenie = () => {
                     {interestOptions.map((interest) => (
                       <Badge
                         key={interest}
-                        variant={preferences.interests.includes(interest) ? "default" : "outline"}
+                        variant={
+                          preferences.interests.includes(interest)
+                            ? "default"
+                            : "outline"
+                        }
                         className="cursor-pointer text-xs"
                         onClick={() => toggleInterest(interest)}
                       >
@@ -234,26 +279,32 @@ const TripGenie = () => {
                   Trip Genie - AI Travel Assistant
                 </CardTitle>
               </CardHeader>
-              
+
               <CardContent className="flex-1 flex flex-col">
                 {/* Messages */}
                 <div className="flex-1 space-y-4 overflow-y-auto mb-4 p-2 max-h-[calc(100vh-300px)]">
                   {messages.map((message) => (
                     <div
                       key={message.id}
-                      className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
+                      className={`flex ${
+                        message.isBot ? "justify-start" : "justify-end"
+                      }`}
                     >
                       <div
                         className={`max-w-[80%] p-3 rounded-lg ${
                           message.isBot
-                            ? 'bg-accent text-accent-foreground'
-                            : 'bg-primary text-primary-foreground'
+                            ? "bg-accent text-accent-foreground"
+                            : "bg-primary text-primary-foreground"
                         }`}
                       >
-                        <div className={`text-sm prose dark:prose-invert max-w-none ${
-                          !message.isBot && 'prose-white-text'
-                        }`}>
-                          <ReactMarkdown rehypePlugins={[rehypeRaw]}>{message.content}</ReactMarkdown>
+                        <div
+                          className={`text-sm prose dark:prose-invert max-w-none ${
+                            !message.isBot && "prose-white-text"
+                          }`}
+                        >
+                          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                            {message.content}
+                          </ReactMarkdown>
                         </div>
                         <div className="text-xs opacity-70 mt-1">
                           {message.timestamp.toLocaleTimeString()}
@@ -281,7 +332,7 @@ const TripGenie = () => {
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
+                      if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         handleSendMessage();
                       }

@@ -138,7 +138,9 @@ export const Heritage: React.FC = () => {
   const rotateX = useTransform(y, [-1, 1], [20, -20]);
   const rotateY = useTransform(x, [-1, 1], [-20, 20]);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseMove = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     if (!mapWrapperRef.current) return;
 
     const rect = mapWrapperRef.current.getBoundingClientRect();
@@ -204,147 +206,182 @@ export const Heritage: React.FC = () => {
 
   return (
     <>
-    <Navigation />
-    <div
-      className="relative w-full min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url(/images/map.png)" }}
-    >
-      <div className="relative z-10 flex flex-col w-full h-full min-h-screen">
-        <div className="w-full mx-auto text-center">
-            <h1 className="text-5xl font-extrabold text-white mt-8 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-            Explore the Heritage of Jharkhand
+      <Navigation />
+      <div
+        className="relative w-full min-h-screen bg-cover bg-center"
+        style={{ backgroundImage: "url(/images/map.png)" }}
+      >
+        <div className="relative z-10 flex flex-col w-full h-full min-h-screen pt-24">
+          <div className="w-full mx-auto text-center">
+            <h1
+              className="text-5xl font-extrabold text-white mt-8 mb-4"
+              style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+            >
+              Explore the Heritage of Jharkhand
             </h1>
             <p className="text-lg text-white mb-8">
-                Discover the rich culture and natural beauty of Jharkhand.
+              Discover the rich culture and natural beauty of Jharkhand.
             </p>
-        </div>
+          </div>
 
-        <div className="w-full mx-auto bg-black/50 backdrop-blur-sm p-4 rounded-lg shadow-lg mb-8">
+          <div className="w-full mx-auto bg-black/50 backdrop-blur-sm p-4 rounded-lg shadow-lg mb-8">
             <div className="flex flex-col md:flex-row gap-4 items-center">
-                <Input
-                    type="text"
-                    placeholder="Search for a location..."
-                    className="w-full md:w-1/3 bg-white/80"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+              <Input
+                type="text"
+                placeholder="Search for a location..."
+                className="w-full md:w-1/3 bg-white/80"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                disabled={isTourRunning}
+              />
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`${
+                      activeCategory === category
+                        ? "bg-blue-600 text-white"
+                        : "bg-white/80 text-black"
+                    } hover:bg-blue-500 hover:text-white`}
                     disabled={isTourRunning}
-                />
-                <div className="flex flex-wrap gap-2">
-                    {categories.map((category) => (
-                        <Button
-                            key={category}
-                            onClick={() => setActiveCategory(category)}
-                            className={`${ activeCategory === category ? "bg-blue-600 text-white" : "bg-white/80 text-black" } hover:bg-blue-500 hover:text-white`}
-                            disabled={isTourRunning}
-                        >
-                            {category}
-                        </Button>
-                    ))}
-                </div>
-                <div className="flex-grow" />
-                {!isTourRunning ? (
-                    <Button onClick={startTour} className="bg-green-500 hover:bg-green-600 text-white">
-                        <Play className="mr-2" size={16}/>
-                        Start Guided Tour
-                    </Button>
-                ) : (
-                    <Button onClick={stopTour} className="bg-red-500 hover:bg-red-600 text-white">
-                        <StopCircle className="mr-2" size={16}/>
-                        Stop Tour
-                    </Button>
-                )}
-            </div>
-        </div>
-
-        <motion.div
-          ref={mapWrapperRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative w-full bg-cover bg-center rounded-lg shadow-2xl"
-          
-        >
-          <div style={{ aspectRatio: '1088 / 960', transform: "translateZ(0)" }}>
-            {/* Markers */}
-            {filteredSpots.map((spot, index) => {
-              const originalIndex = spots.findIndex(s => s.name === spot.name);
-              return (
-              <div
-                key={originalIndex}
-                className="absolute"
-                style={{ top: spot.top, left: spot.left, transform: "translateZ(20px)" }}
-                onClick={() => setSelectedSpot(originalIndex)}
-              >
-                <motion.div
-                  className="w-5 h-5 bg-pink-500 rounded-full shadow-lg cursor-pointer border-2 border-white animate-pulse"
-                  whileHover={{ scale: 1.3 }}
-                />
+                  >
+                    {category}
+                  </Button>
+                ))}
               </div>
-            )})}
+              <div className="flex-grow" />
+              {!isTourRunning ? (
+                <Button
+                  onClick={startTour}
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                >
+                  <Play className="mr-2" size={16} />
+                  Start Guided Tour
+                </Button>
+              ) : (
+                <Button
+                  onClick={stopTour}
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
+                  <StopCircle className="mr-2" size={16} />
+                  Stop Tour
+                </Button>
+              )}
+            </div>
+          </div>
 
-            {/* Card */}
-            {selectedSpot !== null && (
-              <motion.div
+          <motion.div
+            ref={mapWrapperRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+            className="relative w-full bg-cover bg-center rounded-lg shadow-2xl"
+          >
+            <div
+              style={{ aspectRatio: "1088 / 960", transform: "translateZ(0)" }}
+            >
+              {/* Markers */}
+              {filteredSpots.map((spot, index) => {
+                const originalIndex = spots.findIndex(
+                  (s) => s.name === spot.name
+                );
+                return (
+                  <div
+                    key={originalIndex}
+                    className="absolute"
+                    style={{
+                      top: spot.top,
+                      left: spot.left,
+                      transform: "translateZ(20px)",
+                    }}
+                    onClick={() => setSelectedSpot(originalIndex)}
+                  >
+                    <motion.div
+                      className="w-5 h-5 bg-pink-500 rounded-full shadow-lg cursor-pointer border-2 border-white animate-pulse"
+                      whileHover={{ scale: 1.3 }}
+                    />
+                  </div>
+                );
+              })}
+
+              {/* Card */}
+              {selectedSpot !== null && (
+                <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="absolute z-[100] w-72"
                   style={{
-                      top: `calc(${spots[selectedSpot].top} - 10rem)`,
-                      left: `calc(${spots[selectedSpot].left} + 2rem)`,
-                      transform: "translateZ(50px)"
+                    top: `calc(${spots[selectedSpot].top} - 10rem)`,
+                    left: `calc(${spots[selectedSpot].left} + 2rem)`,
+                    transform: "translateZ(50px)",
                   }}
-              >
-                <Card className="shadow-xl border-2 border-blue-500 relative">
-                  <Button
+                >
+                  <Card className="shadow-xl border-2 border-blue-500 relative">
+                    <Button
                       onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedSpot(null);
+                        e.stopPropagation();
+                        setSelectedSpot(null);
                       }}
                       className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 text-white p-0 z-[110]"
-                  >
-                      <X size={16} />
-                  </Button>
-                  <CardContent className="p-2">
-                    <img
-                      src={spots[selectedSpot].img}
-                      alt={spots[selectedSpot].name}
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
-                    <h3 className="text-lg font-semibold mt-2">{spots[selectedSpot].name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{spots[selectedSpot].desc}</p>
-
-                    {loading && <p className="text-sm text-gray-500">Loading weather...</p>}
-                    {error && <p className="text-sm text-red-500">Error: {error}</p>}
-                    {weather && (
-                      <div className="mt-2 text-sm text-gray-700">
-                        <p>Temperature: {weather.main.temp}°C</p>
-                        <p>Feels like: {weather.main.feels_like}°C</p>
-                        <p>Condition: {weather.weather[0].description}</p>
-                        <img
-                          src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-                          alt={weather.weather[0].description}
-                          className="inline-block w-8 h-8"
-                        />
-                        <p className="mt-2 font-semibold">Weather Suggestion:</p>
-                        <p>{getWeatherSuggestion(weather.weather[0].main)}</p>
-                      </div>
-                    )}
-
-                    <Button
-                      className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => window.open(spots[selectedSpot].wiki, "_blank")}
                     >
-                      Learn More
+                      <X size={16} />
                     </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
+                    <CardContent className="p-2">
+                      <img
+                        src={spots[selectedSpot].img}
+                        alt={spots[selectedSpot].name}
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <h3 className="text-lg font-semibold mt-2">
+                        {spots[selectedSpot].name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        {spots[selectedSpot].desc}
+                      </p>
+
+                      {loading && (
+                        <p className="text-sm text-gray-500">
+                          Loading weather...
+                        </p>
+                      )}
+                      {error && (
+                        <p className="text-sm text-red-500">Error: {error}</p>
+                      )}
+                      {weather && (
+                        <div className="mt-2 text-sm text-gray-700">
+                          <p>Temperature: {weather.main.temp}°C</p>
+                          <p>Feels like: {weather.main.feels_like}°C</p>
+                          <p>Condition: {weather.weather[0].description}</p>
+                          <img
+                            src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                            alt={weather.weather[0].description}
+                            className="inline-block w-8 h-8"
+                          />
+                          <p className="mt-2 font-semibold">
+                            Weather Suggestion:
+                          </p>
+                          <p>{getWeatherSuggestion(weather.weather[0].main)}</p>
+                        </div>
+                      )}
+
+                      <Button
+                        className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={() =>
+                          window.open(spots[selectedSpot].wiki, "_blank")
+                        }
+                      >
+                        Learn More
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </div>
     </>
   );
 };
@@ -415,13 +452,11 @@ const weatherSuggestions: { [key: string]: string[] } = {
     "Stay away from windows.",
   ],
   // Default or less common conditions
-  default: [
-    "Check local advisories for best experience.",
-    "Enjoy your visit!",
-  ],
+  default: ["Check local advisories for best experience.", "Enjoy your visit!"],
 };
 
 const getWeatherSuggestion = (weatherMain: string): string => {
-  const suggestions = weatherSuggestions[weatherMain] || weatherSuggestions.default;
+  const suggestions =
+    weatherSuggestions[weatherMain] || weatherSuggestions.default;
   return suggestions[Math.floor(Math.random() * suggestions.length)];
 };
