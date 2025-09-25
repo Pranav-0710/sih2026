@@ -15,29 +15,8 @@ import {
 } from "./ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
-
-declare global {
-  interface Window {
-    google: any;
-    googleTranslateElementInit: () => void;
-  }
-}
-
-const navItems = [
-  { name: "Trip Genie", path: "/trip-genie" },
-  { name: "Journey Hub", path: "/bookings" },
-  { name: "Explore",
-    isDropdown: true,
-    dropdownItems: [
-      { name: "Heritage Trails", path: "/heritage" },
-      { name: "Virtual 360", path: "/vr-experience" },
-      { name: "FunScapes", path: "/funscapes" },
-      { name: "Gen-Z Corner", path: "/genzcorner" },
-      { name: "RouteX", path: "/transport" },
-    ],
-  },
-  { name: "Community", path: "/community" },
-];
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 const NavLinkItem = ({ to, children, className = "" }) => (
   <NavLink
@@ -56,13 +35,29 @@ const NavLinkItem = ({ to, children, className = "" }) => (
 );
 
 export function Navigation() {
+  const { t } = useTranslation();
+  const navItems = [
+    { name: t("nav.tripGenie"), path: "/trip-genie" },
+    { name: t("nav.journeyHub"), path: "/bookings" },
+    {
+      name: t("nav.explore"),
+      isDropdown: true,
+      dropdownItems: [
+        { name: t("nav.heritageTrails"), path: "/heritage" },
+        { name: t("nav.virtual360"), path: "/vr-experience" },
+        { name: t("nav.funscapes"), path: "/funscapes" },
+        { name: t("nav.genzCorner"), path: "/genzcorner" },
+        { name: t("nav.routeX"), path: "/transport" },
+      ],
+    },
+    { name: t("nav.community"), path: "/community" },
+  ];
   const isMobile = useIsMobile();
   const { user, signOut, role, loading } = useAuth();
   const { toggleLargeFont, isLargeFont } = useFontSize();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
-  const [googleTranslateReady, setGoogleTranslateReady] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,16 +65,6 @@ export function Navigation() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const checkGoogleTranslate = setInterval(() => {
-      if (window.google && window.google.translate && window.google.translate.TranslateElement) {
-        setGoogleTranslateReady(true);
-        clearInterval(checkGoogleTranslate);
-      }
-    }, 100);
-    return () => clearInterval(checkGoogleTranslate);
   }, []);
 
   const mobileNavItems = navItems.reduce((acc, item) => {
@@ -92,21 +77,7 @@ export function Navigation() {
   }, [] as { name: string; path: string }[]);
 
   const changeLanguage = (lang: string) => {
-    if (googleTranslateReady && window.google.translate.TranslateElement) {
-      const selectElement = document.querySelector('#google_translate_element select') as HTMLSelectElement;
-      if (selectElement) {
-        selectElement.value = lang;
-        selectElement.dispatchEvent(new Event('change'));
-      }
-      // Attempt to directly call the Google Translate API method
-      if (window.google.translate.TranslateElement._gtc && window.google.translate.TranslateElement._gtc.instance) {
-        window.google.translate.TranslateElement._gtc.instance.changeLanguage(lang);
-      } else if (window.google.translate.TranslateElement.set_language) {
-        window.google.translate.TranslateElement.set_language(lang);
-      }
-    } else {
-      console.warn("Google Translate API not ready yet or set_language method not found.");
-    }
+    i18n.changeLanguage(lang);
     setShowLanguageDropdown(false);
   };
 
@@ -167,7 +138,6 @@ export function Navigation() {
                 <DropdownMenuItem onClick={() => changeLanguage('hi')}>Hindi</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <div id="google_translate_element" className="mr-1"></div>
             <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>

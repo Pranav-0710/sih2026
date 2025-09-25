@@ -1,0 +1,53 @@
+{
+  "features": {
+    "title": "Explore Jharkhand's Treasures",
+    "description": "Discover the rich heritage, vibrant culture, and breathtaking nature of Jharkhand.",
+    "hover_to_learn_more": "Hover to learn more",
+    "explore": "Explore",
+    "long_description": "From AI-powered planning to 24/7 safety, we've got you covered at every step of your cultural and natural exploration of Jharkhand.",
+    "start_exploring_now": "Start Exploring Now",
+    "heritage": {
+      "title": "Heritage Sites",
+      "description": "Uncover ancient temples and historical landmarks."
+    },
+    "culture": {
+      "title": "Tribal Culture",
+      "description": "Experience the unique traditions and art forms of local tribes."
+    },
+    "nature": {
+      "title": "Nature & Wildlife",
+      "description": "Explore lush forests, serene waterfalls, and diverse wildlife."
+    },
+    "community_wall": {
+      "title": "Community Wall",
+      "description": "Connect with fellow travelers, share experiences, and discover hidden gems recommended by locals."
+    },
+    "emergency_assistance": {
+      "title": "Emergency Assistance",
+      "description": "24/7 safety support with SOS button, emergency contacts, and real-time location sharing for remote areas."
+    },
+    "gen_z_corner": {
+      "title": "Gen-Z Corner",
+      "description": "A vibrant space for the young and trendy, offering unique experiences, digital content, and interactive challenges tailored for Gen-Z travelers."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "tripGenie": "Trip Genie",
+    "journeyHub": "Journey Hub",
+    "explore": "Explore",
+    "heritageTrails": "Heritage Trails",
+    "virtual360": "Virtual 360",
+    "funscapes": "FunScapes",
+    "genzCorner": "Gen-Z Corner",
+    "routeX": "RouteX",
+    "community": "Community",
+    "dashboard": "Dashboard",
+    "feedbackAnalysis": "Feedback Analysis",
+    "getStarted": "Get Started",
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "loading": "Loading...",
+    "translate": "Translate"
+  }
+}
