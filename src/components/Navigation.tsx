@@ -156,12 +156,20 @@ export function Navigation() {
                       </Link>
                     ))}
                     {role === "admin" && (
-                      <Link
-                        to="/dashboard"
-                        className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
-                      >
-                        Dashboard
-                      </Link>
+                      <>
+                        <Link
+                          to="/dashboard"
+                          className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                        >
+                          Dashboard
+                        </Link>
+                        <Link
+                          to="/sentiment-analysis"
+                          className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+                        >
+                          Feedback Analysis
+                        </Link>
+                      </>
                     )}
                   </div>
                   <div className="px-4 pt-4 border-t border-border/50">
@@ -240,7 +248,12 @@ export function Navigation() {
                   );
                 })}
                 {role === "admin" && (
-                  <NavLinkItem to="/dashboard">Dashboard</NavLinkItem>
+                  <>
+                    <NavLinkItem to="/dashboard">Dashboard</NavLinkItem>
+                    <NavLinkItem to="/sentiment-analysis">
+                      Feedback Analysis
+                    </NavLinkItem>
+                  </>
                 )}
               </nav>
             </div>
