@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/useAuth";
-import { MapPin, LogOut, CaseSensitive, Menu, ChevronDown } from "lucide-react";
+import { MapPin, LogOut, CaseSensitive, Menu, ChevronDown, Globe } from "lucide-react";
 import { useFontSize } from "./FontSizeProvider";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -16,11 +16,17 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
 
+declare global {
+  interface Window {
+    google: any;
+    googleTranslateElementInit: () => void;
+  }
+}
+
 const navItems = [
   { name: "Trip Genie", path: "/trip-genie" },
   { name: "Journey Hub", path: "/bookings" },
-  {
-    name: "Explore",
+  { name: "Explore",
     isDropdown: true,
     dropdownItems: [
       { name: "Heritage Trails", path: "/heritage" },
@@ -51,10 +57,12 @@ const NavLinkItem = ({ to, children, className = "" }) => (
 
 export function Navigation() {
   const isMobile = useIsMobile();
-  const { user, signOut, role } = useAuth();
+  const { user, signOut, role, loading } = useAuth();
   const { toggleLargeFont, isLargeFont } = useFontSize();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [googleTranslateReady, setGoogleTranslateReady] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,6 +70,16 @@ export function Navigation() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const checkGoogleTranslate = setInterval(() => {
+      if (window.google && window.google.translate && window.google.translate.TranslateElement) {
+        setGoogleTranslateReady(true);
+        clearInterval(checkGoogleTranslate);
+      }
+    }, 100);
+    return () => clearInterval(checkGoogleTranslate);
   }, []);
 
   const mobileNavItems = navItems.reduce((acc, item) => {
@@ -72,6 +90,25 @@ export function Navigation() {
     }
     return acc;
   }, [] as { name: string; path: string }[]);
+
+  const changeLanguage = (lang: string) => {
+    if (googleTranslateReady && window.google.translate.TranslateElement) {
+      const selectElement = document.querySelector('#google_translate_element select') as HTMLSelectElement;
+      if (selectElement) {
+        selectElement.value = lang;
+        selectElement.dispatchEvent(new Event('change'));
+      }
+      // Attempt to directly call the Google Translate API method
+      if (window.google.translate.TranslateElement._gtc && window.google.translate.TranslateElement._gtc.instance) {
+        window.google.translate.TranslateElement._gtc.instance.changeLanguage(lang);
+      } else if (window.google.translate.TranslateElement.set_language) {
+        window.google.translate.TranslateElement.set_language(lang);
+      }
+    } else {
+      console.warn("Google Translate API not ready yet or set_language method not found.");
+    }
+    setShowLanguageDropdown(false);
+  };
 
   return (
     <header
@@ -114,6 +151,23 @@ export function Navigation() {
 
         {isMobile ? (
           <div className="flex items-center space-x-2 ml-auto">
+            <DropdownMenu open={showLanguageDropdown} onOpenChange={setShowLanguageDropdown}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                >
+                  <Globe className="h-5 w-5" />
+                  <span className="sr-only">Translate</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
+                <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => changeLanguage('hi')}>Hindi</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <div id="google_translate_element" className="mr-1"></div>
             <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
@@ -173,7 +227,9 @@ export function Navigation() {
                     )}
                   </div>
                   <div className="px-4 pt-4 border-t border-border/50">
-                    {user ? (
+                    {loading ? (
+                      <div className="py-2 px-3 rounded-lg font-medium text-foreground/70">Loading...</div>
+                    ) : user ? (
                       <div className="space-y-2">
                         <Link
                           to="/profile"
@@ -258,8 +314,27 @@ export function Navigation() {
               </nav>
             </div>
             <div className="flex items-center space-x-3">
+              <DropdownMenu open={showLanguageDropdown} onOpenChange={setShowLanguageDropdown}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                  >
+                    <Globe className="h-5 w-5" />
+                    <span className="sr-only">Translate</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
+                  <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage('hi')}>Hindi</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <div id="google_translate_element" className="mr-3"></div>
               <ModeToggle />
-              {user ? (
+              {loading ? (
+                <div className="font-medium text-foreground/70">Loading...</div>
+              ) : user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button

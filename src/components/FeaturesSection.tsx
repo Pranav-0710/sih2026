@@ -33,7 +33,7 @@ const features = [
     color: "heritage",
     path: "/heritage",
     image:
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&auto=format",
+      "https://imgs.search.brave.com/GPAAu6X5fBcNBUCSaH424zTqH1xqJUMESLteTPbCk-I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vZ2VvZ3Jh/cGhpY2Jvb2suY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDI0/LzA3L0N1bHR1cmFs/LUhlcml0YWdlLmpw/ZWc_cmVzaXplPTEw/MjQsNTc2JnNzbD0x",
   },
   {
     icon: Award,
@@ -63,7 +63,7 @@ const features = [
     color: "destructive",
     path: "/emergency",
     image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&auto=format",
+      "https://imgs.search.brave.com/vg0BOb22uwlcInV964a6S1m9UO9akXaL45Z1LhJvV2M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzExLzg4LzUyLzUw/LzM2MF9GXzExODg1/MjUwMDFfR1QzZTNy/NzBzYU1kMktheGV4/cGxwYkdDMmFQSjNZ/WkEuanBn",
   },
   {
     icon: Calendar,
