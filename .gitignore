@@ -22,7 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.
+
+# Environment / secrets
 .env
+.env.*
+!.env.example
+
+# Supabase CLI local state (machine-specific)
+supabase/.temp/
+
+# Local notes & scratch
 jharkhand-vr (3)
 GOOGLE SIGN-IN.txt
