@@ -1,157 +1,194 @@
-// Supabase Edge Function for Hugging Face sentiment analysis
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-const huggingFaceApiKey = Deno.env.get('HUGGINGFACE_API_KEY');
-const supabaseUrl = Deno.env.get('SUPABASE_URL');
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { InferenceClient } from "https://esm.sh/@huggingface/inference@4.8.0";
+
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-// Hugging Face sentiment analysis
-async function analyzeSentiment(text) {
-  if (!huggingFaceApiKey) throw new Error('Hugging Face API key not configured');
-  const model = 'lxyuan/distilbert-base-multilingual-cased-sentiments-student';
-  const apiUrl = `https://api-inference.huggingface.co/models/${model}`;
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${huggingFaceApiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      inputs: text
-    })
+
+const HF_MODEL = "cardiffnlp/twitter-roberta-base-sentiment-latest";
+const MAX_INPUT_LENGTH = 1000;
+
+type Sentiment = "positive" | "negative" | "neutral";
+
+interface HuggingFaceClassification {
+  label: string;
+  score: number;
+}
+
+interface BatchSourceItem {
+  id: string;
+  title: string | null;
+  content: string | null;
+  rating?: number | null;
+}
+
+interface BatchResult {
+  type: "review" | "community_post";
+  id: string;
+  sentiment: Sentiment;
+  confidence: number;
+  content: string;
+  rating?: number;
+}
+
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`Hugging Face API error: ${response.status} - ${errorText}`);
-    throw new Error(`Hugging Face API error: ${response.status} - ${errorText}`);
+}
+
+function normalizeLabel(label: string): Sentiment {
+  const value = label.toLowerCase();
+
+  if (value.includes("neg")) return "negative";
+  if (value.includes("neu")) return "neutral";
+  if (value.includes("pos")) return "positive";
+
+  if (value === "label_0") return "negative";
+  if (value === "label_1") return "neutral";
+  if (value === "label_2") return "positive";
+
+  return "neutral";
+}
+
+function buildText(title: string | null, content: string | null) {
+  return `${title ?? ""} ${content ?? ""}`.trim().slice(0, MAX_INPUT_LENGTH);
+}
+
+async function analyzeSentiment(text: string): Promise<{ sentiment: Sentiment; confidence: number }> {
+  const apiKey = Deno.env.get("HUGGINGFACE_API_KEY")?.trim();
+  if (!apiKey) {
+    throw new Error("HUGGINGFACE_API_KEY is not configured in Supabase secrets.");
   }
-  const data = await response.json();
-  if (!data || !data.length || !data[0].length) throw new Error('Invalid response from Hugging Face API');
-  const results = data[0];
-  const topResult = results.reduce((prev, current)=>prev.score > current.score ? prev : current);
+
+  const client = new InferenceClient(apiKey);
+  const payload = await client.textClassification({
+    model: HF_MODEL,
+    inputs: text,
+  });
+
+  const results = Array.isArray(payload) && Array.isArray(payload[0])
+    ? payload[0] as HuggingFaceClassification[]
+    : Array.isArray(payload)
+      ? payload as HuggingFaceClassification[]
+      : [];
+
+  if (results.length === 0) {
+    throw new Error("Hugging Face returned an empty classification result.");
+  }
+
+  const topResult = results.reduce((best, candidate) => (
+    candidate.score > best.score ? candidate : best
+  ));
+
   return {
-    sentiment: topResult.label.toLowerCase(),
-    confidence: topResult.score
+    sentiment: normalizeLabel(topResult.label),
+    confidence: topResult.score,
   };
 }
-// Edge Function handler
-serve(async (req)=>{
-  if (req.method === 'OPTIONS') return new Response(null, {
-    headers: corsHeaders
-  });
+
+async function analyzeBatchItems(
+  type: BatchResult["type"],
+  items: BatchSourceItem[],
+): Promise<BatchResult[]> {
+  const settled = await Promise.all(items.map(async (item) => {
+    const text = buildText(item.title, item.content);
+    if (text.length < 3) {
+      return null;
+    }
+
+    try {
+      const sentiment = await analyzeSentiment(text);
+      return {
+        type,
+        id: item.id,
+        sentiment: sentiment.sentiment,
+        confidence: sentiment.confidence,
+        content: text.length > 100 ? `${text.slice(0, 100)}...` : text,
+        rating: item.rating ?? undefined,
+      } satisfies BatchResult;
+    } catch (error) {
+      console.error(`Failed to analyze ${type} ${item.id}:`, error);
+      return null;
+    }
+  }));
+
+  return settled.filter((item): item is BatchResult => item !== null);
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
-    const requestBody = await req.json();
-    const { batchAnalysis, text } = requestBody;
-    // ----- Batch analysis -----
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+    );
+
+    const { batchAnalysis, text } = await req.json();
+
     if (batchAnalysis) {
-      const { data: reviews, error: reviewsError } = await supabase.from('reviews').select('id, content, title, rating').not('content', 'is', null);
-      if (reviewsError) throw reviewsError;
-      const { data: posts, error: postsError } = await supabase.from('community_posts').select('id, content, title').not('content', 'is', null);
-      if (postsError) throw postsError;
-      const reviewPromises = (reviews || []).map(async (review)=>{
-        try {
-          const textToAnalyze = `${review.title || ''} ${review.content}`.trim().substring(0, 1000);
-          if (textToAnalyze.length > 10) {
-            const sentiment = await analyzeSentiment(textToAnalyze);
-            await supabase.from('sentiment_results').insert({
-              type: 'review',
-              item_id: review.id,
-              sentiment: sentiment.sentiment,
-              confidence: sentiment.confidence,
-              rating: review.rating
-            });
-            return {
-              type: 'review',
-              id: review.id,
-              sentiment: sentiment.sentiment,
-              confidence: sentiment.confidence,
-              rating: review.rating,
-              content: textToAnalyze.substring(0, 100) + '...'
-            };
-          }
-        } catch (error) {
-          console.error(`Error analyzing review ${review.id}:`, error);
-          return null;
-        }
-      });
-      const postPromises = (posts || []).map(async (post)=>{
-        try {
-          const textToAnalyze = `${post.title || ''} ${post.content}`.trim().substring(0, 1000);
-          if (textToAnalyze.length > 10) {
-            const sentiment = await analyzeSentiment(textToAnalyze);
-            await supabase.from('sentiment_results').insert({
-              type: 'community_post',
-              item_id: post.id,
-              sentiment: sentiment.sentiment,
-              confidence: sentiment.confidence
-            });
-            return {
-              type: 'community_post',
-              id: post.id,
-              sentiment: sentiment.sentiment,
-              confidence: sentiment.confidence,
-              content: textToAnalyze.substring(0, 100) + '...'
-            };
-          }
-        } catch (error) {
-          console.error(`Error analyzing post ${post.id}:`, error);
-          return null;
-        }
-      });
-      const analysisResults = (await Promise.all([
-        ...reviewPromises,
-        ...postPromises
-      ])).filter((r)=>r !== null);
-      const totalAnalyzed = analysisResults.length;
-      const positiveCount = analysisResults.filter((r)=>r.sentiment === 'positive').length;
-      const negativeCount = analysisResults.filter((r)=>r.sentiment === 'negative').length;
-      const neutralCount = analysisResults.filter((r)=>r.sentiment === 'neutral').length;
-      const averageConfidence = totalAnalyzed > 0 ? analysisResults.reduce((sum, r)=>sum + r.confidence, 0) / totalAnalyzed : 0;
-      return new Response(JSON.stringify({
+      const [{ data: reviews, error: reviewsError }, { data: posts, error: postsError }] = await Promise.all([
+        supabase.from("reviews").select("id, content, title, rating").not("content", "is", null),
+        supabase.from("community_posts").select("id, content, title").not("content", "is", null),
+      ]);
+
+      if (reviewsError) throw new Error(`Failed to fetch reviews: ${reviewsError.message}`);
+      if (postsError) throw new Error(`Failed to fetch community posts: ${postsError.message}`);
+
+      const [reviewResults, postResults] = await Promise.all([
+        analyzeBatchItems("review", (reviews ?? []) as BatchSourceItem[]),
+        analyzeBatchItems("community_post", (posts ?? []) as BatchSourceItem[]),
+      ]);
+
+      const results = [...reviewResults, ...postResults];
+      const total = results.length;
+      const positive = results.filter((item) => item.sentiment === "positive").length;
+      const negative = results.filter((item) => item.sentiment === "negative").length;
+      const neutral = results.filter((item) => item.sentiment === "neutral").length;
+      const averageConfidence = total > 0
+        ? results.reduce((sum, item) => sum + item.confidence, 0) / total
+        : 0;
+
+      return jsonResponse({
         success: true,
-        results: analysisResults,
+        results,
         statistics: {
-          total: totalAnalyzed,
-          positive: positiveCount,
-          negative: negativeCount,
-          neutral: neutralCount,
-          averageConfidence
-        }
-      }), {
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json'
-        }
+          total,
+          positive,
+          negative,
+          neutral,
+          averageConfidence,
+        },
       });
     }
-    // ----- Single text analysis -----
-    if (!text || text.trim().length === 0) throw new Error('Text is required for analysis');
-    const sentiment = await analyzeSentiment(text.trim());
-    return new Response(JSON.stringify({
+
+    if (typeof text !== "string" || text.trim().length === 0) {
+      return jsonResponse({
+        success: false,
+        error: "Text is required for analysis.",
+      }, 400);
+    }
+
+    const result = await analyzeSentiment(text.trim());
+
+    return jsonResponse({
       success: true,
-      result: sentiment
-    }), {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'application/json'
-      }
+      result,
     });
   } catch (error) {
-    console.error('Error in sentiment-analysis function:', error);
-    return new Response(JSON.stringify({
-      error: error.message,
-      success: false
-    }), {
-      status: 500,
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'application/json'
-      }
-    });
+    const message = error instanceof Error ? error.message : "An unknown error occurred.";
+    console.error("Error in sentiment-analysis function:", error);
+
+    return jsonResponse({
+      success: false,
+      error: message,
+    }, 500);
   }
 });

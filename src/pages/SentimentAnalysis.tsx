@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import Navigation from "@/components/Navigation";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,6 +31,46 @@ interface Statistics {
   neutral: number;
   averageConfidence: number;
 }
+
+interface FunctionErrorBody {
+  success?: boolean;
+  error?: string;
+  message?: string;
+  diagnostics?: Array<Record<string, unknown>>;
+}
+
+const getErrorMessage = async (error: unknown, fallback: string) => {
+  if (!(error instanceof Error)) {
+    return fallback;
+  }
+
+  const functionError = error as Error & {
+    context?: {
+      json: () => Promise<FunctionErrorBody>;
+    };
+  };
+
+  if (!functionError.context) {
+    return functionError.message || fallback;
+  }
+
+  try {
+    const body = await functionError.context.json();
+    console.log("SERVER ERROR BODY:", body);
+
+    if (body.error) {
+      return body.error;
+    }
+
+    if (body.message) {
+      return body.message;
+    }
+  } catch {
+    return functionError.message || fallback;
+  }
+
+  return functionError.message || fallback;
+};
 
 const SentimentAnalysis = () => {
   const [inputText, setInputText] = useState("");
@@ -70,10 +109,14 @@ const SentimentAnalysis = () => {
         throw new Error(data.error);
       }
     } catch (error) {
-      console.error('Error analyzing sentiment:', error);
+      console.error("Error analyzing sentiment:", error);
+      const errorMessage = await getErrorMessage(
+        error,
+        "Failed to analyze sentiment. Please try again.",
+      );
       toast({
-        title: "Error",
-        description: "Failed to analyze sentiment. Please try again.",
+        title: "Analysis Failed",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -101,10 +144,14 @@ const SentimentAnalysis = () => {
         throw new Error(data.error);
       }
     } catch (error) {
-      console.error('Error in batch analysis:', error);
+      console.error("Error in batch analysis:", error);
+      const errorMessage = await getErrorMessage(
+        error,
+        "Failed to run batch analysis. Please try again.",
+      );
       toast({
-        title: "Error",
-        description: "Failed to run batch analysis. Please try again.",
+        title: "Batch Analysis Failed",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -148,8 +195,6 @@ const SentimentAnalysis = () => {
   return (
     <PageLayout>
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
       <main className="container mx-auto py-8 px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="h-8 w-8 text-primary" />

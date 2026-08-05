@@ -4,6 +4,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Volume2, VolumeX } from "lucide-react"
 import * as THREE from "three"
 
+const SPATIAL_AUDIO_PATHS = [
+  "/vr-assets/assets/sound.mp3",
+  "/assets/sound.mp3",
+]
+
 interface SpatialAudioSystemProps {
   isEnabled: boolean
   userPosition: { x: number; y: number; z: number }
@@ -37,6 +42,39 @@ export const SpatialAudioSystem = forwardRef<SpatialAudioSystemRef, SpatialAudio
   const audioBufferRef = useRef<AudioBuffer | null>(null)
   const sceneRef = useRef<THREE.Scene | null>(null)
   const cameraRef = useRef<THREE.Camera | null>(null)
+
+  const loadSpatialAudioBuffer = useCallback(async () => {
+    let lastError: Error | null = null
+
+    for (const path of SPATIAL_AUDIO_PATHS) {
+      try {
+        const response = await fetch(path)
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
+        }
+
+        const contentType = response.headers.get("content-type") ?? ""
+        if (!contentType.includes("audio") && !contentType.includes("mpeg")) {
+          throw new Error(`Unexpected content-type: ${contentType || "unknown"}`)
+        }
+
+        const arrayBuffer = await response.arrayBuffer()
+        const loader = new THREE.AudioLoader()
+        const buffer = await loader.loadAsync(path)
+
+        // Touch the payload first so failed HTML fallbacks are caught before decode.
+        if (arrayBuffer.byteLength === 0) {
+          throw new Error("Empty audio file")
+        }
+
+        return buffer
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error))
+      }
+    }
+
+    throw lastError ?? new Error("Failed to load spatial audio")
+  }, [])
 
   // Expose cleanup method via ref
   useImperativeHandle(ref, () => ({
@@ -94,22 +132,18 @@ export const SpatialAudioSystem = forwardRef<SpatialAudioSystemRef, SpatialAudio
       camera.add(listener)
       cameraRef.current = camera
 
-      // Load audio file
-      audioLoader.load(
-        '/assets/sound.mp3',
-        (buffer) => {
+      loadSpatialAudioBuffer()
+        .then((buffer) => {
           try {
             audioBufferRef.current = buffer
             createPositionalAudio(scene, camera, buffer)
           } catch (error) {
-            console.error('Error creating positional audio:', error)
+            console.error("Error creating positional audio:", error)
           }
-        },
-        undefined,
-        (error) => {
-          console.error('Failed to load spatial audio:', error)
-        }
-      )
+        })
+        .catch((error) => {
+          console.error("Failed to load spatial audio:", error)
+        })
     } catch (error) {
       console.error('Error initializing spatial audio system:', error)
     }
@@ -136,7 +170,7 @@ export const SpatialAudioSystem = forwardRef<SpatialAudioSystemRef, SpatialAudio
         console.error('Error during spatial audio cleanup:', error)
       }
     }
-  }, [isEnabled, locationId])
+  }, [isEnabled, locationId, loadSpatialAudioBuffer])
 
   // Additional cleanup effect for component unmounting
   useEffect(() => {
