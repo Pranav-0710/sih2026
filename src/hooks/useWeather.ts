@@ -22,7 +22,7 @@ interface WeatherData {
   name: string;
 }
 
-const YOUR_OPENWEATHER_API_KEY = 'REMOVED_USE_VITE_WEATHER_API_KEY'; // User's actual API key
+const YOUR_OPENWEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 export const useWeather = (lat: number | null, lon: number | null) => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
