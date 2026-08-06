@@ -354,6 +354,28 @@
   }
 }
 
+/* Hero wordmark — gradient drifts through the letters continuously, so the
+   headline keeps a little life after its entrance animation has finished.
+   Needs an oversized background for the position shift to be visible. */
+@keyframes gradient-drift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.animate-gradient-text {
+  background-size: 220% auto;
+  animation: gradient-drift 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient-text {
+    animation: none;
+  }
+}
+
 /* Hero media carousel — slow pan/zoom on static photography */
 @keyframes ken-burns {
   0% {

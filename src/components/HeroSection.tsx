@@ -11,17 +11,20 @@ import { useRef } from "react";
 const container = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.14, delayChildren: 0.25 },
+    transition: { staggerChildren: 0.09, delayChildren: 0.2 },
   },
 };
 
 const line = {
-  hidden: { y: "115%" },
+  hidden: { y: "115%", rotate: 4 },
   visible: {
     y: "0%",
-    transition: { duration: 1, ease: [0.22, 1, 0.36, 1] as const },
+    rotate: 0,
+    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
+
+const HEADLINE_WORDS = ["Discover", "the", "Soul", "of"];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -67,17 +70,25 @@ const HeroSection = () => {
             className="max-w-3xl text-white"
           >
             <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
-              {/* pb/-mb pair stops the mask clipping descenders and the
+              {/* Each word gets its own mask so they arrive one after another.
+                  The pb/-mb pair stops the mask clipping descenders and the
                   italic overhang on "Sikkim". */}
-              <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-                <motion.span variants={lineVariants} className="block">
-                  Discover the Soul of
-                </motion.span>
+              <span className="block">
+                {HEADLINE_WORDS.map((word) => (
+                  <span
+                    key={word}
+                    className="mr-[0.25em] inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom"
+                  >
+                    <motion.span variants={lineVariants} className="inline-block">
+                      {word}
+                    </motion.span>
+                  </span>
+                ))}
               </span>
               <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
                 <motion.span
                   variants={lineVariants}
-                  className="block bg-gradient-to-r from-heritage to-accent bg-clip-text pr-[0.08em] italic text-transparent"
+                  className="animate-gradient-text inline-block bg-gradient-to-r from-heritage via-accent to-heritage bg-clip-text pr-[0.08em] italic text-transparent"
                 >
                   Sikkim
                 </motion.span>
