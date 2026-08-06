@@ -116,24 +116,6 @@ export function Navigation() {
               "bg-background/95 backdrop-blur-xl border border-border/30 shadow-soft h-[4.5rem]"
         )}
       >
-        {/* Icon only — the wordmark was removed from the bar. The link keeps
-            an accessible name so it still reads as "home" to screen readers. */}
-        <Link to="/" aria-label="Monastery360 home" className="flex items-center">
-          <div
-            className={cn(
-              "bg-gradient-to-br from-nature to-primary rounded-xl shadow-soft transition-all duration-300",
-              scrolled ? "p-2" : "p-2.5"
-            )}
-          >
-            <MapPin
-              className={cn(
-                "text-white transition-all duration-300",
-                scrolled ? "h-5 w-5" : "h-6 w-6"
-              )}
-            />
-          </div>
-        </Link>
-
         {isMobile ? (
           <div className="flex items-center space-x-2 ml-auto">
             <DropdownMenu open={showLanguageDropdown} onOpenChange={setShowLanguageDropdown}>
@@ -249,7 +231,11 @@ export function Navigation() {
           </div>
         ) : (
           <>
-            <div className="flex-1 flex justify-center">
+            {/* Spacer balancing the controls on the right, so the nav stays
+                centred in the bar now that the logo no longer occupies the
+                left side. */}
+            <div className="flex-1" />
+            <div className="flex justify-center">
               <nav
                 className={cn(
                   "flex items-center space-x-6 text-sm transition-all duration-300",
@@ -302,7 +288,7 @@ export function Navigation() {
                 )}
               </nav>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-1 items-center justify-end space-x-3">
               <DropdownMenu open={showLanguageDropdown} onOpenChange={setShowLanguageDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button
