@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { X } from 'lucide-react';
@@ -25,6 +25,22 @@ const Transport = () => {
   const [filters, setFilters] = useState({ Bus: true, Train: true, Cab: true, 'Auto-rickshaw': true });
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
+
+  // Defined at component scope (not inside the map effect) so the panel's
+  // close handler can reach it too — it previously lived inside useEffect,
+  // which made handleClosePanel throw a ReferenceError on every close.
+  // Safe to memoise with no deps: it only reads a ref.
+  const highlightRoute = useCallback((routeId: string | null) => {
+    // Reset style of all routes
+    Object.values(routeLayersRef.current).forEach(layer =>
+      (layer as L.Polyline).setStyle({ weight: 5, opacity: 0.7 })
+    );
+
+    // Highlight the selected route
+    if (routeId && routeLayersRef.current[routeId]) {
+      routeLayersRef.current[routeId].setStyle({ weight: 8, opacity: 1 }).bringToFront();
+    }
+  }, []);
 
   useEffect(() => {
     const routes = {
@@ -95,16 +111,6 @@ const Transport = () => {
         return L.divIcon({ html: iconHtml(type, color), className: 'bg-transparent transition-transform duration-100 ease-in-out', iconSize: [size, size], iconAnchor: [size/2, size/2], popupAnchor: [0, -size/2] });
     };
 
-    const highlightRoute = (routeId) => {
-        // Reset style of all routes
-        Object.values(routeLayersRef.current).forEach(layer => (layer as L.Polyline).setStyle({ weight: 5, opacity: 0.7 }));
-
-        // Highlight the selected route
-        if (routeId && routeLayersRef.current[routeId]) {
-            routeLayersRef.current[routeId].setStyle({ weight: 8, opacity: 1 }).bringToFront();
-        }
-    };
-
     if (mapContainerRef.current && !mapRef.current) {
       mapRef.current = L.map(mapContainerRef.current, { zoomControl: false }).setView([23.4, 85.4], 11);
       L.control.zoom({ position: 'bottomright' }).addTo(mapRef.current);
@@ -124,8 +130,6 @@ const Transport = () => {
         marker.bindPopup(popupContent);
 
                 marker.on('click', () => {
-                    alert(`Clicked on ${t.name}`);
-                    // marker.openPopup(); // Explicitly open the Leaflet popup
                     setSelectedVehicle(t);
                     if (t.routeId) {
                         highlightRoute(t.routeId);

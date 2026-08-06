@@ -15,6 +15,7 @@ import AdminRoute from "./components/AdminRoute";
 import ScrollProgress from "./components/ScrollProgress";
 import PageFade from "./components/PageFade";
 import RouteLoader from "./components/RouteLoader";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Everything below is route-only, so it doesn't need to be in the initial
 // bundle — split it into its own chunk, downloaded on first visit to that
@@ -40,7 +41,8 @@ const ReportCondition = lazy(() => import("./pages/ReportCondition"));
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <FontSizeProvider>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme" attribute="class" enableSystem={true}> {/* Wrap with ThemeProvider */}
@@ -52,9 +54,10 @@ const App = () => (
             </BrowserRouter>
           </TooltipProvider>
         </ThemeProvider>
-      </FontSizeProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+        </FontSizeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 const MainLayout = () => {
@@ -65,8 +68,11 @@ const MainLayout = () => {
   return (
     <>
       <ScrollProgress />
-      <Suspense fallback={<RouteLoader />}>
-        <Routes>
+      {/* Keyed by pathname so navigating away from a crashed page clears the
+          error automatically, instead of stranding the user on it. */}
+      <ErrorBoundary key={location.pathname}>
+        <Suspense fallback={<RouteLoader />}>
+          <Routes>
           <Route path="/" element={<PageFade><Index /></PageFade>} />
           <Route path="/auth" element={<PageFade><Auth /></PageFade>} />
           <Route path="/trip-genie" element={<PageFade><TripGenie /></PageFade>} />
@@ -88,9 +94,10 @@ const MainLayout = () => {
           <Route path="/cookies" element={<PageFade><Cookies /></PageFade>} />
           <Route path="/profile" element={<PageFade><Profile /></PageFade>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<PageFade><NotFound /></PageFade>} />
-        </Routes>
-      </Suspense>
+            <Route path="*" element={<PageFade><NotFound /></PageFade>} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
       {showSOSButton && (
         <Link
           to="/emergency"

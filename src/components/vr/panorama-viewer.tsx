@@ -69,6 +69,15 @@ export function PanoramaViewer({
   const [showTriviaQuiz, setShowTriviaQuiz] = useState(false)
   const spatialAudioRef = useRef<SpatialAudioSystemRef>(null)
 
+  // No openly-licensed 360° capture exists for any of these monasteries yet
+  // (see src/data/monasteries.ts), so panoramaImage is unset today and this
+  // always falls back to real static photography. A flat photo sphere-mapped
+  // as if it were a 360° panorama looks visibly warped, so it's shown as a
+  // normal photo instead — no drag, no rotation — and the UI says so rather
+  // than claiming "full spherical immersion". Kept reactive to panoramaImage
+  // (not hardcoded false) so a genuine future capture lights this back up.
+  const hasPanorama = Boolean(location.panoramaImage)
+
   const glRef = useRef<WebGLRenderingContext | null>(null)
   const programRef = useRef<WebGLProgram | null>(null)
   const textureRef = useRef<WebGLTexture | null>(null)
@@ -105,6 +114,12 @@ export function PanoramaViewer({
   }
 
   useEffect(() => {
+    // The canvas only exists in the DOM when hasPanorama is true (see JSX
+    // below), so this must re-run whenever that flips — not just on mount —
+    // otherwise WebGL never initializes for a location added later with a
+    // real capture, since the canvas element wouldn't have existed yet.
+    if (!hasPanorama) return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -182,9 +197,13 @@ export function PanoramaViewer({
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, [hasPanorama])
 
   useEffect(() => {
+    // Flat-photo mode has its own <img> with its own onLoad below — this
+    // effect only drives the WebGL texture path.
+    if (!hasPanorama) return
+
     const gl = glRef.current
     if (!gl || !programRef.current) return
 
@@ -580,8 +599,10 @@ export function PanoramaViewer({
         <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-lg">Loading 360° Experience...</p>
-            <p className="text-sm text-gray-400 mt-2">Preparing immersive view of {location.name}</p>
+            <p className="text-lg">
+              {hasPanorama ? "Loading 360° Experience..." : "Loading photography..."}
+            </p>
+            <p className="text-sm text-gray-400 mt-2">Preparing the view of {location.name}</p>
           </div>
         </div>
       )}
@@ -594,7 +615,7 @@ export function PanoramaViewer({
           onLoad={() => setIsLoading(false)}
           onError={() => setIsLoading(false)}
         />
-      ) : (
+      ) : hasPanorama ? (
         <canvas
           ref={canvasRef}
           className="w-full h-full cursor-grab active:cursor-grabbing"
@@ -603,6 +624,17 @@ export function PanoramaViewer({
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
           style={{ touchAction: "none" }}
+        />
+      ) : (
+        <img
+          src={location.image}
+          alt={location.name}
+          className="absolute inset-0 h-full w-full object-cover animate-ken-burns"
+          onLoad={() => setIsLoading(false)}
+          onError={() => {
+            console.error("[panorama-viewer] Failed to load fallback photo:", location.image)
+            setIsLoading(false)
+          }}
         />
       )}
 
@@ -713,28 +745,31 @@ export function PanoramaViewer({
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
         <div className="bg-black/80 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleZoomOut}
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </Button>
+          {hasPanorama && (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleZoomOut}
+                className="text-white hover:bg-white/20 rounded-full"
+              >
+                <ZoomOut className="h-4 w-4" />
+              </Button>
 
-          <Button variant="ghost" size="sm" onClick={handleReset} className="text-white hover:bg-white/20 rounded-full">
-            <RotateCcw className="h-4 w-4" />
-          </Button>
+              <Button variant="ghost" size="sm" onClick={handleReset} className="text-white hover:bg-white/20 rounded-full">
+                <RotateCcw className="h-4 w-4" />
+              </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleZoomIn}
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleZoomIn}
+                className="text-white hover:bg-white/20 rounded-full"
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </>
+          )}
 
           {location.hotspots && location.hotspots.length > 0 && (
             <Button
@@ -789,10 +824,13 @@ export function PanoramaViewer({
 
       <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-white text-center z-10">
         <p className="text-sm opacity-75">
-          Drag to explore 360° • Scroll or zoom controls to adjust view •{" "}
+          {hasPanorama
+            ? "Drag to explore 360° • Scroll or zoom controls to adjust view • "
+            : ""}
           {location.hotspots && location.hotspots.length > 0 ? "Click Info for hotspots • " : ""}
           {location.educationalContent ? "Click Book for learning • " : ""}
-          Click Star for quiz • Full spherical immersion enabled
+          Click Star for quiz
+          {!hasPanorama ? " • Photography preview — full 360° capture coming soon" : ""}
         </p>
       </div>
     </div>

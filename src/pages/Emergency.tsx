@@ -13,7 +13,6 @@ import {
   Navigation as NavigationIcon,
   Copy
 } from 'lucide-react';
-import Navigation from '@/components/Navigation';
 import { useToast } from '@/hooks/use-toast';
 import PageLayout from '@/components/PageLayout';
 
@@ -170,8 +169,6 @@ const Emergency = () => {
   return (
     <PageLayout>
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">

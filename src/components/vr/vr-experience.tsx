@@ -19,7 +19,6 @@ import {
 } from "lucide-react"
 import { PanoramaViewer } from "./panorama-viewer"
 import { TriviaQuiz } from "./trivia-quiz"
-import Navigation from "../Navigation"
 import { locations } from "@/data/monasteries"
 
 export function VRExperience() {

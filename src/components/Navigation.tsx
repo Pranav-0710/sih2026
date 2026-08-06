@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
@@ -55,7 +55,9 @@ export function Navigation() {
   const { toggleLargeFont, isLargeFont } = useFontSize();
   const navigate = useNavigate();
   const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(
+    () => typeof window !== "undefined" && window.scrollY > 50
+  );
   const [hovering, setHovering] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
@@ -63,7 +65,11 @@ export function Navigation() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
+    // Sync once on mount: browsers restore the previous scroll position on
+    // refresh without firing a scroll event, which otherwise left the bar
+    // stuck in its top-of-page style on top of already-scrolled content.
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -99,10 +105,13 @@ export function Navigation() {
         className={cn(
           "flex items-center px-6 py-3 rounded-2xl transition-all duration-500 ease-out floating-navbar",
           transparent
-            ? "nav-transparent bg-transparent border border-transparent shadow-none h-18"
+            ? "nav-transparent bg-transparent border border-transparent shadow-none h-[4.5rem]"
             : scrolled
             ? "bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong h-16"
-            : "bg-background/60 backdrop-blur-md border border-border/30 shadow-soft h-18"
+            : // Kept near-opaque: on the homepage this state sits over dark
+              // hero footage, and a translucent bar left the dark nav text
+              // and gradient wordmark unreadable against it.
+              "bg-background/95 backdrop-blur-xl border border-border/30 shadow-soft h-[4.5rem]"
         )}
       >
         <Link to="/" className="flex items-center space-x-3">
@@ -167,6 +176,10 @@ export function Navigation() {
                 className="pr-0 bg-background/95 backdrop-blur-xl border-r border-border/50 rounded-r-2xl"
               >
                 <div className="flex flex-col space-y-4 py-4">
+                  {/* Radix requires a title inside every dialog/sheet for
+                      screen readers; the drawer is visually self-evident, so
+                      it's exposed to assistive tech only. */}
+                  <SheetTitle className="sr-only">Site navigation</SheetTitle>
                   <Link to="/" className="flex items-center space-x-3 px-4">
                     <div className="bg-gradient-to-br from-nature to-primary p-2 rounded-xl shadow-soft">
                       <MapPin className="h-5 w-5 text-white" />

@@ -1,9 +1,7 @@
-import Navigation from "@/components/Navigation";
 import PageLayout from "@/components/PageLayout";
 const Terms = () => {
   return (
     <PageLayout>
-      <Navigation />
       <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Terms of Service</h1>
       <p className="mb-4">
