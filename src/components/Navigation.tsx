@@ -44,6 +44,7 @@ export function Navigation() {
       dropdownItems: [
         { name: t("nav.allMonasteries"), path: "/explore" },
         { name: t("nav.calendar"), path: "/calendar" },
+        { name: t("nav.archive"), path: "/archive" },
         { name: t("nav.heritageTrails"), path: "/heritage" },
         { name: t("nav.virtual360"), path: "/vr-experience" },
         { name: t("nav.routeX"), path: "/transport" },

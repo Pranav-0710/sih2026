@@ -55,3 +55,34 @@ video footage available (the two clips above, both vertical/portrait source).
 Rumtek, Pemayangtse, and Tashiding use the static photography above with a
 "Ken Burns" pan/zoom effect rather than real video — this is disclosed here
 rather than presented as if all four had actual motion footage.
+
+
+## Digital archive (/archive)
+
+The archive presents **87** images pulled from Wikimedia Commons via its
+public API, together with the author and licence metadata recorded for each file.
+Images are loaded from Commons' own thumbnail service and every card links back to
+its source page, where the full licence terms and author credit live. Attribution
+(author + licence) is also shown on the card itself, as CC BY and CC BY-SA require.
+
+Licences represented:
+
+- CC BY 4.0 — 72 file(s)
+- CC BY 2.0 — 5 file(s)
+- CC BY-SA 3.0 — 4 file(s)
+- CC BY-SA 4.0 — 3 file(s)
+- CC BY 3.0 — 1 file(s)
+- CC0 — 1 file(s)
+- CC BY-SA 2.0 — 1 file(s)
+
+By monastery:
+
+- Enchey Monastery — 38 item(s)
+- Tashiding Monastery — 28 item(s)
+- Pemayangtse Monastery — 16 item(s)
+- Rumtek Monastery — 5 item(s)
+
+> Nothing in the archive is generated or reconstructed. The dataset is produced by
+> `gen-archive.mjs` from live Commons metadata so it can be regenerated as more
+> material is released under a free licence. No manuscript scans are included:
+> none are openly licensed for these four monasteries at the time of writing.
