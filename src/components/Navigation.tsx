@@ -3,7 +3,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/useAuth";
 import { MapPin, LogOut, CaseSensitive, Menu, ChevronDown, Globe } from "lucide-react";
 import { useFontSize } from "./FontSizeProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -38,15 +38,13 @@ export function Navigation() {
   const { t } = useTranslation();
   const navItems = [
     { name: t("nav.tripGenie"), path: "/trip-genie" },
-    { name: t("nav.journeyHub"), path: "/bookings" },
     {
       name: t("nav.explore"),
       isDropdown: true,
       dropdownItems: [
+        { name: t("nav.allMonasteries"), path: "/explore" },
         { name: t("nav.heritageTrails"), path: "/heritage" },
         { name: t("nav.virtual360"), path: "/vr-experience" },
-        { name: t("nav.funscapes"), path: "/funscapes" },
-        { name: t("nav.genzCorner"), path: "/genzcorner" },
         { name: t("nav.routeX"), path: "/transport" },
       ],
     },
@@ -56,7 +54,9 @@ export function Navigation() {
   const { user, signOut, role, loading } = useAuth();
   const { toggleLargeFont, isLargeFont } = useFontSize();
   const navigate = useNavigate();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [hovering, setHovering] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   useEffect(() => {
@@ -66,6 +66,11 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // The homepage hero renders full-bleed media behind the nav — let it show
+  // through until the user scrolls past the hero or hovers the bar itself.
+  const isHeroPage = location.pathname === "/";
+  const transparent = isHeroPage && !scrolled && !hovering;
 
   const mobileNavItems = navItems.reduce((acc, item) => {
     if (item.isDropdown && item.dropdownItems) {
@@ -83,6 +88,8 @@ export function Navigation() {
 
   return (
     <header
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
       className={cn(
         "fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500 ease-out",
         scrolled ? "w-[95%] max-w-6xl" : "w-[98%] max-w-7xl"
@@ -91,7 +98,9 @@ export function Navigation() {
       <div
         className={cn(
           "flex items-center px-6 py-3 rounded-2xl transition-all duration-500 ease-out floating-navbar",
-          scrolled
+          transparent
+            ? "nav-transparent bg-transparent border border-transparent shadow-none h-18"
+            : scrolled
             ? "bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong h-16"
             : "bg-background/60 backdrop-blur-md border border-border/30 shadow-soft h-18"
         )}
@@ -112,11 +121,14 @@ export function Navigation() {
           </div>
           <span
             className={cn(
-              "font-bold bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent transition-all duration-300",
-              scrolled ? "text-lg" : "text-xl"
+              "font-bold transition-all duration-300",
+              scrolled ? "text-lg" : "text-xl",
+              transparent
+                ? "text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]"
+                : "bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent"
             )}
           >
-            JharVirasat
+            Monastery360
           </span>
         </Link>
 
@@ -160,7 +172,7 @@ export function Navigation() {
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
                     <span className="font-bold text-lg bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent">
-                      Jharkhand Tour
+                      Monastery360
                     </span>
                   </Link>
                   <div className="flex flex-col space-y-2 px-4">
@@ -303,7 +315,7 @@ export function Navigation() {
               <div id="google_translate_element" className="mr-3"></div>
               <ModeToggle />
               {loading ? (
-                <div className="font-medium text-foreground/70">Loading...</div>
+                <div className="h-9 w-28 animate-pulse rounded-xl bg-foreground/10" />
               ) : user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

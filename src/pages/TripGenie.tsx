@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Sparkles, MapPin, Clock, DollarSign, Heart } from "lucide-react";
-import { HfInference } from "@huggingface/inference";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import ReactMarkdown from "react-markdown";
@@ -25,20 +25,79 @@ interface Message {
   timestamp: Date;
 }
 
-const hf = new HfInference(import.meta.env.VITE_HUGGINGFACE_API_KEY);
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as
+  | string
+  | undefined;
+
+/**
+ * Streams Kora's reply token-by-token from the edge function.
+ *
+ * Resolves `true` once any text has been delivered, `false` when streaming
+ * isn't usable at all — the caller then retries via the function's plain
+ * JSON mode rather than leaving the user with nothing.
+ */
+async function streamReply(
+  body: Record<string, unknown>,
+  onChunk: (chunk: string) => void
+): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return false;
+
+  let received = 0;
+  try {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token ?? SUPABASE_ANON_KEY;
+
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/trip-genie-chat`,
+      {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...body, stream: true }),
+      }
+    );
+
+    if (!response.ok || !response.body) return false;
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const text = decoder.decode(value, { stream: true });
+      if (text) {
+        received += text.length;
+        onChunk(text);
+      }
+    }
+  } catch {
+    // A mid-stream failure that already produced text is reported as success
+    // so the caller doesn't append a duplicate reply on top of it.
+    return received > 0;
+  }
+
+  return received > 0;
+}
 
 const TripGenie = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       content:
-        "Hello! I'm Trip Genie, your AI travel companion for exploring the beautiful state of Jharkhand. I can help you plan the perfect trip based on your interests, budget, and time. What would you like to discover today? 🌟",
+        "Hello! I'm Kora, your AI guide to Sikkim's monasteries. I can help you plan a self-guided Buddhist Circuit across Rumtek, Pemayangtse, Tashiding and Enchey based on your interests, budget, and time. What would you like to discover today? 🌟",
       isBot: true,
       timestamp: new Date(),
     },
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingId, setStreamingId] = useState<string | null>(null);
   const [preferences, setPreferences] = useState({
     budget: "",
     duration: "",
@@ -46,26 +105,27 @@ const TripGenie = () => {
     location: "",
   });
   const { toast } = useToast();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const interestOptions = [
     "Heritage Sites",
-    "Nature & Wildlife",
-    "Adventure",
-    "Tribal Culture",
-    "Photography",
+    "Monastic Architecture",
     "Spiritual",
-    "Food & Cuisine",
-    "Festivals",
+    "Photography",
+    "Festivals & Rituals",
+    "Trekking",
+    "Local Cuisine",
+    "History",
   ];
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // Scroll the message list itself rather than using scrollIntoView, which
+  // also scrolls every ancestor — including the window — and was shoving the
+  // composer below the fold on load.
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [messages, isLoading]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -77,48 +137,67 @@ const TripGenie = () => {
       timestamp: new Date(),
     };
 
+    const history = messages.slice(1).map((m) => ({
+      role: m.isBot ? "assistant" : "user",
+      content: m.content,
+    }));
+
     setMessages((prev) => [...prev, userMessage]);
     setInputMessage("");
     setIsLoading(true);
 
-    try {
-      const systemPrompt = `You are Trip Genie, an AI travel assistant specialized in Jharkhand tourism. You help visitors discover the rich cultural heritage, natural beauty, and tribal traditions of Jharkhand.\n\nKey knowledge about Jharkhand:\n- Famous heritage sites: Jagannath Temple Ranchi, Rajrappa Temple, Deoghar Baidyanath Temple\n- Natural attractions: Hundru Falls, Dassam Falls, Betla National Park, Netarhat, Palamau Tiger Reserve\n- Tribal culture: Santhal, Munda, Oraon tribes with unique festivals like Karma, Sarhul, Tusu\n- Adventure activities: Trekking in Parasnath Hills, river rafting, wildlife safaris\n- Cultural experiences: Tribal dance performances, handicraft workshops, village stays\n- Best time: October to March for most places\n- Local cuisine: Thekua, Pittha, Dhuska, tribal honey, bamboo shoot dishes\n\nGuidelines:\n1. Always prioritize Jharkhand destinations and experiences\n2. Consider the user's budget, duration, and interests\n3. Provide practical information: costs, best times to visit, transportation\n4. Include cultural immersion opportunities\n5. Suggest heritage sites based on user interests\n6. Be enthusiastic and informative\n7. Format responses in a conversational, helpful manner\n8. Include approximate costs in INR\n9. Suggest 2-3 day itineraries when appropriate\n\nCurrent request context:\nBudget: ${
-        preferences.budget || "Not specified"
-      }\nDuration: ${preferences.duration || "Not specified"} \nInterests: ${
-        preferences.interests.join(", ") || "General tourism"
-      }\nLocation preference: ${
-        preferences.location || "Anywhere in Jharkhand"
-      }`;
+    const botId = (Date.now() + 1).toString();
+    const payload = { message: inputMessage, history, preferences };
+    let firstChunk = true;
 
-      const response = await hf.chatCompletion({
-        model: "meta-llama/Llama-3.3-70B-Instruct",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: inputMessage },
-        ],
-        max_tokens: 1000,
+    try {
+      const streamed = await streamReply(payload, (chunk) => {
+        if (firstChunk) {
+          // First token in — swap the spinner for a live message bubble.
+          firstChunk = false;
+          setIsLoading(false);
+          setStreamingId(botId);
+          setMessages((prev) => [
+            ...prev,
+            { id: botId, content: chunk, isBot: true, timestamp: new Date() },
+          ]);
+          return;
+        }
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === botId ? { ...m, content: m.content + chunk } : m
+          )
+        );
       });
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content:
-          response.choices[0].message?.content ||
-          "Sorry, I couldn't generate a response.",
-        isBot: true,
-        timestamp: new Date(),
-      };
+      // Streaming unavailable (older browser, proxy buffering, etc.) — fall
+      // back to the function's plain JSON mode so the demo still works.
+      if (!streamed) {
+        const { data, error } = await supabase.functions.invoke(
+          "trip-genie-chat",
+          { body: payload }
+        );
 
-      setMessages((prev) => [...prev, botMessage]);
+        if (error) throw error;
+        if (!data?.success) {
+          throw new Error(data?.error || "Kora couldn't generate a response.");
+        }
+
+        setMessages((prev) => [
+          ...prev,
+          { id: botId, content: data.reply, isBot: true, timestamp: new Date() },
+        ]);
+      }
     } catch (error) {
-      console.error("Trip Genie error:", error);
+      console.error("Kora error:", error);
       toast({
         title: "Error",
-        description:
-          "Failed to get response from Trip Genie. Please try again.",
+        description: "Failed to get response from Kora. Please try again.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
+      setStreamingId(null);
     }
   };
 
@@ -132,11 +211,11 @@ const TripGenie = () => {
   };
 
   const suggestedQuestions = [
-    "Plan a 3-day heritage tour of Ranchi",
-    "Best waterfalls to visit in monsoon",
-    "Tribal culture experiences in Jharkhand",
-    "Adventure activities under ₹5000",
-    "Family-friendly places near Jamshedpur",
+    "Plan a 2-day Buddhist Circuit starting from Gangtok",
+    "What's the difference between Nyingma and Kagyu monasteries?",
+    "Best time to visit for the Bumchu festival",
+    "Monastery etiquette I should know before visiting",
+    "Which monastery has the most impressive architecture?",
   ];
 
   return (
@@ -146,7 +225,7 @@ const TripGenie = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Preferences Sidebar */}
-          <div className="lg:col-span-1 space-y-4">
+          <div className="lg:col-span-1 space-y-4 lg:h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-2">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -211,7 +290,7 @@ const TripGenie = () => {
                     Preferred Area
                   </label>
                   <Input
-                    placeholder="e.g. Ranchi, Jamshedpur"
+                    placeholder="e.g. Gangtok, Pelling"
                     value={preferences.location}
                     onChange={(e) =>
                       setPreferences((prev) => ({
@@ -259,7 +338,7 @@ const TripGenie = () => {
                       key={index}
                       variant="ghost"
                       size="sm"
-                      className="w-full text-left justify-start text-xs h-auto p-2"
+                      className="w-full text-left justify-start text-xs h-auto p-2 whitespace-normal break-words leading-snug"
                       onClick={() => setInputMessage(question)}
                     >
                       {question}
@@ -272,17 +351,20 @@ const TripGenie = () => {
 
           {/* Chat Interface */}
           <div className="lg:col-span-3">
-            <Card className="flex flex-col min-h-[400px]">
-              <CardHeader>
+            <Card className="flex flex-col h-[calc(100vh-10rem)] min-h-[420px]">
+              <CardHeader className="shrink-0">
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
-                  Trip Genie - AI Travel Assistant
+                  Kora — AI Monastery Guide
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex-1 flex flex-col">
+              <CardContent className="flex-1 flex flex-col min-h-0">
                 {/* Messages */}
-                <div className="flex-1 space-y-4 overflow-y-auto mb-4 p-2 max-h-[calc(100vh-300px)]">
+                <div
+                  ref={messagesContainerRef}
+                  className="flex-1 min-h-0 space-y-4 overflow-y-auto mb-4 p-2"
+                >
                   {messages.map((message) => (
                     <div
                       key={message.id}
@@ -306,9 +388,13 @@ const TripGenie = () => {
                             {message.content}
                           </ReactMarkdown>
                         </div>
-                        <div className="text-xs opacity-70 mt-1">
-                          {message.timestamp.toLocaleTimeString()}
-                        </div>
+                        {message.id === streamingId ? (
+                          <span className="mt-1 inline-block h-4 w-[2px] animate-pulse bg-current align-middle" />
+                        ) : (
+                          <div className="text-xs opacity-70 mt-1">
+                            {message.timestamp.toLocaleTimeString()}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -317,18 +403,17 @@ const TripGenie = () => {
                       <div className="bg-accent text-accent-foreground p-3 rounded-lg">
                         <div className="flex items-center gap-2">
                           <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full"></div>
-                          Trip Genie is thinking...
+                          Kora is thinking...
                         </div>
                       </div>
                     </div>
                   )}
-                  <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                   <Textarea
-                    placeholder="Ask me about places to visit, itineraries, costs, or anything about Jharkhand tourism..."
+                    placeholder="Ask me about monastery history, routes, festivals, or anything about visiting Sikkim's monasteries..."
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={(e) => {

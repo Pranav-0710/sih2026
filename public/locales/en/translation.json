@@ -1,22 +1,26 @@
 {
   "features": {
-    "title": "Explore Jharkhand's Treasures",
-    "description": "Discover the rich heritage, vibrant culture, and breathtaking nature of Jharkhand.",
+    "title": "Explore Sikkim's Monasteries",
+    "description": "Discover the rich heritage, living culture, and Himalayan landscapes of Sikkim.",
     "hover_to_learn_more": "Hover to learn more",
     "explore": "Explore",
-    "long_description": "From AI-powered planning to 24/7 safety, we've got you covered at every step of your cultural and natural exploration of Jharkhand.",
+    "long_description": "From AI-powered planning to 24/7 safety, we've got you covered at every step of your cultural and spiritual exploration of Sikkim.",
     "start_exploring_now": "Start Exploring Now",
+    "kora": {
+      "title": "Kora, your AI circuit guide",
+      "description": "Ask anything about Sikkim's monasteries — routes, festivals, etiquette, history — and get grounded answers in seconds."
+    },
+    "virtual_tours": {
+      "title": "360° Virtual Tours",
+      "description": "Step inside all four monasteries with guided panoramas, hotspots and audio narration."
+    },
     "heritage": {
-      "title": "Heritage Sites",
-      "description": "Uncover ancient temples and historical landmarks."
+      "title": "Heritage Trails",
+      "description": "Every monastery pinned on an interactive map of Sikkim, with live conditions."
     },
     "culture": {
-      "title": "Tribal Culture",
-      "description": "Experience the unique traditions and art forms of local tribes."
-    },
-    "nature": {
-      "title": "Nature & Wildlife",
-      "description": "Explore lush forests, serene waterfalls, and diverse wildlife."
+      "title": "Monastic Culture",
+      "description": "Experience the rituals, dances, and living traditions of Sikkim's monasteries."
     },
     "community_wall": {
       "title": "Community Wall",
@@ -26,20 +30,18 @@
       "title": "Emergency Assistance",
       "description": "24/7 safety support with SOS button, emergency contacts, and real-time location sharing for remote areas."
     },
-    "gen_z_corner": {
-      "title": "Gen-Z Corner",
-      "description": "A vibrant space for the young and trendy, offering unique experiences, digital content, and interactive challenges tailored for Gen-Z travelers."
+    "condition_report": {
+      "title": "Report a Condition Issue",
+      "description": "Spot damage, erosion, or overcrowding at a monastery? Submit a report and help Sikkim's heritage authorities prioritize restoration."
     }
   },
   "nav": {
     "home": "Home",
-    "tripGenie": "Trip Genie",
-    "journeyHub": "Journey Hub",
+    "tripGenie": "Kora",
     "explore": "Explore",
+    "allMonasteries": "All Monasteries",
     "heritageTrails": "Heritage Trails",
     "virtual360": "Virtual 360",
-    "funscapes": "FunScapes",
-    "genzCorner": "Gen-Z Corner",
     "routeX": "RouteX",
     "community": "Community",
     "dashboard": "Dashboard",

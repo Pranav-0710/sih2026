@@ -1,64 +1,110 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Compass, Headphones, ShieldAlert } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
-
-const videos = [
-  {
-    id: "aaNUOOFXf-E",
-    title: "Jharkhand Tourism: Best Places to Visit",
-    description: "A comprehensive travel guide to some of the best tourist places in Jharkhand, including Deoghar, Shikharji, and Patratu Valley.",
-  },
-  {
-    id: "UmPTEgQ_AxM",
-    title: "Exploring Ranchi: Must-Visit Spots",
-    description: "A vlog exploring the capital city of Jharkhand, Ranchi. This video covers tourist places like Dassam Falls, Sun Temple, and Ranchi Lake.",
-  },
-  {
-    id: "MEhP9KbTaAU",
-    title: "Top 7 Best Places to Visit in Jharkhand",
-    description: "A list of the top 7 best places to visit in Jharkhand, including Ranchi, Jamshedpur, Hazaribagh, Deoghar, Bokaro, Dhanbad, and Palamu.",
-  },
-  {
-    id: "Ic1HIhK81Qg",
-    title: "Discover Jharkhand",
-    description: "A beautiful cinematic video showcasing the diverse landscapes and culture of Jharkhand.",
-  },
-  {
-    id: "aXOVKVqOdvY",
-    title: "Jharkhand 360° Virtual Tour",
-    description: "Experience a virtual tour of Jharkhand's beautiful landscapes in 360 degrees.",
-  },
-];
+import ProgressiveImage from "@/components/ProgressiveImage";
+import { Button } from "@/components/ui/button";
+import { locations } from "@/data/monasteries";
 
 const Explore = () => {
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Explore Jharkhand
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover the beauty of Jharkhand through these videos.
-          </p>
+    <PageLayout noTopPadding noBackground>
+      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
+        {/* Ambient light */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 left-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
+          <div className="absolute top-1/2 right-0 h-[26rem] w-[26rem] translate-x-1/3 rounded-full bg-heritage/15 blur-[130px]" />
         </div>
-        <div className="space-y-8">
-          {videos.map((video) => (
-            <div key={video.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
-                <iframe
-                  src={`https://www.youtube.com/embed/${video.id}`}
-                  title={video.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                ></iframe>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold mb-2">{video.title}</h2>
-                <p className="text-muted-foreground">{video.description}</p>
-              </div>
-            </div>
-          ))}
+
+        <div className="relative z-10 container mx-auto px-4 pt-28 pb-24">
+          {/* Header */}
+          <div className="mx-auto mb-16 max-w-3xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+              <Compass className="h-3.5 w-3.5" />
+              The Buddhist Circuit
+            </span>
+            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              Explore Sikkim's{" "}
+              <span className="text-gradient-heritage">Monasteries</span>
+            </h1>
+            <p className="mt-4 text-lg leading-relaxed text-white/60">
+              A closer look at the history, culture and geography behind each
+              site.
+            </p>
+          </div>
+
+          {/* Sites */}
+          <div className="space-y-24">
+            {locations.map((site, index) => {
+              const flipped = index % 2 === 1;
+              return (
+                <motion.article
+                  key={site.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.6 }}
+                  className="grid grid-cols-1 items-center gap-10 md:grid-cols-2"
+                >
+                  {/* Image */}
+                  <div
+                    className={`relative ${flipped ? "md:order-2" : ""}`}
+                  >
+                    <div
+                      aria-hidden
+                      className="absolute -inset-4 rounded-[2rem] bg-heritage/10 blur-2xl"
+                    />
+                    <div className="group relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+                      <ProgressiveImage
+                        src={site.image}
+                        alt={site.name}
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <span className="absolute left-5 top-5 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
+                        {site.type}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Copy */}
+                  <div className={flipped ? "md:order-1" : ""}>
+                    <span className="font-display text-6xl font-semibold leading-none text-white/10">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h2 className="mt-2 font-display text-3xl font-semibold text-white md:text-4xl">
+                      {site.name}
+                    </h2>
+                    <p className="mt-4 leading-relaxed text-white/65">
+                      {site.educationalContent?.history}
+                    </p>
+
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <Button
+                        asChild
+                        className="bg-gradient-to-r from-primary to-accent font-semibold text-white hover:opacity-90"
+                      >
+                        <Link to="/vr-experience">
+                          <Headphones className="mr-2 h-4 w-4" />
+                          Take the virtual tour
+                        </Link>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="border-white/20 bg-white/5 font-semibold text-white hover:bg-white/10 hover:text-white"
+                      >
+                        <Link to="/report-condition">
+                          <ShieldAlert className="mr-2 h-4 w-4" />
+                          Report a condition issue
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
         </div>
       </div>
     </PageLayout>

@@ -1,197 +1,201 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Bot,
   MapPin,
-  Award,
   Users,
   Shield,
-  Calendar,
+  ShieldAlert,
   Compass,
   Camera,
+  ArrowUpRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0 },
+const iconColorVariants: Record<string, string> = {
+  primary: "bg-primary/10 text-primary",
+  heritage: "bg-heritage/15 text-heritage",
+  accent: "bg-accent/10 text-accent",
+  nature: "bg-nature/10 text-nature",
+  destructive: "bg-destructive/10 text-destructive",
+  cultural: "bg-cultural/10 text-cultural",
 };
 
-const FeatureCard = ({ feature, index }) => {
-  const { t } = useTranslation();
-  const iconColorVariants = {
-    primary: "bg-primary/10 text-primary",
-    heritage: "bg-heritage/10 text-heritage",
-    accent: "bg-accent/10 text-accent",
-    nature: "bg-nature/10 text-nature",
-    destructive: "bg-destructive/10 text-destructive",
-    cultural: "bg-cultural/10 text-cultural",
-  };
+/**
+ * Bento tile. Content is always visible — nothing is hidden behind a hover,
+ * so everything is readable on touch devices and on a projector.
+ */
+const BentoTile = ({ feature, index }) => {
+  const featured = feature.featured;
 
   return (
     <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="h-full"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, delay: Math.min(index, 4) * 0.08 }}
+      className={cn("min-h-[190px]", feature.span)}
     >
-      <div className="group h-full [perspective:1000px]">
-        <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-          {/* Front of card - Image */}
-          <div className="absolute inset-0 h-full w-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-lg">
-            <div className="relative h-full">
-              <img
-                src={feature.image}
-                alt={feature.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <div
-                  className={cn(
-                    "w-12 h-12 rounded-lg flex items-center justify-center mb-3",
-                    iconColorVariants[feature.color]
-                  )}
-                >
-                  <feature.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-200 text-sm opacity-90">
-                  {t("features.hover_to_learn_more")}
-                </p>
-              </div>
-            </div>
+      <Link
+        to={feature.path}
+        className={cn(
+          "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:-translate-y-1.5",
+          featured
+            ? "border-white/10 text-white shadow-2xl hover:shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)]"
+            : "border-border bg-card shadow-sm hover:border-primary/30 hover:shadow-xl"
+        )}
+      >
+        {/* Featured tiles get real photography behind the copy */}
+        {featured && (
+          <>
+            <img
+              src={feature.image}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/25" />
+          </>
+        )}
+
+        <div className="relative">
+          <div
+            className={cn(
+              "mb-4 flex h-11 w-11 items-center justify-center rounded-xl",
+              featured
+                ? "bg-white/15 text-white backdrop-blur"
+                : iconColorVariants[feature.color]
+            )}
+          >
+            <feature.icon className="h-5 w-5" />
           </div>
 
-          {/* Back of card - Content */}
-          <div className="absolute inset-0 h-full w-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl">
-            <Card className="h-full flex flex-col rounded-2xl shadow-lg bg-white">
-              <CardHeader className="pb-4">
-                <div
-                  className={cn(
-                    "w-14 h-14 rounded-lg flex items-center justify-center mb-4",
-                    iconColorVariants[feature.color]
-                  )}
-                >
-                  <feature.icon className="w-7 h-7" />
-                </div>
-                <CardTitle className="text-xl font-bold text-gray-900">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col flex-grow">
-                <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
-                  {feature.description}
-                </p>
-                <div className="mt-auto">
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="font-semibold w-full"
-                  >
-                    <Link to={feature.path}>{t("features.explore")}</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <h3
+            className={cn(
+              "font-display font-semibold tracking-tight",
+              featured
+                ? "text-2xl text-white md:text-3xl"
+                : "text-lg text-foreground"
+            )}
+          >
+            {feature.title}
+          </h3>
+
+          <p
+            className={cn(
+              "mt-2 leading-relaxed",
+              featured
+                ? "max-w-md text-sm text-white/75"
+                : "text-sm text-muted-foreground"
+            )}
+          >
+            {feature.description}
+          </p>
+
+          <span
+            className={cn(
+              "mt-4 inline-flex items-center gap-1.5 text-sm font-semibold transition-transform duration-300 group-hover:translate-x-1",
+              featured ? "text-heritage" : "text-primary"
+            )}
+          >
+            {feature.cta}
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 };
 
 const FeaturesSection = () => {
   const { t } = useTranslation();
+
   const features = [
     {
       icon: Bot,
-      title: t("features.heritage.title"),
-      description: t("features.heritage.description"),
+      title: t("features.kora.title"),
+      description: t("features.kora.description"),
+      cta: "Chat with Kora",
       color: "primary",
       path: "/trip-genie",
-      image:
-        "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop&auto=format",
+      featured: true,
+      image: "/vr-assets/rumtek-monastery.jpg",
+      span: "lg:col-span-2 lg:row-span-2",
+    },
+    {
+      icon: ShieldAlert,
+      title: t("features.condition_report.title"),
+      description: t("features.condition_report.description"),
+      cta: "Submit a report",
+      color: "heritage",
+      path: "/report-condition",
+      featured: true,
+      image: "/vr-assets/tashiding-monastery.jpg",
+      span: "lg:col-span-2",
+    },
+    {
+      icon: Camera,
+      title: t("features.virtual_tours.title"),
+      description: t("features.virtual_tours.description"),
+      cta: "Start the tour",
+      color: "accent",
+      path: "/vr-experience",
+      span: "lg:col-span-1",
     },
     {
       icon: MapPin,
-      title: t("features.culture.title"),
-      description: t("features.culture.description"),
-      color: "heritage",
+      title: t("features.heritage.title"),
+      description: t("features.heritage.description"),
+      cta: "Open the map",
+      color: "cultural",
       path: "/heritage",
-      image:
-        "https://imgs.search.brave.com/GPAAu6X5fBcNBUCSaH424zTqH1xqJUMESLteTPbCk-I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vZ2VvZ3Jh/cGhpY2Jvb2suY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDI0/LzA3L0N1bHR1cmFs/LUhlcml0YWdlLmpw/ZWc_cmVzaXplPTEw/MjQsNTc2JnNzbD0x",
-    },
-    {
-      icon: Award,
-      title: t("features.nature.title"),
-      description: t("features.nature.description"),
-      color: "accent",
-      path: "/funscapes",
-      image:
-        "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop&auto=format",
+      span: "lg:col-span-1",
     },
     {
       icon: Users,
       title: t("features.community_wall.title"),
       description: t("features.community_wall.description"),
+      cta: "Join the conversation",
       color: "nature",
       path: "/community",
-      image:
-        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop&auto=format",
+      span: "lg:col-span-2",
     },
     {
       icon: Shield,
       title: t("features.emergency_assistance.title"),
       description: t("features.emergency_assistance.description"),
+      cta: "See safety info",
       color: "destructive",
       path: "/emergency",
-      image:
-        "https://imgs.search.brave.com/vg0BOb22uwlcInV964a6S1m9UO9akXaL45Z1LhJvV2M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzExLzg4LzUyLzUw/LzM2MF9GXzExODg1/MjUwMDFfR1QzZTNy/NzBzYU1kMktheGV4/cGxwYkdDMmFQSjNZ/WkEuanBn",
-    },
-    {
-      icon: Calendar,
-      title: t("features.gen_z_corner.title"),
-      description: t("features.gen_z_corner.description"),
-      color: "cultural",
-      path: "/genzcorner",
-      image:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&auto=format",
+      span: "lg:col-span-2",
     },
   ];
+
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 text-primary mb-4">
             <Compass className="h-5 w-5" />
             <span className="font-semibold">{t("features.title")}</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-4 tracking-tight">
             {t("features.description")}
           </h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed">
             {t("features.long_description")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[minmax(190px,auto)]">
           {features.map((feature, index) => (
-            <div key={index} className="h-80">
-              <FeatureCard feature={feature} index={index} />
-            </div>
+            <BentoTile key={feature.path} feature={feature} index={index} />
           ))}
         </div>
 
-        <div className="text-center mt-20">
+        <div className="text-center mt-16">
           <Button
             size="lg"
             asChild

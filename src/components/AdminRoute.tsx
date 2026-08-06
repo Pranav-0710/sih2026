@@ -10,7 +10,11 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const { user, loading, role } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner component
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
   if (!user || role !== 'admin') {

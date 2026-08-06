@@ -6,7 +6,7 @@ import { Input } from "./ui/input";
 const Footer = () => {
   const quickLinks = [
     { name: "Heritage Trails", path: "/heritage" },
-    { name: "Trip Genie", path: "/trip-genie" },
+    { name: "Kora", path: "/trip-genie" },
     { name: "Community", path: "/community" },
     { name: "FunScapes", path: "/funscapes" },
     { name: "Bookings", path: "/bookings" },
@@ -35,10 +35,10 @@ const Footer = () => {
               <div className="bg-gradient-to-br from-nature to-primary p-2.5 rounded-xl">
                 <MapPin className="h-6 w-6 text-white" />
               </div>
-              <span className="font-semibold text-lg">Jharkhand Tour</span>
+              <span className="font-semibold text-lg">Monastery360</span>
             </Link>
             <p className="text-gray-400 leading-relaxed">
-              Discover the untamed beauty and rich cultural heritage of Jharkhand with our AI-powered smart tourism platform.
+              Discover and help preserve Sikkim's centuries-old monasteries with our AI-powered digital heritage platform.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Smart Tourism Jharkhand. All rights reserved.
+            © {new Date().getFullYear()} Monastery360. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm">
             {legalLinks.map(link => (

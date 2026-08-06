@@ -52,11 +52,11 @@ const Emergency = () => {
       description: '24/7 tourist assistance and information'
     },
     {
-      category: 'Jharkhand Tourism',
-      number: '0651-2446066',
+      category: 'Sikkim Tourism',
+      number: '03592-209090',
       icon: MapPin,
       color: 'bg-purple-100 text-purple-800 border-purple-300',
-      description: 'State tourism department'
+      description: 'Sikkim Tourist Information Centre, M.G. Marg, Gangtok'
     },
     {
       category: 'Roadside Assistance',
@@ -69,32 +69,32 @@ const Emergency = () => {
 
   const importantLocations = [
     {
-      name: 'RIMS Hospital, Ranchi',
-      address: 'Bariatu Road, Ranchi',
-      phone: '0651-2577515',
+      name: 'STNM Hospital',
+      address: 'Sochakgang, Gangtok, Sikkim',
+      phone: '03592-202944',
       type: 'Hospital',
-      coordinates: '23.3307°N 85.3105°E'
+      coordinates: '27.3300°N 88.6200°E'
     },
     {
-      name: 'Ranchi Railway Station',
-      address: 'Station Road, Ranchi',
-      phone: '139',
-      type: 'Railway',
-      coordinates: '23.3583°N 85.3247°E'
+      name: 'Sikkim Tourist Information Centre',
+      address: 'M.G. Marg, Gangtok, East Sikkim',
+      phone: '03592-209090',
+      type: 'Tourist Info',
+      coordinates: '27.3300°N 88.6200°E'
     },
     {
-      name: 'Birsa Munda Airport',
-      address: 'Hinoo, Ranchi',
-      phone: '0651-2582525',
+      name: 'Pakyong Airport',
+      address: 'Pakyong, ~31 km south of Gangtok',
+      phone: '03592-267001',
       type: 'Airport',
-      coordinates: '23.3145°N 85.3217°E'
+      coordinates: '27.2325°N 88.5883°E'
     },
     {
       name: 'Police Control Room',
-      address: 'Main Road, Ranchi',
-      phone: '0651-2482100',
+      address: 'Gangtok, East Sikkim',
+      phone: '03592-202892',
       type: 'Police',
-      coordinates: '23.3441°N 85.3096°E'
+      coordinates: '27.3300°N 88.6200°E'
     }
   ];
 
@@ -270,7 +270,7 @@ const Emergency = () => {
                         onClick={() => makeCall(contact.number)}
                         size="sm"
                         className="flex-1"
-                        variant="heritage"
+                        variant="default"
                       >
                         <Phone className="h-4 w-4 mr-2" />
                         Call Now

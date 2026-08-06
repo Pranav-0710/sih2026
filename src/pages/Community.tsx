@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import Navigation from "@/components/Navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -35,6 +35,7 @@ import {
 
 interface CommunityPost {
   id: string;
+  user_id: string;
   title: string | null;
   content: string;
   images: any;
@@ -191,21 +192,39 @@ const Community = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pt-24">
-        <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      <PageLayout>
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="mb-8 space-y-3">
+            <Skeleton className="h-10 w-64" />
+            <Skeleton className="h-4 w-96 max-w-full" />
+          </div>
+          <div className="space-y-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="rounded-xl border border-border p-6">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </div>
+                <div className="mt-4 space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-11/12" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+                <Skeleton className="mt-4 h-48 w-full rounded-lg" />
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </PageLayout>
     );
   }
 
   return (
     <PageLayout>
     <div className="min-h-screen bg-background">
-      <Navigation />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
@@ -222,7 +241,7 @@ const Community = () => {
 
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
-              <Button variant="heritage" className="flex items-center gap-2">
+              <Button variant="default" className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
                 Share Experience
               </Button>
@@ -392,14 +411,15 @@ const Community = () => {
         </div>
 
         {posts.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-12 border border-dashed border-border rounded-xl">
             <Camera className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
               No posts yet
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-5">
               Be the first to share your travel experience!
             </p>
+            <Button onClick={() => setIsCreateOpen(true)}>Share your story</Button>
           </div>
         )}
       </div>

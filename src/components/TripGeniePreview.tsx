@@ -4,13 +4,13 @@ import { Bot, Sparkles, MessageCircle, ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const TripGeniePreview = () => {
+const KoraPreview = () => {
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -19,15 +19,15 @@ const TripGeniePreview = () => {
           >
             <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 text-primary">
               <Bot className="h-5 w-5" />
-              <span className="font-semibold">AI-Powered Travel Planning</span>
+              <span className="font-semibold">AI Monastery Guide</span>
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-4xl md:text-5xl font-extrabold leading-tight text-gray-800 tracking-tight">
-                Meet Your Personal <span className="text-primary">Trip Genie</span>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold leading-tight text-gray-800 tracking-tight">
+                Meet <span className="text-primary">Kora</span>, Your Circuit Guide
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Our AI assistant creates personalized itineraries that blend adventure, culture, and nature—perfectly tailored for your Jharkhand journey.
+                Named for the ritual circuit walked around a monastery, Kora helps you plan a self-guided Buddhist Circuit, answering questions about monastery history, rituals, and routes across Sikkim.
               </p>
             </div>
 
@@ -53,7 +53,7 @@ const TripGeniePreview = () => {
               >
                 <Link to="/trip-genie">
                   <Bot className="h-6 w-6 mr-3" />
-                  Chat with Trip Genie
+                  Chat with Kora
                 </Link>
               </Button>
             </div>
@@ -73,7 +73,7 @@ const TripGeniePreview = () => {
                     <Bot className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg">Trip Genie</h4>
+                    <h4 className="font-bold text-lg">Kora</h4>
                     <div className="flex items-center space-x-1.5">
                       <div className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
                       <span className="text-sm text-white/70">Online</span>
@@ -83,21 +83,20 @@ const TripGeniePreview = () => {
 
                 <div className="space-y-4 text-sm">
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 ml-8 max-w-xs self-end rounded-br-none">
-                    <p>I want to explore tribal culture and nature in 3 days with a ₹15,000 budget.</p>
+                    <p>I only have 2 days and I'm starting in Gangtok — which monastery should I visit first?</p>
                   </div>
-                  
+
                   <div className="bg-heritage/20 backdrop-blur-sm rounded-xl p-4 mr-8 max-w-md self-start rounded-bl-none">
-                    <p className="font-semibold mb-2">Perfect! Here is your 3-day cultural immersion:</p>
+                    <p className="font-semibold mb-2">Start with what's near Gangtok:</p>
                     <ul className="text-white/90 space-y-1.5 text-xs">
-                      <li>🏛️ Jagannath Temple & Tribal Museum</li>
-                      <li>🌿 Betla National Park Safari</li>
-                      <li>🎭 Authentic Santali Village Experience</li>
-                      <li className="font-bold pt-1">💰 Total cost: ₹14,500 (within budget!)</li>
+                      <li>🏛️ Rumtek Monastery — seat of the Karma Kagyu lineage</li>
+                      <li>🙏 Enchey Monastery — known for its Cham dances</li>
+                      <li className="font-bold pt-1">📍 Both reachable in a single day near Gangtok</li>
                     </ul>
                   </div>
 
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 ml-8 max-w-xs self-end rounded-br-none">
-                    <p>This looks amazing! Can you book it?</p>
+                    <p>Perfect, and what about day two?</p>
                   </div>
                 </div>
 
@@ -107,7 +106,7 @@ const TripGeniePreview = () => {
                     <div className="w-2 h-2 bg-heritage rounded-full animate-bounce [animation-delay:0.1s]"></div>
                     <div className="w-2 h-2 bg-heritage rounded-full animate-bounce [animation-delay:0.2s]"></div>
                   </div>
-                  <span className="text-xs text-white/60">Trip Genie is typing...</span>
+                  <span className="text-xs text-white/60">Kora is typing...</span>
                 </div>
               </CardContent>
             </Card>
@@ -118,4 +117,4 @@ const TripGeniePreview = () => {
   );
 };
 
-export default TripGeniePreview;
+export default KoraPreview;

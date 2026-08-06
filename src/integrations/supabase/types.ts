@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       bookings: {
@@ -132,6 +157,51 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
         ]
+      }
+      condition_reports: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          lat: number | null
+          lon: number | null
+          monastery_id: string
+          monastery_name: string
+          photo_url: string | null
+          reporter_id: string | null
+          severity: string | null
+          severity_confidence: number | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          lat?: number | null
+          lon?: number | null
+          monastery_id: string
+          monastery_name: string
+          photo_url?: string | null
+          reporter_id?: string | null
+          severity?: string | null
+          severity_confidence?: number | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          lat?: number | null
+          lon?: number | null
+          monastery_id?: string
+          monastery_name?: string
+          photo_url?: string | null
+          reporter_id?: string | null
+          severity?: string | null
+          severity_confidence?: number | null
+          status?: string
+        }
+        Relationships: []
       }
       heritage_badges: {
         Row: {
@@ -350,6 +420,36 @@ export type Database = {
           },
         ]
       }
+      sentiment_results: {
+        Row: {
+          confidence: number | null
+          created_at: string | null
+          id: number
+          item_id: number | null
+          rating: number | null
+          sentiment: string | null
+          type: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string | null
+          id?: number
+          item_id?: number | null
+          rating?: number | null
+          sentiment?: string | null
+          type: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string | null
+          id?: number
+          item_id?: number | null
+          rating?: number | null
+          sentiment?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
       travel_packages: {
         Row: {
           agency_id: string | null
@@ -566,6 +666,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       badge_level: ["bronze", "silver", "gold"],

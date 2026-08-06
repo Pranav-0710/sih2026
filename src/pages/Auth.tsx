@@ -26,7 +26,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
-import heroImage from "@/assets/hero-jharkhand.png";
+import heroImage from "@/assets/hero-sikkim.png";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -101,18 +101,18 @@ const Auth = () => {
                   <Mountain className="h-8 w-8" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold">Smart Tourism</h1>
-                  <p className="text-white/90 text-lg">Jharkhand</p>
+                  <h1 className="text-3xl font-bold">Monastery360</h1>
+                  <p className="text-white/90 text-lg">Sikkim</p>
                 </div>
               </div>
 
               <h2 className="text-4xl font-bold mb-4 leading-tight">
                 Discover the Soul of <br />
-                <span className="text-accent">Jharkhand</span>
+                <span className="text-accent">Sikkim</span>
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Embark on a journey through ancient forests, tribal heritage,
-                and hidden waterfalls in India's untamed wilderness.
+                Step inside centuries-old monasteries, explore Himalayan
+                Buddhist heritage, and help preserve it for the next generation.
               </p>
             </motion.div>
 
@@ -126,13 +126,13 @@ const Auth = () => {
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Trees className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">50+ Heritage Sites</span>
+                <span className="text-white/90">4 Flagship Monasteries</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Star className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">15+ Tribal Villages</span>
+                <span className="text-white/90">Crowdsourced Conservation</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
@@ -164,9 +164,9 @@ const Auth = () => {
               </div>
               <div className="ml-3">
                 <h1 className="text-2xl font-bold text-foreground">
-                  Smart Tourism
+                  Monastery360
                 </h1>
-                <p className="text-muted-foreground">Jharkhand</p>
+                <p className="text-muted-foreground">Sikkim</p>
               </div>
             </motion.div>
 
@@ -181,7 +181,7 @@ const Auth = () => {
                     Welcome Back
                   </CardTitle>
                   <CardDescription className="text-lg text-muted-foreground">
-                    Sign in to explore Jharkhand's heritage and culture
+                    Sign in to explore Sikkim's monastery heritage
                   </CardDescription>
                 </CardHeader>
 

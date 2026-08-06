@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Jharkhand Smart Tourism Platform Design System
-   Inspired by Jharkhand's natural beauty, tribal culture, and heritage
+/* Monastery360 Design System
+   Inspired by Sikkim's monasteries — maroon monastic robes, saffron/gold
+   ritual accents, and the green of Himalayan forest slopes.
    All colors MUST be HSL.
 */
 
@@ -20,8 +21,8 @@
     --popover: 40 20% 99%;
     --popover-foreground: 20 15% 15%;
 
-    /* Primary - Deep Forest Green (Jharkhand's forests) */
-    --primary: 140 45% 25%;
+    /* Primary - Monastic Maroon (Sikkim monastery robes) */
+    --primary: 350 55% 30%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary - Warm Earth Tones */
@@ -32,7 +33,7 @@
     --muted: 35 15% 92%;
     --muted-foreground: 25 8% 45%;
 
-    /* Accent - Tribal Orange (inspired by tribal art) */
+    /* Accent - Saffron */
     --accent: 25 85% 60%;
     --accent-foreground: 0 0% 98%;
 
@@ -53,15 +54,15 @@
 
     --border: 35 20% 88%;
     --input: 35 20% 88%;
-    --ring: 140 45% 25%;
+    --ring: 350 55% 30%;
 
     --radius: 0.75rem;
 
-    /* Beautiful gradients inspired by Jharkhand's landscapes */
+    /* Gradients inspired by Sikkim's monasteries and Himalayan landscape */
     --gradient-hero: linear-gradient(
       135deg,
-      hsl(140 45% 25%) 0%,
-      hsl(120 40% 45%) 50%,
+      hsl(350 55% 30%) 0%,
+      hsl(350 45% 40%) 50%,
       hsl(45 90% 55%) 100%
     );
     --gradient-cultural: linear-gradient(
@@ -86,9 +87,9 @@
     );
 
     /* Elegant shadows with warm tones */
-    --shadow-soft: 0 4px 20px -4px hsl(140 45% 25% / 0.1);
-    --shadow-medium: 0 8px 30px -8px hsl(140 45% 25% / 0.15);
-    --shadow-strong: 0 16px 40px -16px hsl(140 45% 25% / 0.2);
+    --shadow-soft: 0 4px 20px -4px hsl(350 55% 30% / 0.1);
+    --shadow-medium: 0 8px 30px -8px hsl(350 55% 30% / 0.15);
+    --shadow-strong: 0 16px 40px -16px hsl(350 55% 30% / 0.2);
     --shadow-glow: 0 0 40px hsl(45 90% 55% / 0.3);
 
     /* Smooth transitions */
@@ -97,12 +98,12 @@
 
     --sidebar-background: 42 15% 97%;
     --sidebar-foreground: 20 15% 15%;
-    --sidebar-primary: 140 45% 25%;
+    --sidebar-primary: 350 55% 30%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 35 25% 90%;
     --sidebar-accent-foreground: 20 15% 15%;
     --sidebar-border: 35 20% 88%;
-    --sidebar-ring: 140 45% 25%;
+    --sidebar-ring: 350 55% 30%;
   }
 
   .dark {
@@ -117,7 +118,7 @@
     --popover-foreground: 40 15% 92%;
 
     /* Brighter colors for dark mode */
-    --primary: 120 40% 55%;
+    --primary: 350 45% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 25 20% 18%;
@@ -143,13 +144,13 @@
 
     --border: 25 20% 18%;
     --input: 25 20% 18%;
-    --ring: 120 40% 55%;
+    --ring: 350 45% 55%;
 
     /* Dark mode gradients */
     --gradient-hero: linear-gradient(
       135deg,
-      hsl(120 40% 55%) 0%,
-      hsl(140 45% 45%) 50%,
+      hsl(350 45% 55%) 0%,
+      hsl(350 45% 45%) 50%,
       hsl(45 90% 65%) 100%
     );
     --gradient-cultural: linear-gradient(
@@ -181,12 +182,12 @@
 
     --sidebar-background: 20 25% 8%;
     --sidebar-foreground: 40 15% 92%;
-    --sidebar-primary: 120 40% 55%;
+    --sidebar-primary: 350 45% 55%;
     --sidebar-primary-foreground: 20 25% 8%;
     --sidebar-accent: 25 20% 18%;
     --sidebar-accent-foreground: 40 15% 92%;
     --sidebar-border: 25 20% 18%;
-    --sidebar-ring: 120 40% 55%;
+    --sidebar-ring: 350 45% 55%;
   }
 }
 
@@ -222,7 +223,7 @@
     /* A subtle, luxurious gradient */
     background: linear-gradient(
       160deg,
-      hsl(120 40% 97%) 0%,
+      hsl(350 30% 97%) 0%,
       hsl(35 80% 97%) 50%,
       hsl(0 0% 100%) 100%
     );
@@ -234,7 +235,7 @@
     /* A deep, cinematic dark gradient */
     background: linear-gradient(
       160deg,
-      hsl(140 20% 8%) 0%,
+      hsl(350 20% 8%) 0%,
       hsl(30 25% 8%) 50%,
       hsl(20 25% 6%) 100%
     );
@@ -242,6 +243,42 @@
 
   .large-font {
     font-size: 18px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  ::selection {
+    background-color: hsl(var(--heritage) / 0.35);
+  }
+
+  /* Slim, themed scrollbars instead of the default OS chrome */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.4) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.35);
+    background-clip: content-box;
+    border: 2px solid transparent;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.6);
+    background-clip: content-box;
   }
 }
 
@@ -265,10 +302,35 @@
     --tw-prose-td-borders: theme(colors.white);
   }
 
+  /* Frosted panel used across the dark heritage/explore surfaces */
+  .glass-panel {
+    @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
+  }
+
+  .text-gradient-heritage {
+    @apply bg-gradient-to-r from-heritage to-accent bg-clip-text text-transparent;
+  }
+
+  .card-lift {
+    @apply transition-all duration-300 hover:-translate-y-1.5 hover:shadow-strong;
+  }
+
   /* Floating navbar styles */
   .floating-navbar {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Nav sits transparent over the homepage hero media until scrolled/hovered */
+  .nav-transparent {
+    --foreground: 0 0% 100%;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .nav-transparent svg,
+  .nav-transparent span,
+  .nav-transparent a {
+    filter: drop-shadow(0 1px 4px rgb(0 0 0 / 0.55));
   }
 
   /* Ensure proper spacing for fixed navbar */
@@ -289,6 +351,24 @@
     .page-content {
       padding-top: 6rem;
     }
+  }
+}
+
+/* Hero media carousel — slow pan/zoom on static photography */
+@keyframes ken-burns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.12) translate(-1.5%, -1.5%);
+  }
+}
+.animate-ken-burns {
+  animation: ken-burns 4s ease-out forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns {
+    animation: none;
   }
 }
 

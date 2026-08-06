@@ -208,7 +208,7 @@ export function EducationalPanel({ locationName, content, isVisible, onClose }: 
                   </p>
                   <p className="text-sm text-gray-400 mb-6">
                     {score === content.quiz.length
-                      ? "Perfect! You're a Jharkhand expert!"
+                      ? "Perfect! You're a Sikkim heritage expert!"
                       : score >= content.quiz.length * 0.7
                         ? "Great job! You know a lot about this location."
                         : "Good effort! Try exploring more to learn additional facts."}

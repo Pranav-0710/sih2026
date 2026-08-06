@@ -1,130 +1,85 @@
 // src/pages/heritage.tsx
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Play, StopCircle } from "lucide-react";
+import { Play, StopCircle, Search, ExternalLink, Compass, MapPin } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { useWeather } from "@/hooks/useWeather";
+import { cn } from "@/lib/utils";
 
+// Marker positions are computed from each monastery's real coordinates against
+// the bounds of the Sikkim location map (top 28.14, bottom 27.03, left 87.95,
+// right 88.93) — see CREDITS.md. Founding dates, lineage and elevation are the
+// same sourced values used in src/data/monasteries.ts; Tashiding has no
+// elevation listed there, so it is deliberately left blank rather than guessed.
 const spots = [
   {
-    name: "Baidhyanath Temple",
-    top: "33.49%",
-    left: "69.99%",
-    img: "/images/spots/baidyanath.jpg",
-    desc: "One of the 12 Jyotirlingas, an important pilgrimage site in Deoghar.",
-    wiki: "https://en.wikipedia.org/wiki/Baidyanath_Temple",
-    category: "Temple",
-    lat: 24.49273,
-    lon: 86.69991,
+    name: "Rumtek Monastery",
+    top: "76.70%",
+    left: "62.39%",
+    img: "/vr-assets/rumtek-monastery.jpg",
+    desc: "The Dharma Chakra Centre — largest monastery in Sikkim and principal seat of the Karma Kagyu lineage.",
+    wiki: "https://en.wikipedia.org/wiki/Rumtek_Monastery",
+    category: "Monastery",
+    founded: "1734 · rebuilt 1966",
+    order: "Karma Kagyu",
+    district: "East Sikkim",
+    elevation: "1,550 m",
+    lat: 27.28861,
+    lon: 88.56139,
   },
   {
-    name: "Netarhat",
-    top: "55.93%",
-    left: "29.45%",
-    img: "/images/spots/netarhat.jpg",
-    desc: "Known as the Queen of Chotanagpur, famous for sunrise and sunset views.",
-    wiki: "https://en.wikipedia.org/wiki/Netarhat",
-    category: "Nature",
-    lat: 23.4833,
-    lon: 84.2667,
+    name: "Pemayangtse Monastery",
+    top: "75.28%",
+    left: "30.90%",
+    img: "/vr-assets/pemayangtse-monastery.jpg",
+    desc: "The 'Perfect Sublime Lotus', founded 1705 — head of Sikkim's Nyingma monasteries, home to the Zangdok Palri.",
+    wiki: "https://en.wikipedia.org/wiki/Pemayangtse_Monastery",
+    category: "Monastery",
+    founded: "1705",
+    order: "Nyingma",
+    district: "West Sikkim",
+    elevation: "2,085 m",
+    lat: 27.30444,
+    lon: 88.25278,
   },
   {
-    name: "Parasnath Hills",
-    top: "40%",
-    left: "55%",
-    img: "/images/spots/parasnath.jpg",
-    desc: "Highest peak in Jharkhand, a major Jain pilgrimage site.",
-    wiki: "https://en.wikipedia.org/wiki/Parasnath",
-    category: "Nature",
-    lat: 23.9634,
-    lon: 86.129,
+    name: "Tashiding Monastery",
+    top: "74.92%",
+    left: "35.52%",
+    img: "/vr-assets/tashiding-monastery.jpg",
+    desc: "Widely held to be Sikkim's holiest monastery, home to the sin-cleansing Thongwa Rangdrol chorten.",
+    wiki: "https://en.wikipedia.org/wiki/Tashiding_Monastery",
+    category: "Pilgrimage",
+    founded: "1641",
+    order: "Nyingma",
+    district: "West Sikkim",
+    elevation: "",
+    lat: 27.30833,
+    lon: 88.29806,
   },
   {
-    name: "Hazaribagh National Park",
-    top: "44.08%",
-    left: "48.55%",
-    img: "/images/spots/hazaribagh.jpg",
-    desc: "Wildlife sanctuary known for tigers, leopards, and rich flora.",
-    wiki: "https://en.wikipedia.org/wiki/Hazaribagh_National_Park",
-    category: "Park",
-    lat: 24.016544,
-    lon: 85.413133,
-  },
-  {
-    name: "Betla National Park",
-    top: "47.33%",
-    left: "28.17%",
-    img: "/images/spots/betla.jpg",
-    desc: "Part of the Palamau Tiger Reserve, rich in wildlife and history.",
-    wiki: "https://en.wikipedia.org/wiki/Betla_National_Park",
-    category: "Park",
-    lat: 23.87,
-    lon: 84.19,
-  },
-  {
-    name: "Jagannath Temple, Ranchi",
-    top: "58%",
-    left: "45%",
-    img: "/images/spots/jagannath.jpg",
-    desc: "A 17th-century temple resembling Puri's Jagannath Temple.",
-    wiki: "https://en.wikipedia.org/wiki/Jagannath_Temple,_Ranchi",
-    category: "Temple",
-    lat: 23.3169,
-    lon: 85.2817,
-  },
-  {
-    name: "Hundru Falls",
-    top: "55%",
-    left: "54%",
-    img: "/images/spots/hundru.jpg",
-    desc: "A spectacular 98m waterfall on the Subarnarekha River.",
-    wiki: "https://en.wikipedia.org/wiki/Hundru_Falls",
-    category: "Waterfall",
-    lat: 23.450839,
-    lon: 85.666799,
-  },
-  {
-    name: "Dassam Falls",
-    top: "65%",
-    left: "48%",
-    img: "/images/spots/dassam.jpg",
-    desc: "A beautiful waterfall near Ranchi, popular picnic spot.",
-    wiki: "https://en.wikipedia.org/wiki/Dassam_Falls",
-    category: "Waterfall",
-    lat: 23.143358,
-    lon: 85.466441,
-  },
-  {
-    name: "Jonha Falls",
-    top: "61%",
-    left: "53%",
-    img: "/images/spots/jonha.jpg",
-    desc: "Also known as Gautamdhara, falls named after Lord Buddha.",
-    wiki: "https://en.wikipedia.org/wiki/Jonha_Falls",
-    category: "Waterfall",
-    lat: 23.34167,
-    lon: 85.60833,
-  },
-  {
-    name: "Shikharji",
-    top: "45.31%",
-    left: "40%",
-    img: "/images/spots/shikharji.jpg",
-    desc: "Most important Jain pilgrimage site, located on Parasnath Hill.",
-    wiki: "https://en.wikipedia.org/wiki/Shikharji",
-    category: "Temple",
-    lat: 23.96111,
-    lon: 86.137083,
+    name: "Enchey Monastery",
+    top: "72.45%",
+    left: "68.28%",
+    img: "/vr-assets/enchey-monastery.jpg",
+    desc: "'The Solitary Temple' above Gangtok, renowned for its masked Cham and Singhe Chaam dances.",
+    wiki: "https://en.wikipedia.org/wiki/Enchey_Monastery",
+    category: "Festival",
+    founded: "1909",
+    order: "Nyingma",
+    district: "East Sikkim",
+    elevation: "1,800 m",
+    lat: 27.33583,
+    lon: 88.61917,
   },
 ];
 
-const categories = ["All", "Temple", "Nature", "Park", "Waterfall"];
+const categories = ["All", "Monastery", "Pilgrimage", "Festival"];
 
 export const Heritage: React.FC = () => {
-  const [selectedSpot, setSelectedSpot] = useState<number | null>(null);
+  const [selectedSpot, setSelectedSpot] = useState<number | null>(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [isTourRunning, setIsTourRunning] = useState(false);
@@ -135,8 +90,8 @@ export const Heritage: React.FC = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const rotateX = useTransform(y, [-1, 1], [20, -20]);
-  const rotateY = useTransform(x, [-1, 1], [-20, 20]);
+  const rotateX = useTransform(y, [-1, 1], [10, -10]);
+  const rotateY = useTransform(x, [-1, 1], [-10, 10]);
 
   const handleMouseMove = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -144,14 +99,8 @@ export const Heritage: React.FC = () => {
     if (!mapWrapperRef.current) return;
 
     const rect = mapWrapperRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    const xPct = (event.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (event.clientY - rect.top) / rect.height - 0.5;
 
     x.set(xPct);
     y.set(yPct);
@@ -169,7 +118,7 @@ export const Heritage: React.FC = () => {
     tourIntervalRef.current = setInterval(() => {
       setSelectedSpot(currentSpot);
       currentSpot = (currentSpot + 1) % spots.length;
-    }, 3000);
+    }, 4000);
   };
 
   const stopTour = () => {
@@ -177,7 +126,6 @@ export const Heritage: React.FC = () => {
     if (tourIntervalRef.current) {
       clearInterval(tourIntervalRef.current);
     }
-    setSelectedSpot(null);
   };
 
   useEffect(() => {
@@ -199,263 +147,324 @@ export const Heritage: React.FC = () => {
     });
   }, [searchQuery, activeCategory]);
 
+  const selected = selectedSpot !== null ? spots[selectedSpot] : null;
+
   const { weather, loading, error } = useWeather(
-    selectedSpot !== null ? spots[selectedSpot].lat : null,
-    selectedSpot !== null ? spots[selectedSpot].lon : null
+    selected ? selected.lat : null,
+    selected ? selected.lon : null
   );
 
   return (
-    <PageLayout>
-      <div
-        className="relative w-full min-h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url(/images/map.png)" }}
-      >
-        <div className="relative z-10 flex flex-col w-full h-full min-h-screen pt-24">
-          <div className="w-full mx-auto text-center">
-            <h1
-              className="text-5xl font-extrabold text-white mt-8 mb-4"
-              style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-            >
-              Explore the Heritage of Jharkhand
+    <PageLayout noTopPadding noBackground>
+      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
+        {/* Ambient light — keeps the dark canvas from reading as empty space */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 left-1/4 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
+          <div className="absolute -bottom-32 right-0 h-[28rem] w-[28rem] translate-x-1/4 rounded-full bg-heritage/20 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/3 h-[22rem] w-[22rem] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 container mx-auto px-4 pt-28 pb-16">
+          {/* Header */}
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+              <Compass className="h-3.5 w-3.5" />
+              Heritage Trails
+            </span>
+            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              Explore the Monasteries of{" "}
+              <span className="bg-gradient-to-r from-heritage to-accent bg-clip-text text-transparent">
+                Sikkim
+              </span>
             </h1>
-            <p className="text-lg text-white mb-8">
-              Discover the rich culture and natural beauty of Jharkhand.
+            <p className="mt-3 text-white/60">
+              Discover centuries of Himalayan Buddhist heritage, mapped across
+              the hills of Sikkim.
             </p>
           </div>
 
-          <div className="w-full mx-auto bg-black/50 backdrop-blur-sm p-4 rounded-lg shadow-lg mb-8">
-            <div className="flex flex-col md:flex-row gap-4 items-center">
-              <Input
-                type="text"
-                placeholder="Search for a location..."
-                className="w-full md:w-1/3 bg-white/80"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                disabled={isTourRunning}
-              />
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={`${
-                      activeCategory === category
-                        ? "bg-blue-600 text-white"
-                        : "bg-white/80 text-black"
-                    } hover:bg-blue-500 hover:text-white`}
+          <div className="grid items-start gap-6 lg:grid-cols-12">
+            {/* ---------- Left: search, filters, site list ---------- */}
+            <div className="space-y-4 lg:col-span-3">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                  <Input
+                    type="text"
+                    placeholder="Search monasteries..."
+                    className="border-white/15 bg-white/5 pl-9 text-white placeholder:text-white/40 focus-visible:ring-heritage/40"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     disabled={isTourRunning}
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-              <div className="flex-grow" />
-              {!isTourRunning ? (
-                <Button
-                  onClick={startTour}
-                  className="bg-green-500 hover:bg-green-600 text-white"
-                >
-                  <Play className="mr-2" size={16} />
-                  Start Guided Tour
-                </Button>
-              ) : (
-                <Button
-                  onClick={stopTour}
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                >
-                  <StopCircle className="mr-2" size={16} />
-                  Stop Tour
-                </Button>
-              )}
-            </div>
-          </div>
+                  />
+                </div>
 
-          <motion.div
-            ref={mapWrapperRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="relative w-full bg-cover bg-center rounded-lg shadow-2xl"
-          >
-            <div
-              style={{ aspectRatio: "1088 / 960", transform: "translateZ(0)" }}
-            >
-              {/* Markers */}
-              {filteredSpots.map((spot, index) => {
-                const originalIndex = spots.findIndex(
-                  (s) => s.name === spot.name
-                );
-                return (
-                  <div
-                    key={originalIndex}
-                    className="absolute"
-                    style={{
-                      top: spot.top,
-                      left: spot.left,
-                      transform: "translateZ(20px)",
-                    }}
-                    onClick={() => setSelectedSpot(originalIndex)}
-                  >
-                    <motion.div
-                      className="w-5 h-5 bg-pink-500 rounded-full shadow-lg cursor-pointer border-2 border-white animate-pulse"
-                      whileHover={{ scale: 1.3 }}
-                    />
-                  </div>
-                );
-              })}
-
-              {/* Card */}
-              {selectedSpot !== null && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute z-[100] w-72"
-                  style={{
-                    top: `calc(${spots[selectedSpot].top} - 10rem)`,
-                    left: `calc(${spots[selectedSpot].left} + 2rem)`,
-                    transform: "translateZ(50px)",
-                  }}
-                >
-                  <Card className="shadow-xl border-2 border-blue-500 relative">
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedSpot(null);
-                      }}
-                      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 text-white p-0 z-[110]"
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      disabled={isTourRunning}
+                      className={cn(
+                        "rounded-full px-3 py-1 text-xs font-medium transition-all disabled:opacity-40",
+                        activeCategory === category
+                          ? "bg-heritage text-black"
+                          : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                      )}
                     >
-                      <X size={16} />
-                    </Button>
-                    <CardContent className="p-2">
+                      {category}
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={isTourRunning ? stopTour : startTour}
+                  className={cn(
+                    "mt-4 w-full font-semibold",
+                    isTourRunning
+                      ? "bg-destructive text-white hover:bg-destructive/90"
+                      : "bg-gradient-to-r from-primary to-accent text-white hover:opacity-90"
+                  )}
+                >
+                  {isTourRunning ? (
+                    <>
+                      <StopCircle className="mr-2 h-4 w-4" /> Stop Tour
+                    </>
+                  ) : (
+                    <>
+                      <Play className="mr-2 h-4 w-4" /> Start Guided Tour
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Site list */}
+              <div className="space-y-2">
+                {filteredSpots.length === 0 && (
+                  <p className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/50">
+                    No monasteries match that search.
+                  </p>
+                )}
+                {filteredSpots.map((spot) => {
+                  const originalIndex = spots.findIndex(
+                    (s) => s.name === spot.name
+                  );
+                  const isActive = selectedSpot === originalIndex;
+                  return (
+                    <button
+                      key={spot.name}
+                      onClick={() => setSelectedSpot(originalIndex)}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-xl border p-2.5 text-left transition-all",
+                        isActive
+                          ? "border-heritage/60 bg-heritage/10 shadow-[0_0_24px_-6px] shadow-heritage/40"
+                          : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.07]"
+                      )}
+                    >
                       <img
-                        src={spots[selectedSpot].img}
-                        alt={spots[selectedSpot].name}
-                        className="w-full h-32 object-cover rounded-lg"
+                        src={spot.img}
+                        alt={spot.name}
+                        className="h-12 w-12 shrink-0 rounded-lg object-cover"
                       />
-                      <h3 className="text-lg font-semibold mt-2">
-                        {spots[selectedSpot].name}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {spots[selectedSpot].desc}
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-white">
+                          {spot.name.replace(" Monastery", "")}
+                        </p>
+                        <p className="truncate text-xs text-white/50">
+                          {spot.founded} · {spot.order}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ---------- Centre: the map ---------- */}
+            <div className="lg:col-span-5">
+              <div className="relative flex justify-center">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 m-auto h-3/4 w-3/4 rounded-full bg-heritage/10 blur-[90px]"
+                />
+                <motion.div
+                  ref={mapWrapperRef}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                    aspectRatio: "218.34467 / 268.94427",
+                    backgroundImage: "url(/images/sikkim-map.svg)",
+                  }}
+                  className="relative h-[clamp(340px,52vh,540px)] rounded-2xl bg-contain bg-center bg-no-repeat"
+                >
+                  {filteredSpots.map((spot) => {
+                    const originalIndex = spots.findIndex(
+                      (s) => s.name === spot.name
+                    );
+                    const isActive = selectedSpot === originalIndex;
+                    return (
+                      <button
+                        key={spot.name}
+                        onClick={() => setSelectedSpot(originalIndex)}
+                        aria-label={spot.name}
+                        className="group absolute"
+                        style={{
+                          top: spot.top,
+                          left: spot.left,
+                          transform: "translate(-50%, -50%) translateZ(24px)",
+                        }}
+                      >
+                        <span className="relative flex h-4 w-4 items-center justify-center">
+                          <span
+                            className={cn(
+                              "absolute inline-flex h-full w-full rounded-full opacity-75",
+                              isActive
+                                ? "animate-ping bg-heritage"
+                                : "animate-pulse bg-primary"
+                            )}
+                          />
+                          <span
+                            className={cn(
+                              "relative inline-flex rounded-full border-2 border-white shadow-lg transition-all",
+                              isActive
+                                ? "h-5 w-5 bg-heritage"
+                                : "h-3.5 w-3.5 bg-primary group-hover:h-4 group-hover:w-4"
+                            )}
+                          />
+                        </span>
+                        <span
+                          className={cn(
+                            "pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black/80 px-2 py-1 text-[10px] font-medium text-white backdrop-blur transition-opacity",
+                            isActive
+                              ? "opacity-100"
+                              : "opacity-0 group-hover:opacity-100"
+                          )}
+                        >
+                          {spot.name.replace(" Monastery", "")}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              </div>
+            </div>
+
+            {/* ---------- Right: detail panel ---------- */}
+            <div className="lg:col-span-4">
+              <AnimatePresence mode="wait">
+                {selected ? (
+                  <motion.div
+                    key={selected.name}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -14 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl"
+                  >
+                    <div className="relative h-44">
+                      <img
+                        src={selected.img}
+                        alt={selected.name}
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1a]/20 to-transparent" />
+                      <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
+                        {selected.category}
+                      </span>
+                    </div>
+
+                    <div className="p-5">
+                      <h2 className="font-display text-2xl font-semibold text-white">
+                        {selected.name}
+                      </h2>
+
+                      <div className="mt-4 grid grid-cols-2 gap-2">
+                        {[
+                          { label: "Founded", value: selected.founded },
+                          { label: "Order", value: selected.order },
+                          { label: "District", value: selected.district },
+                          { label: "Elevation", value: selected.elevation },
+                        ]
+                          .filter((f) => f.value)
+                          .map((f) => (
+                            <div
+                              key={f.label}
+                              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+                            >
+                              <p className="text-[10px] uppercase tracking-wider text-white/40">
+                                {f.label}
+                              </p>
+                              <p className="text-xs font-medium text-white/90">
+                                {f.value}
+                              </p>
+                            </div>
+                          ))}
+                      </div>
+
+                      <p className="mt-4 text-sm leading-relaxed text-white/70">
+                        {selected.desc}
                       </p>
 
-                      {loading && (
-                        <p className="text-sm text-gray-500">
-                          Loading weather...
+                      {/* Live weather */}
+                      <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                        <p className="mb-2 text-[10px] uppercase tracking-wider text-white/40">
+                          Conditions right now
                         </p>
-                      )}
-                      {error && (
-                        <p className="text-sm text-red-500">Error: {error}</p>
-                      )}
-                      {weather && (
-                        <div className="mt-2 text-sm text-gray-700">
-                          <p>Temperature: {weather.main.temp}°C</p>
-                          <p>Feels like: {weather.main.feels_like}°C</p>
-                          <p>Condition: {weather.weather[0].description}</p>
-                          <img
-                            src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-                            alt={weather.weather[0].description}
-                            className="inline-block w-8 h-8"
-                          />
-                          <p className="mt-2 font-semibold">
-                            Weather Suggestion:
+                        {loading && (
+                          <p className="text-sm text-white/50">
+                            Loading weather...
                           </p>
-                          <p>{getWeatherSuggestion(weather.weather[0].main)}</p>
-                        </div>
-                      )}
+                        )}
+                        {error && (
+                          <p className="text-sm text-white/50">
+                            Weather unavailable right now.
+                          </p>
+                        )}
+                        {weather && (
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                              alt={weather.weather[0].description}
+                              className="h-10 w-10"
+                            />
+                            <div>
+                              <p className="text-lg font-semibold text-white">
+                                {Math.round(weather.main.temp)}°C
+                              </p>
+                              <p className="text-xs capitalize text-white/60">
+                                {weather.weather[0].description} · feels like{" "}
+                                {Math.round(weather.main.feels_like)}°C
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
                       <Button
-                        className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={() =>
-                          window.open(spots[selectedSpot].wiki, "_blank")
-                        }
+                        className="mt-4 w-full bg-white/10 font-semibold text-white hover:bg-white/20"
+                        onClick={() => window.open(selected.wiki, "_blank")}
                       >
-                        Learn More
+                        Learn more
+                        <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )}
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-6 text-center">
+                    <MapPin className="mb-3 h-8 w-8 text-white/25" />
+                    <p className="text-sm text-white/50">
+                      Select a marker on the map to see its story.
+                    </p>
+                  </div>
+                )}
+              </AnimatePresence>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </PageLayout>
   );
-};
-
-const weatherSuggestions: { [key: string]: string[] } = {
-  Rain: [
-    "Carry an umbrella or raincoat.",
-    "Wear waterproof footwear.",
-    "Be cautious of slippery roads.",
-  ],
-  Clouds: [
-    "A good day for outdoor activities, but keep an eye on the sky.",
-    "Comfortable weather, ideal for sightseeing.",
-  ],
-  Clear: [
-    "Perfect weather for exploring! Don't forget your sunglasses.",
-    "Enjoy the clear skies, ideal for photography.",
-    "Stay hydrated and use sunscreen.",
-  ],
-  Drizzle: [
-    "Light rain expected, an umbrella might be useful.",
-    "Roads might be slightly wet, drive carefully.",
-  ],
-  Thunderstorm: [
-    "Seek shelter indoors immediately.",
-    "Avoid open areas and tall objects.",
-    "Stay updated with weather alerts.",
-  ],
-  Snow: [
-    "Dress warmly in layers.",
-    "Be careful of icy conditions.",
-    "Enjoy the snowy landscapes, but prioritize safety.",
-  ],
-  Mist: [
-    "Visibility might be reduced, drive carefully.",
-    "A mystical atmosphere, great for serene walks.",
-  ],
-  Fog: [
-    "Visibility will be low, exercise extreme caution if driving.",
-    "Consider delaying travel until fog lifts.",
-  ],
-  Haze: [
-    "Air quality might be affected, consider wearing a mask if sensitive.",
-    "Visibility might be slightly reduced.",
-  ],
-  Smoke: [
-    "Air quality is poor, limit outdoor activities.",
-    "Wear a mask to protect against smoke inhalation.",
-  ],
-  Dust: [
-    "Expect dusty conditions, protect your eyes and respiratory system.",
-    "Visibility might be reduced due to dust.",
-  ],
-  Sand: [
-    "Similar to dust, protect yourself from sand particles.",
-    "Strong winds might carry sand, secure loose items.",
-  ],
-  Ash: [
-    "Volcanic ash can be hazardous, stay indoors if possible.",
-    "Wear protective gear if you must go outside.",
-  ],
-  Squall: [
-    "Expect sudden, strong winds and heavy precipitation.",
-    "Seek immediate shelter.",
-  ],
-  Tornado: [
-    "This is a severe weather event. Seek immediate shelter in a sturdy building or basement.",
-    "Stay away from windows.",
-  ],
-  // Default or less common conditions
-  default: ["Check local advisories for best experience.", "Enjoy your visit!"],
-};
-
-const getWeatherSuggestion = (weatherMain: string): string => {
-  const suggestions =
-    weatherSuggestions[weatherMain] || weatherSuggestions.default;
-  return suggestions[Math.floor(Math.random() * suggestions.length)];
 };

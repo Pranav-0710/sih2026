@@ -551,7 +551,7 @@ export function PanoramaViewer({
     {
       id: `${location.id}-intro`,
       title: `Welcome to ${location.name}`,
-      text: `Welcome to ${location.name}, ${location.description}. This ${location.type} offers a unique glimpse into Jharkhand's natural beauty and cultural heritage.`,
+      text: `Welcome to ${location.name}, ${location.description}. This ${location.type} offers a unique glimpse into Sikkim's Buddhist heritage and living monastic tradition.`,
       category: "introduction" as const,
       priority: 10,
     },
@@ -565,7 +565,7 @@ export function PanoramaViewer({
     {
       id: `${location.id}-history`,
       title: `History of ${location.name}`,
-      text: `${location.name} has been an important part of Jharkhand's landscape for centuries. This region showcases the rich biodiversity and cultural significance that makes Jharkhand a unique destination in eastern India.`,
+      text: `${location.name} has been part of Sikkim's sacred landscape for centuries. Monasteries like this one preserve manuscripts, murals and ritual traditions that make Sikkim one of the most significant centres of Himalayan Buddhism.`,
       category: "history" as const,
       priority: 8,
     },

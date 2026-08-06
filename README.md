@@ -1,17 +1,17 @@
-# 🇮🇳 SIH 2025 — AI-Powered India Tourism Platform
+# 🏔️ Monastery360 — Digital Heritage Platform for Sikkim's Monasteries
 
 <div align="center">
 
-![SIH 2025 Tourism](https://img.shields.io/badge/SIH-2025-orange?style=for-the-badge&logo=india)
+![SIH 2026](https://img.shields.io/badge/SIH_Internal_2026-orange?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite)
 ![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?style=for-the-badge&logo=supabase)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=for-the-badge&logo=tailwindcss)
 
-**An AI-powered, scalable, and highly interactive tourism & travel platform aimed at enhancing the tourist experience across India.**
+**A digital heritage platform for Sikkim's monasteries — 360° virtual tours, an AI monastery guide, and a crowdsourced conservation-reporting system that helps prioritize restoration.**
 
-[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure) · [Database Schema](#-database-schema) · [Environment Variables](#-environment-variables) · [Contributing](#-contributing)
+[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure) · [Database Schema](#-database-schema) · [Environment Variables](#-environment-variables)
 
 </div>
 
@@ -19,107 +19,65 @@
 
 ## 📋 Overview
 
-The **SIH 2025 Tourism Platform** is a full-stack web application built for Smart India Hackathon 2025. It targets tourists of all demographics (including Gen-Z), government tourism boards, and local communities with the goal of revolutionizing how people explore India.
+**Monastery360** digitizes and showcases the monasteries of Sikkim for tourism and cultural preservation (SIH25061). It's built on a proven tourism-platform architecture (originally developed for SIH 2025's Jharkhand tourism problem statement) and repurposed toward a preservation-first pitch: real, verifiable pain points exist for Sikkim's monasteries — overtourism pressure on sites like Rumtek, remote and hard-to-monitor mountain locations, a shortage of trained conservators, and humidity damage to manuscripts and thangkas. Sikkim's own Department of Cultural Affairs & Heritage is already digitizing old photographs by hand in collaboration with ASI and INTACH — this platform scales up that work.
 
-The platform combines **Artificial Intelligence**, **Augmented/Virtual Reality**, **real-time mapping**, **community engagement**, and **emergency services** into a single unified experience — all powered by a modern React + Supabase architecture.
+The centerpiece feature isn't the virtual tours — it's **crowdsourced condition reporting**: any visitor or local can submit a photo, geotag, and description of a monastery's condition, an AI model classifies its urgency in real time, and reports feed a severity-ranked dashboard for heritage authorities.
 
 ---
 
 ## ✨ Features
 
-### 🔐 Authentication & User Management
-- Secure authentication via **Supabase Auth** (email/password + Google OAuth)
-- Role-based user types: `tourist`, `local_guide`, `agency`, `admin`
-- Auto-provisioned user profiles on signup via database trigger
-- Profile management: avatar, bio, travel preferences, location
+### 🕶️ Virtual Monastery Tours
+- Immersive **Three.js**-powered 360° virtual tours of four flagship monasteries: **Rumtek** (Dharma Chakra Centre, Karma Kagyu seat), **Pemayangtse** (Nyingma, home to the Zangdok Palri), **Tashiding** (Sikkim's holiest monastery, Bumchu festival), and **Enchey** (Cham dances, Pang Lhabsol)
+- Historically-sourced content (history, culture, geography, hotspots) for each site — see [`CREDITS.md`](./CREDITS.md) for sources and image attribution
+- Interactive hotspots with facts and best-visit-time guidance
 
-### 🤖 TripGenie — AI Trip Planner
-- Conversational AI powered by **Hugging Face Inference API**
-- Generates personalized day-by-day itineraries based on destination, budget, duration, and interests
-- Recommends places, activities, transport, and accommodations
+### 🚨 Crowdsourced Condition Reporting (centerpiece feature)
+- Visitors and locals submit reports on monastery condition — photo, geotag, and description of damage, erosion, or overcrowding
+- A Supabase Edge Function runs **AI zero-shot severity classification** (Hugging Face, `facebook/bart-large-mnli`) on submission, tagging each report `urgent structural damage` / `moderate wear` / `minor issue` / `no concern`
+- Reports feed a live, severity-ranked **Conservation Priority Dashboard** for admins
+- Persistent floating "Report a Condition Issue" button, accessible from every page
 
-### 📅 Journey Hub (Bookings)
-- Centralized booking management dashboard for hotels, flights, and tours
-- Real-time booking status tracking: `pending` → `confirmed` → `completed` / `cancelled`
-- Manage participants, special requests, and total trip costs
-- Integrated with the `travel_packages` and `bookings` database tables
+### 🤖 Kora — AI Monastery Guide
+- Conversational AI (Hugging Face `Llama-3.3-70B-Instruct`, called server-side via a Supabase Edge Function — the API key never reaches the browser)
+- Helps plan a self-guided Buddhist Circuit across the four monasteries based on budget, duration, and interests
+- Grounded in real sourced facts about each site; explicitly declines to fabricate details it isn't confident about (e.g. current entry fees)
 
-### 🧠 Feedback Analysis (Sentiment Analysis)
-- AI-driven sentiment analysis on tourist reviews using **Hugging Face NLP models**
-- Flags negative experiences and generates actionable insights for hosts and tourism authorities
-- Visual sentiment score dashboard with categorized feedback
-
-### 🏛️ Heritage Exploration
-- Interactive catalogue of Indian heritage sites with rich multimedia content
-- Historical significance, best visit times, entry fees, and multilingual audio stories
-- Gamified **Heritage Badges** system (Bronze / Silver / Gold) awarded after quiz completion
-- Seeded with initial Jharkhand heritage data (Jagannath Temple, Hundru Falls, Betla National Park, etc.)
-
-### 🥽 AR / VR Experiences
-- Immersive **Three.js**-powered 3D virtual tours of heritage sites
-- Panoramic walk-throughs for prospective travelers to preview destinations
-- Dedicated VR Experience page (`/vr-experience`) with full-screen WebGL rendering
-
-### 🎮 Funscapes — GenZ Games Hub
-An interactive gamification layer (accessible at `/funscapes`) featuring 8 culturally themed mini-games:
-
-| Game | Description |
-|------|-------------|
-| 🦁 Hidden Animal | Spot wildlife camouflaged in Indian forest imagery |
-| 🏺 Tribal Artifact Hunt | Identify authentic tribal artifacts from a curated gallery |
-| 💃 Festival Dance-Off | Match classic Indian festival dance moves |
-| 🦚 Wildlife Trivia | Answer questions about India's biodiversity |
-| 🌿 Eco Explorer | Learn about eco-tourism destinations through interactive challenges |
-| ⏳ Time Traveler | Navigate historical events across ancient India |
-| 🍛 Food Explorer | Identify regional Indian cuisines and their origins |
-| 🖼️ Cave Painting | Recognize famous prehistoric cave art from across India |
-
-### 🎯 GenZ Corner
-- Gamified trend-focused content tailored for Gen-Z tourists
-- Viral challenges, vlogs, short-form travel content
-- Community-driven travel stories and social sharing
-
-### 🗺️ Transport & Navigation
-- Local transport options (road, rail, metro) with route planning
-- Integration-ready with real-time transit APIs
-- Leaflet-powered interactive maps for route visualization
-
-### 🌤️ Weather Module
-- Live weather conditions and 7-day forecasts via an external Weather API
-- Trip timing recommendations based on seasonal forecasts
-- Location-aware weather lookup
+### 🏛️ Heritage Explorer
+- Interactive hover-map of the four monasteries plotted on a real Sikkim location map, with marker positions computed from actual coordinates (see [`CREDITS.md`](./CREDITS.md) for the math)
+- Historical significance, best visit times, and Wikipedia references per site
+- Gamified quiz per monastery (Bronze/Silver/Gold badge mechanic; badge persistence is a known future-scope item — see below)
 
 ### 🆘 Emergency Services
-- Instant access to local emergency contacts (police, hospitals, fire, embassies) based on geolocation
-- **Leaflet** map integration for nearest service navigation
-- Persistent **floating SOS button** visible on every page (except the emergency page itself)
+- Real Gangtok/Sikkim emergency contacts: STNM Hospital, Sikkim Police Control Room, Pakyong Airport, Sikkim Tourist Information Centre
+- **Leaflet**-ready map integration
+- Persistent floating **SOS button** visible on every page except `/emergency`
 
 ### 🌐 Community & Social
-- Post-based social feed: create posts with images, location tags, and travel hashtags
+- Post-based social feed: share experiences, photos, and location tags
 - Like and comment system
-- Featured posts curated by admins
 
-### 📊 Admin Dashboard
-- Protected route (`/dashboard`) accessible only to users with `admin` role
-- Summary of platform metrics: trips, bookings, community activity, and user growth
-- Quick-action links and customized recommendation feeds
+### 🌤️ Weather Module
+- Live weather conditions and forecasts via OpenWeatherMap
+- Trip timing recommendations based on seasonal forecasts
 
-### 🌍 Internationalization
-- Full multi-language support via **i18next** with browser language auto-detection
-- HTTP backend for lazy-loading language bundles
+### 🗺️ Transport & Navigation
+- Local transport options with route planning, Leaflet-powered maps
 
-### 🌙 Dark Mode
-- System-aware dark/light theme via `next-themes`
-- Persisted in `localStorage` under key `vite-ui-theme`
+### 📊 Conservation Priority Dashboard (Admin)
+- Protected route (`/dashboard`), admin-only
+- Live query against `condition_reports` — total reports, urgent count, severity breakdown, reports ranked by restoration priority
+- No mock data — this is real, submitted-report data
 
-### ♿ Accessibility
-- Adjustable font sizes via `FontSizeProvider` context
-- Semantic HTML throughout all pages
-- WCAG-aligned color contrast in both themes
+### 🔐 Authentication & Internationalization
+- Supabase Auth (email/password + Google OAuth), role-based access
+- Multi-language support via **i18next** (English/Hindi), dark mode, accessibility font scaling
 
-### 🔏 Privacy & Legal
-- Dedicated **Privacy Policy** (`/privacy`), **Terms of Service** (`/terms`), and **Cookie Policy** (`/cookies`) pages
-- GDPR-aligned data handling practices
+---
+
+## 🚫 Explicitly Cut
+
+The following features existed in the original Jharkhand-themed build and have been removed as out of scope for the preservation-focused pitch: **Bookings/Journey Hub** (hotel/tour booking — a tourism-transaction feature, not a preservation one), **GenZ Corner**, and **Funscapes** (8 mini-games — all deeply Jharkhand-content-specific; re-theming them was assessed as more work than the timeline allowed). Component code for these still exists in the repo as unrouted dead code rather than being deleted outright, so it can be revisited later.
 
 ---
 
@@ -143,10 +101,8 @@ An interactive gamification layer (accessible at `/funscapes`) featuring 8 cultu
 | CSS Framework | Tailwind CSS v3 |
 | Component Library | Shadcn UI (Radix UI primitives) |
 | Animations | Framer Motion + GSAP |
-| Icons | Lucide React + React Icons |
-| Typography | Geist Font |
+| Icons | Lucide React |
 | Charts | Recharts |
-| Carousel | Embla Carousel |
 
 ### Backend & Infrastructure
 
@@ -155,24 +111,22 @@ An interactive gamification layer (accessible at `/funscapes`) featuring 8 cultu
 | Database | Supabase (PostgreSQL) |
 | Authentication | Supabase Auth (Email + Google OAuth) |
 | Row Level Security | Supabase RLS Policies |
-| Edge Functions | Supabase Functions |
-| Analytics | Vercel Analytics |
+| Edge Functions | Supabase Functions (Deno) — `sentiment-analysis`, `classify-condition`, `trip-genie-chat` |
+| Storage | Supabase Storage (`condition-reports` bucket for photo uploads) |
 
 ### AI & External APIs
 
 | Category | Technology |
 |----------|-----------|
-| LLM / NLP | Hugging Face Inference API |
+| LLM / NLP | Hugging Face Inference API (chat completions + zero-shot classification), called server-side only |
 | Mapping | Leaflet + React-Leaflet |
-| Weather | External Weather REST API |
-| Web3 (future) | Ethers.js |
+| Weather | OpenWeatherMap API |
 
 ### 3D & Immersive
 
 | Category | Technology |
 |----------|-----------|
 | 3D Rendering | Three.js |
-| Type Definitions | @types/three |
 
 ---
 
@@ -181,7 +135,7 @@ An interactive gamification layer (accessible at `/funscapes`) featuring 8 cultu
 ### Prerequisites
 
 - **Node.js** ≥ 18.x
-- **npm** or **bun**
+- **npm**
 - A [Supabase](https://supabase.com) project
 - A [Hugging Face](https://huggingface.co) API token
 - A weather API key (e.g., [OpenWeatherMap](https://openweathermap.org/api))
@@ -189,45 +143,35 @@ An interactive gamification layer (accessible at `/funscapes`) featuring 8 cultu
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Pranav-0710/SIH-2025-TOURISM-.git
-cd SIH-2025-TOURISM-
+git clone https://github.com/Pranav-0710/sih2026.git
+cd sih2026
 ```
 
 ### 2. Install Dependencies
 
 ```bash
 npm install
-# or
-bun install
 ```
 
 ### 3. Set Up Environment Variables
 
-Create a `.env` file in the root directory (copy from `.env.example` if available):
-
-```env
-VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
-VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
-VITE_HUGGINGFACE_API_KEY=<your-huggingface-token>
-VITE_WEATHER_API_KEY=<your-weather-api-key>
-```
+Copy `.env.example` to `.env` and fill in your own values. See that file for a full explanation of each variable, including which ones are safe to expose client-side and which must stay server-only.
 
 > ⚠️ **Never commit your `.env` file.** It is already listed in `.gitignore`.
 
 ### 4. Apply Database Migrations
 
-Link your local project to your Supabase project and push the schema:
+Run the SQL in `supabase/migrations/` from the Supabase Dashboard → SQL Editor (in order, by filename timestamp). The CLI's `supabase db push` requires a direct Postgres connection, which some networks block — the Dashboard SQL Editor is the more reliable path.
+
+### 5. Deploy Edge Functions
 
 ```bash
-npx supabase link --project-ref <your-project-ref>
-npx supabase db push
+npx supabase functions deploy sentiment-analysis --project-ref <your-project-ref>
+npx supabase functions deploy classify-condition --project-ref <your-project-ref>
+npx supabase functions deploy trip-genie-chat --project-ref <your-project-ref>
 ```
 
-Or manually run the SQL in `supabase/migrations/` from the Supabase SQL Editor.
-
-### 5. Configure Google OAuth (Optional)
-
-Follow the steps in `GOOGLE SIGN-IN.txt` to set up Google OAuth in your Supabase Auth settings.
+Set the `HUGGINGFACE_API_KEY` secret in Supabase (Dashboard → Edge Functions → Secrets) — this is separate from the deprecated `VITE_HUGGINGFACE_API_KEY` client variable.
 
 ### 6. Start the Development Server
 
@@ -243,157 +187,82 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 npm run build
 ```
 
-The output will be in the `dist/` folder, ready for deployment on Vercel, Netlify, or any static host.
-
 ---
 
 ## 📁 Project Structure
 
 ```
 new-sih/
-├── public/                        # Static assets served at root
+├── public/
+│   ├── vr-assets/                 # Monastery photography (see CREDITS.md)
+│   ├── images/sikkim-map.svg      # Location map used by Heritage.tsx
+│   └── locales/                   # i18next translation JSON (en, hi)
 ├── src/
-│   ├── assets/                    # Images & static media (e.g., sos.png)
-│   ├── components/                # Reusable UI components
-│   │   ├── ui/                    # Shadcn UI primitives (Button, Dialog, etc.)
-│   │   ├── vr/                    # Three.js VR scene components
-│   │   ├── funscapes/             # Mini-game UI components
+│   ├── assets/                    # Site-wide static media (hero image, SOS icon)
+│   ├── components/
+│   │   ├── ui/                    # Shadcn UI primitives
+│   │   ├── vr/                    # Three.js VR panorama engine (live tree — see note below)
 │   │   ├── AdminRoute.tsx         # Protected route wrapper for admin pages
 │   │   ├── AuthProvider.tsx       # Supabase auth context provider
-│   │   ├── FontSizeProvider.tsx   # Accessibility font-size context
 │   │   ├── Navigation.tsx         # Top navigation bar
-│   │   ├── HeroSection.tsx        # Landing page hero
-│   │   ├── FeaturesSection.tsx    # Landing page features grid
-│   │   ├── TripGeniePreview.tsx   # TripGenie teaser widget
-│   │   ├── PopularDestinations.tsx# Destinations carousel
-│   │   ├── Footer.tsx             # Site-wide footer
-│   │   ├── TypeWriter.tsx         # Typewriter text animation
-│   │   ├── WaveDivider.tsx        # SVG wave section divider
-│   │   ├── mode-toggle.tsx        # Dark/Light mode toggle button
-│   │   └── theme-provider.tsx     # next-themes wrapper component
-│   ├── data/                      # Static data / seed data files
-│   ├── hooks/                     # Custom React hooks
-│   │   ├── useAuth.ts             # Authentication state & actions
-│   │   ├── useWeather.ts          # Weather API data fetching hook
-│   │   ├── use-toast.ts           # Toast notification hook
-│   │   └── use-mobile.tsx         # Mobile viewport detection hook
-│   ├── integrations/
-│   │   └── supabase/              # Supabase client initialization & types
-│   ├── lib/                       # Utility functions (cn, etc.)
-│   ├── pages/                     # Top-level route pages
+│   │   └── ...
+│   ├── data/
+│   │   └── monasteries.ts         # Sourced content for the 4 monasteries — single source of truth
+│   ├── hooks/
+│   │   ├── useAuth.ts             # Auth state; admin role is a hardcoded email allowlist (see file)
+│   │   └── useWeather.ts
+│   ├── integrations/supabase/     # Supabase client + generated types
+│   ├── pages/
 │   │   ├── Index.tsx              # Landing page (/)
-│   │   ├── Auth.tsx               # Login & Registration (/auth)
-│   │   ├── Dashboard.tsx          # Admin Dashboard (/dashboard) [Protected]
-│   │   ├── Profile.tsx            # User Profile (/profile)
-│   │   ├── TripGenie.tsx          # AI Trip Planner (/trip-genie)
-│   │   ├── Bookings.tsx           # Journey Hub — Bookings (/bookings)
-│   │   ├── Heritage.tsx           # Heritage Sites Explorer (/heritage)
+│   │   ├── TripGenie.tsx          # Kora, AI Monastery Guide (/trip-genie)
+│   │   ├── Heritage.tsx           # Heritage map explorer (/heritage)
+│   │   ├── ReportCondition.tsx    # Condition report submission (/report-condition)
+│   │   ├── Dashboard.tsx          # Conservation Priority Dashboard (/dashboard) [Admin]
 │   │   ├── Community.tsx          # Community Feed (/community)
-│   │   ├── GenzCorner.tsx         # GenZ Corner (/genzcorner)
-│   │   ├── SentimentAnalysis.tsx  # Feedback Analysis (/sentiment-analysis) [Admin]
 │   │   ├── Emergency.tsx          # Emergency Services (/emergency)
-│   │   ├── Transport.tsx          # Transport & Navigation (/transport)
-│   │   ├── Weather.tsx            # Weather Module (/weather)
 │   │   ├── VRExperience.tsx       # VR Tour (/vr-experience)
-│   │   ├── ArVrExperience.tsx     # Funscapes Hub (/funscapes)
-│   │   ├── Explore.tsx            # Explore Destinations (/explore)
-│   │   ├── Privacy.tsx            # Privacy Policy (/privacy)
-│   │   ├── Terms.tsx              # Terms of Service (/terms)
-│   │   ├── Cookies.tsx            # Cookie Policy (/cookies)
-│   │   ├── NotFound.tsx           # 404 Page (*)
-│   │   └── funscapes/             # Individual game pages
-│   │       ├── HiddenAnimalPage.tsx
-│   │       ├── TribalArtifactHuntPage.tsx
-│   │       ├── FestivalDanceOffPage.tsx
-│   │       ├── WildlifeTriviaPage.tsx
-│   │       ├── EcoExplorerPage.tsx
-│   │       ├── TimeTravelerPage.tsx
-│   │       ├── FoodExplorerPage.tsx
-│   │       └── CavePaintingPage.tsx
-│   ├── styles/                    # Additional CSS modules
-│   ├── i18n.ts                    # i18next configuration
-│   ├── index.css                  # Global Tailwind + custom CSS
-│   ├── main.tsx                   # React DOM render entry point
-│   └── App.tsx                    # Root component with routing
+│   │   └── ...
+│   ├── i18n.ts
+│   └── App.tsx
 ├── supabase/
-│   ├── config.toml                # Supabase local dev config
-│   ├── functions/                 # Supabase Edge Functions
+│   ├── config.toml
+│   ├── functions/
+│   │   ├── sentiment-analysis/    # Tourist review sentiment (positive/negative/neutral)
+│   │   ├── classify-condition/    # Condition-report severity triage (zero-shot)
+│   │   └── trip-genie-chat/       # AI monastery guide chat completions
 │   └── migrations/
-│       └── 20250908161514_*.sql   # Initial database schema migration
-├── .env                           # Local environment variables (gitignored)
-├── .gitignore
-├── index.html                     # Vite HTML entry point
-├── package.json
-├── tailwind.config.ts             # Tailwind CSS configuration
-├── tsconfig.json                  # TypeScript configuration
-├── vite.config.ts                 # Vite build configuration
-├── PRD.md                         # Product Requirements Document
-└── TYPEWRITER_IMPLEMENTATION.md   # Typewriter component docs
+│       ├── 20250908161514_*.sql          # Original schema (profiles, heritage_sites, bookings, etc.)
+│       ├── 20260806052334_condition_reports.sql
+│       └── 20260806090000_condition_reports_storage_retry.sql
+├── CREDITS.md                     # Image attribution + source citations
+└── .env.example
 ```
+
+> **Note on `src/components/vr/`**: there is a duplicated, dead sibling tree at `src/components/vr/components/` from earlier development. The live VR engine is `src/components/vr/` (imported by `VRExperience.tsx`) — the nested `components/` copy is unused and safe to delete as cleanup.
 
 ---
 
 ## 🗄️ Database Schema
-
-The Supabase PostgreSQL database consists of **7 core tables** with full Row Level Security (RLS) enabled.
-
-```
-auth.users (Supabase managed)
-    │
-    ▼ (trigger: on_auth_user_created)
-profiles ──────────────────────────────────┐
-    │                                       │
-    ├──► bookings ◄──── travel_packages     │
-    │                                       │
-    ├──► heritage_badges ◄── heritage_sites │
-    │                                       │
-    ├──► community_posts                    │
-    │                                       │
-    └──► reviews ◄──── travel_packages      │
-                └──── heritage_sites ───────┘
-```
 
 ### Tables
 
 | Table | Description |
 |-------|-------------|
 | `profiles` | Extended user data, roles, preferences. Auto-created on signup. |
-| `heritage_sites` | Catalogue of Indian heritage & nature sites with geolocation data |
-| `travel_packages` | Agency-listed travel packages with itineraries, pricing, and availability |
-| `bookings` | Tourist bookings linking users to travel packages |
-| `heritage_badges` | User-earned gamification badges (Bronze/Silver/Gold) per heritage site |
-| `community_posts` | User-generated travel posts with geo-tagging and social counters |
-| `reviews` | Star-rated reviews for packages and heritage sites |
-
-### Enum Types
-
-```sql
-user_type      → tourist | local_guide | agency | admin
-package_category → culture | adventure | nature | pilgrimage | heritage
-badge_level    → bronze | silver | gold
-booking_status → pending | confirmed | completed | cancelled
-```
+| `heritage_sites` | Original Jharkhand-era seed data (unused by current UI, left in place) |
+| `condition_reports` | **Active** — crowdsourced monastery condition reports with AI severity classification |
+| `community_posts` | User-generated posts with geo-tagging and social counters |
+| `travel_packages`, `bookings`, `heritage_badges`, `reviews` | From the original schema; not currently queried by the live UI (Bookings feature is cut; badge persistence is future scope) |
 
 ### Security Model
 
-All tables use **Row Level Security (RLS)**:
-- **Public read** for heritage sites, packages, badges, community posts, and reviews
-- **Private write** — users can only modify their own data
-- **Admin-only** modification of heritage sites
-- **Agency-scoped** management of travel packages
+All tables use **Row Level Security (RLS)**. For `condition_reports` specifically: public read, authenticated-only insert (with `reporter_id` required to match `auth.uid()` — verified to reject impersonation), admin-only status updates. The `condition-reports` storage bucket is public-read with authenticated-only upload.
 
 ---
 
 ## 🔐 Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_SUPABASE_URL` | Your Supabase project URL | ✅ |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous public key | ✅ |
-| `VITE_HUGGINGFACE_API_KEY` | Hugging Face API token for TripGenie & Sentiment Analysis | ✅ |
-| `VITE_WEATHER_API_KEY` | Weather API key for live forecasts | ✅ |
-
-> All variables are prefixed with `VITE_` so Vite exposes them to the browser bundle. **Do not store secrets intended only for a server in `VITE_` variables in a production environment.**
+See [`.env.example`](./.env.example) for the full list with explanations. Key point: `VITE_`-prefixed variables are compiled into the client bundle and are extractable by anyone — only the Supabase anon key is safe there. The Hugging Face API key must be set as a Supabase Edge Function secret (`HUGGINGFACE_API_KEY`), **not** as a `VITE_` variable — both Kora and condition-report classification now call Hugging Face server-side for exactly this reason.
 
 ---
 
@@ -403,109 +272,65 @@ All tables use **Row Level Security (RLS)**:
 |-------|------|:---:|
 | `/` | Landing Page | ❌ |
 | `/auth` | Login / Register | ❌ |
-| `/trip-genie` | AI Trip Planner | ✅ |
-| `/bookings` | Journey Hub (Bookings) | ✅ |
-| `/heritage` | Heritage Explorer | ❌ |
+| `/trip-genie` | AI Monastery Guide | ❌ |
+| `/heritage` | Heritage Map Explorer | ❌ |
+| `/report-condition` | Submit a Condition Report | ✅ |
 | `/community` | Community Feed | ✅ |
-| `/genzcorner` | GenZ Corner | ❌ |
-| `/explore` | Explore Destinations | ❌ |
-| `/weather` | Weather Module | ❌ |
-| `/transport` | Transport & Navigation | ❌ |
+| `/vr-experience` | 360° Virtual Tours | ❌ |
 | `/emergency` | Emergency Services | ❌ |
-| `/vr-experience` | VR Tour | ❌ |
-| `/funscapes` | Funscapes Games Hub | ❌ |
+| `/transport` | Transport & Navigation | ❌ |
+| `/weather` | Weather Module | ❌ |
+| `/explore` | Monastery Deep-Dives | ❌ |
 | `/sentiment-analysis` | Feedback Analysis | 🔒 Admin |
-| `/dashboard` | Admin Dashboard | 🔒 Admin |
+| `/dashboard` | Conservation Priority Dashboard | 🔒 Admin |
 | `/profile` | User Profile | ✅ |
-| `/privacy` | Privacy Policy | ❌ |
-| `/terms` | Terms of Service | ❌ |
-| `/cookies` | Cookie Policy | ❌ |
+| `/privacy`, `/terms`, `/cookies` | Legal pages | ❌ |
 
 ---
 
 ## 🧩 Key Architectural Decisions
 
-### Context Providers Stack
-The app wraps the entire tree with layered providers for clean separation of concerns:
-```
-QueryClientProvider        ← TanStack React Query cache
-  └── AuthProvider         ← Supabase session management
-        └── FontSizeProvider  ← Accessibility font scaling
-              └── ThemeProvider  ← Dark/Light mode (next-themes)
-                    └── TooltipProvider  ← Radix UI tooltips
-                          └── BrowserRouter  ← React Router
-```
+### AI calls are server-side only
+Both `classify-condition` and `trip-genie-chat` Edge Functions follow the same pattern established by `sentiment-analysis`: the Hugging Face API key lives in Supabase secrets, never in client code. This was a real vulnerability in the original build (Kora, then called TripGenie, called Hugging Face directly from the browser) — fixed and verified by confirming the token string is absent from the built `dist/` bundle.
 
-### Admin Route Guard
-The `/dashboard` and sensitive pages are wrapped in `<AdminRoute />` which checks the `user_type === 'admin'` flag from the `profiles` table before rendering the child route.
+### Admin access
+`AdminRoute` gates `/dashboard`. Admin role is currently determined by a **hardcoded email allowlist** in `useAuth.ts` (documented in-file as a demo-only shortcut, not a production pattern) rather than the `profiles.user_type` database column.
 
-### Floating SOS Button
-A persistent emergency SOS button is rendered at the layout level (not inside any individual page) and conditionally hidden only on the `/emergency` page itself, ensuring tourist safety at all times.
-
-### AI Integration Pattern
-Both **TripGenie** (trip planning) and **SentimentAnalysis** (feedback analysis) use the `@huggingface/inference` SDK to call Hugging Face Inference API endpoints directly from the browser, with the API key sourced from `VITE_HUGGINGFACE_API_KEY`.
+### Floating action buttons
+Two persistent floating buttons render at the layout level in `App.tsx`: SOS (links to `/emergency`) and Report Condition (links to `/report-condition`), each conditionally hidden only on its own destination page.
 
 ---
 
 ## 🧪 Available Scripts
 
 ```bash
-# Start development server (hot module replacement)
-npm run dev
-
-# Type-check and build for production
-npm run build
-
-# Build in development mode (no minification)
-npm run build:dev
-
-# Preview production build locally
-npm run preview
-
-# Run ESLint
-npm run lint
+npm run dev        # Start development server
+npm run build       # Production build (does not run tsc — see note)
+npm run build:dev   # Build in development mode (no minification)
+npm run preview     # Preview production build locally
+npm run lint        # Run ESLint
 ```
+
+> `npm run build` does not run TypeScript's type checker — run `npx tsc --noEmit -p tsconfig.app.json` separately if you want type errors surfaced before shipping.
 
 ---
 
 ## 🔮 Future Scope
 
-- [ ] **Payment Gateway Integration** — Direct booking payments via Razorpay / Stripe
-- [ ] **Expanded AR/VR** — Spatial computing APIs for device-native AR overlays
-- [ ] **TripGenie v2** — Real-time dynamic cost optimization and availability tracking
-- [ ] **Offline Support** — PWA with service worker caching for travel in low-connectivity areas
-- [ ] **Web3 Integration** — NFT-based heritage badges and loyalty rewards using Ethers.js
-- [ ] **Real-time Transit** — Live train, bus, and metro tracking via government transit APIs
-- [ ] **Push Notifications** — Booking reminders and travel alerts
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! To contribute:
-
-1. **Fork** the repository
-2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m "feat: add your feature"`
-4. Push to your fork: `git push origin feature/your-feature-name`
-5. Open a **Pull Request** against the `main` branch
-
-Please follow the existing code style (TypeScript strict mode, ESLint rules, and Tailwind utility-first CSS).
+- [ ] **Heritage badge persistence** — the Bronze/Silver/Gold quiz mechanic currently exists as local component state only; `heritage_badges` table exists but nothing writes to it
+- [ ] **Bookings-as-RSVP** — the problem statement's "Cultural Calendar: booking and participation options" bullet is better served by a trimmed festival/event RSVP feature than a full re-theme of the cut Bookings module
+- [ ] **Digital archive + AI search** — a manuscript/mural archive with Hugging Face-powered search, extending the pattern already used for severity classification
+- [ ] **Additional regional languages** — Nepali, Bhutia, Lepcha (technically cheap to add — i18next config is a shallow change)
+- [ ] **True 360° panoramic capture** — current virtual tours use high-quality static photography; real panoramic capture of these specific monasteries wasn't available under an open license within the build timeline
 
 ---
 
 ## 📄 License
 
-This project was built for **Smart India Hackathon 2025** and is intended for educational and demonstration purposes.
-
----
-
-## 👨‍💻 Team
-
-Built with ❤️ for SIH 2025 — empowering India's tourism through technology.
+Built for an SRM internal hackathon reusing the SIH 2025 problem statement list (SIH25061), for educational and demonstration purposes.
 
 ---
 
 <div align="center">
-  <sub>Made for Smart India Hackathon 2025 | Powered by React · Supabase · Hugging Face · Three.js</sub>
+  <sub>Powered by React · Supabase · Hugging Face · Three.js</sub>
 </div>
