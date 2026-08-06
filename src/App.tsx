@@ -31,6 +31,7 @@ const VRExperiencePage = lazy(() => import("./pages/VRExperience"));
 const Transport = lazy(() => import("./pages/Transport"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Explore = lazy(() => import("./pages/Explore"));
+const CulturalCalendar = lazy(() => import("./pages/Calendar"));
 const Weather = lazy(() => import("./pages/Weather"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -88,6 +89,7 @@ const MainLayout = () => {
           <Route path="/ar-vr-experience" element={<PageFade><VRExperiencePage /></PageFade>} />
           <Route path="/transport" element={<PageFade><Transport /></PageFade>} />
           <Route path="/explore" element={<PageFade><Explore /></PageFade>} />
+          <Route path="/calendar" element={<PageFade><CulturalCalendar /></PageFade>} />
           <Route path="/weather" element={<PageFade><Weather /></PageFade>} />
           <Route path="/privacy" element={<PageFade><Privacy /></PageFade>} />
           <Route path="/terms" element={<PageFade><Terms /></PageFade>} />

@@ -43,6 +43,7 @@ export function Navigation() {
       isDropdown: true,
       dropdownItems: [
         { name: t("nav.allMonasteries"), path: "/explore" },
+        { name: t("nav.calendar"), path: "/calendar" },
         { name: t("nav.heritageTrails"), path: "/heritage" },
         { name: t("nav.virtual360"), path: "/vr-experience" },
         { name: t("nav.routeX"), path: "/transport" },
@@ -156,7 +157,8 @@ export function Navigation() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
                 <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage('hi')}>Hindi</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => changeLanguage('hi')}>हिन्दी</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => changeLanguage('ne')}>नेपाली</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <ModeToggle />
@@ -322,7 +324,8 @@ export function Navigation() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
                   <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLanguage('hi')}>Hindi</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage('hi')}>हिन्दी</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage('ne')}>नेपाली</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <div id="google_translate_element" className="mr-3"></div>

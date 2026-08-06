@@ -1,0 +1,20 @@
+{
+  "name": "Monastery360 — Sikkim Monastery Heritage",
+  "short_name": "Monastery360",
+  "description": "Virtual tours, an AI monastery guide, and community condition reporting for Sikkim's Buddhist monasteries.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#7a1f2b",
+  "orientation": "portrait-primary",
+  "categories": ["travel", "education", "culture"],
+  "icons": [
+    {
+      "src": "/vr-assets/rumtek-monastery.jpg",
+      "sizes": "1280x853",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
