@@ -116,7 +116,9 @@ export function Navigation() {
               "bg-background/95 backdrop-blur-xl border border-border/30 shadow-soft h-[4.5rem]"
         )}
       >
-        <Link to="/" className="flex items-center space-x-3">
+        {/* Icon only — the wordmark was removed from the bar. The link keeps
+            an accessible name so it still reads as "home" to screen readers. */}
+        <Link to="/" aria-label="Monastery360 home" className="flex items-center">
           <div
             className={cn(
               "bg-gradient-to-br from-nature to-primary rounded-xl shadow-soft transition-all duration-300",
@@ -130,17 +132,6 @@ export function Navigation() {
               )}
             />
           </div>
-          <span
-            className={cn(
-              "font-bold transition-all duration-300",
-              scrolled ? "text-lg" : "text-xl",
-              transparent
-                ? "text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]"
-                : "bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent"
-            )}
-          >
-            Monastery360
-          </span>
         </Link>
 
         {isMobile ? (
