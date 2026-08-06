@@ -10,11 +10,47 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { archiveItems, archiveCategories, type ArchiveItem } from "@/data/archive";
 
-/** Text the semantic model matches against for each item. */
-const searchableText = (item: ArchiveItem) =>
-  [item.title, item.monasteryName, item.category, item.description]
-    .filter(Boolean)
-    .join(". ");
+/**
+ * Factual Tibetan-Buddhist synonyms, added so plain-English queries can reach
+ * items titled with specialist terms. These are established equivalences, not
+ * guesses about what a given photograph depicts: Guru Rinpoche *is*
+ * Padmasambhava, "the lotus-born"; a chorten *is* a stupa; a dukhang *is* the
+ * assembly hall monks chant in. The small embedding model has no reliable
+ * knowledge of this vocabulary, so without it "where monks chant" matches
+ * nothing useful.
+ */
+const SYNONYMS: Array<[RegExp, string]> = [
+  [/guru rinpoche|padmasambhava|lhakhang/i, "Padmasambhava the lotus-born saint who brought Vajrayana Buddhism to Tibet"],
+  [/chorten|stupa/i, "stupa reliquary dome monument holding sacred relics"],
+  [/prayer hall|dukhang|assembly/i, "dukhang assembly hall where monks gather to chant and pray"],
+  [/prayer.?wheel/i, "mani wheel cylinder spun clockwise to accumulate merit"],
+  [/inscription|mani|slab/i, "mani stones carved with the Om Mani Padme Hum mantra"],
+  [/mural|wall art|fresco/i, "painted wall art depicting deities"],
+  [/statue|idol|deity/i, "sculpted figure of a deity or teacher"],
+  [/cham|mask/i, "masked ritual dance costume"],
+  [/thangka|thanka/i, "scroll painting on cloth"],
+];
+
+/**
+ * Text the semantic model matches against.
+ *
+ * The Commons descriptions are deliberately excluded: 84 of the 87 items share
+ * just 22 distinct blurbs (one repeats 15 times), because they describe the
+ * monastery rather than the individual photograph. Including them drowned the
+ * distinguishing title in boilerplate — measurably so, e.g. "where monks
+ * gather to chant" returned prayer wheels instead of the prayer hall.
+ */
+const searchableText = (item: ArchiveItem) => {
+  const base = `${item.title}. ${item.title}. ${item.category}. ${item.monasteryName}.`;
+  const extra = SYNONYMS.filter(([re]) => re.test(item.title) || re.test(item.category))
+    .map(([, text]) => text)
+    .join(" ");
+  return extra ? `${base} ${extra}` : base;
+};
+
+/** Plain-text haystack for the non-AI keyword fallback. */
+const keywordText = (item: ArchiveItem) =>
+  [item.title, item.monasteryName, item.category, item.description].filter(Boolean).join(" ");
 
 const DigitalArchive = () => {
   const { toast } = useToast();
@@ -43,7 +79,7 @@ const DigitalArchive = () => {
     // Plain keyword filter — what you get before running a semantic search,
     // and the fallback if the AI call fails.
     const q = query.toLowerCase();
-    return byCategory.filter((i) => searchableText(i).toLowerCase().includes(q));
+    return byCategory.filter((i) => keywordText(i).toLowerCase().includes(q));
   }, [byCategory, query, ranking]);
 
   const runSemanticSearch = async () => {
