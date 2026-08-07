@@ -78,6 +78,24 @@ export function PanoramaViewer({
   // (not hardcoded false) so a genuine future capture lights this back up.
   const hasPanorama = Boolean(location.panoramaImage)
 
+  /*
+   * How to render the panorama.
+   *
+   * This used to be `panoramaImage.startsWith('http')`, which sent *any*
+   * remote URL to the iframe branch — including a directly-linked
+   * equirectangular photo, which would then appear as a flat image in a
+   * frame with no sphere projection and no drag-to-look. Detect a real
+   * image by extension instead, so remotely-hosted 360 photographs get the
+   * WebGL sphere and only genuine viewer pages get iframed.
+   *
+   * Declared up here rather than just before the return because the
+   * loading effect below needs it.
+   */
+  const panoramaUrl = location.panoramaImage
+  const isDirectImage = Boolean(panoramaUrl && /\.(jpe?g|png|webp|avif)(\?|#|$)/i.test(panoramaUrl))
+  const isEmbeddedViewer = Boolean(panoramaUrl && /^https?:\/\//i.test(panoramaUrl) && !isDirectImage)
+  const isArtistic = location.panoramaSource === "artistic-impression"
+
   const glRef = useRef<WebGLRenderingContext | null>(null)
   const programRef = useRef<WebGLProgram | null>(null)
   const textureRef = useRef<WebGLTexture | null>(null)
@@ -99,6 +117,27 @@ export function PanoramaViewer({
     setSpatialAudioEnabled(true)
     setTtsEnabled(audioEnabled)
   }, [location.id, audioEnabled])
+
+  /*
+   * Safety cap on the loading overlay for embedded viewers.
+   *
+   * An iframe's `load` only fires once every subresource inside it has
+   * finished, and the Blockade Labs viewer pulls a large panorama texture:
+   * measured at roughly 20s before `load` fired. That is the honest signal
+   * that the skybox is actually ready — handing off earlier just replaces
+   * our overlay with the embedded viewer's own wireframe placeholder,
+   * which looks broken rather than loading.
+   *
+   * So the overlay stays until onLoad, but the overlay itself now shows
+   * the real photograph of the monastery (see the JSX below) rather than a
+   * black void, which makes the wait informative instead of dead. This
+   * timer is only a backstop, in case `load` never fires at all.
+   */
+  useEffect(() => {
+    if (!isEmbeddedViewer) return
+    const t = setTimeout(() => setIsLoading(false), 25000)
+    return () => clearTimeout(t)
+  }, [isEmbeddedViewer, location.id])
 
   // Auto-stop audio when VR closes
   useEffect(() => {
@@ -590,31 +629,33 @@ export function PanoramaViewer({
     },
   ]
 
-  /*
-   * Decide how to render the panorama.
-   *
-   * This used to be `panoramaImage.startsWith('http')`, which sent *any*
-   * remote URL to the iframe branch — including a directly-linked
-   * equirectangular photo, which would then appear as a flat image in a
-   * frame with no sphere projection and no drag-to-look. Detect a real
-   * image by extension instead, so remotely-hosted 360 photographs get the
-   * WebGL sphere and only genuine viewer pages get iframed.
-   */
-  const panoramaUrl = location.panoramaImage
-  const isDirectImage = Boolean(panoramaUrl && /\.(jpe?g|png|webp|avif)(\?|#|$)/i.test(panoramaUrl))
-  const isEmbeddedViewer = Boolean(panoramaUrl && /^https?:\/\//i.test(panoramaUrl) && !isDirectImage)
-  const isArtistic = location.panoramaSource === "artistic-impression"
-
   return (
     <div className="fixed inset-0 z-[60] bg-black">
+      {/* Loading state. The panorama can take ~20s to paint, so this shows
+          the real photograph of the monastery behind the indicator rather
+          than a black rectangle — the wait then shows the actual place
+          instead of nothing. */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-lg">
-              {hasPanorama ? "Loading 360° Experience..." : "Loading photography..."}
+        <div className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden bg-black text-white">
+          <img
+            src={location.image}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full scale-105 object-cover opacity-40 blur-[2px]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/50" />
+          <div className="relative text-center">
+            <div className="mx-auto mb-5 flex items-center justify-center gap-1.5">
+              <span className="h-3 w-1 animate-pulse bg-heritage [animation-delay:0ms]" />
+              <span className="h-5 w-1 animate-pulse bg-heritage [animation-delay:150ms]" />
+              <span className="h-3 w-1 animate-pulse bg-heritage [animation-delay:300ms]" />
+            </div>
+            <p className="font-display text-xl tracking-tight text-white">
+              {location.name}
             </p>
-            <p className="text-sm text-gray-400 mt-2">Preparing the view of {location.name}</p>
+            <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.24em] text-heritage">
+              {hasPanorama ? "Preparing the 360° view" : "Loading photography"}
+            </p>
           </div>
         </div>
       )}

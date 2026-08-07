@@ -4,14 +4,21 @@
  * Historical details are sourced from Wikipedia and Sikkim tourism references —
  * see CREDITS.md at the repo root for image attribution and source links.
  *
- * Note: `panoramaImage` is currently unset on every monastery. No openly-
- * licensed 360° capture of these specific sites was found (Wikimedia
- * Commons has no equirectangular panoramas of them), so the viewer falls
- * back to the real photography in `image` rather than substituting a
- * generic skybox.
+ * 360° PANORAMAS
+ * --------------
+ * All four monasteries carry a generated Blockade Labs skybox, labelled in
+ * the viewer as an artistic impression. No openly-licensed photographic
+ * 360° capture of these specific sites exists (Wikimedia Commons has no
+ * equirectangular panoramas of them), so these evoke each site rather than
+ * document it — swap any of them for `panoramaSource: "photograph"` the
+ * moment a real capture is available.
  *
- * TO ADD A 360° PANORAMA
- * ----------------------
+ * Note the URLs use the `/e/` embed form. The plain share URL
+ * (skybox.blockadelabs.com/<id>, no `/e/`) returns HTTP 500 and will not
+ * load — verified against all four.
+ *
+ * TO CHANGE OR ADD A PANORAMA
+ * ---------------------------
  * Set `panoramaImage` on a monastery below. The viewer detects the form
  * automatically:
  *
@@ -104,6 +111,9 @@ export const locations: MonasteryLocation[] = [
     description:
       "Step inside the Dharma Chakra Centre, the largest monastery in Sikkim and the principal seat of the Karma Kagyu lineage outside Tibet.",
     image: "/vr-assets/rumtek-monastery.jpg",
+    panoramaImage: "https://skybox.blockadelabs.com/e/6b765851fda20aae3e2a0cea82220e14",
+    panoramaSource: "artistic-impression",
+    panoramaCredit: "Generated with Blockade Labs Skybox AI.",
     audioTracks: [
       {
         id: "rumtek-intro",
@@ -205,6 +215,9 @@ export const locations: MonasteryLocation[] = [
     description:
       "Explore the 'Perfect Sublime Lotus' — one of Sikkim's oldest and most revered monasteries, crowned by a seven-tiered wooden vision of paradise.",
     image: "/vr-assets/pemayangtse-monastery.jpg",
+    panoramaImage: "https://skybox.blockadelabs.com/e/5568ac69449b7c77f8c81662000bfd54",
+    panoramaSource: "artistic-impression",
+    panoramaCredit: "Generated with Blockade Labs Skybox AI.",
     audioTracks: [
       {
         id: "pemayangtse-intro",
@@ -304,6 +317,9 @@ export const locations: MonasteryLocation[] = [
     description:
       "Visit the monastery widely held to be the holiest in Sikkim, where a single glance at the Thongwa Rangdrol chorten is said to cleanse a lifetime of sin.",
     image: "/vr-assets/tashiding-monastery.jpg",
+    panoramaImage: "https://skybox.blockadelabs.com/e/1f012dec7c86c0a4193436f020cd092b",
+    panoramaSource: "artistic-impression",
+    panoramaCredit: "Generated with Blockade Labs Skybox AI.",
     audioTracks: [
       {
         id: "tashiding-intro",
@@ -408,6 +424,9 @@ export const locations: MonasteryLocation[] = [
     description:
       "Walk through 'The Solitary Temple' above Gangtok, a pine-shrouded Nyingma monastery famed for its masked Cham dances.",
     image: "/vr-assets/enchey-monastery.jpg",
+    panoramaImage: "https://skybox.blockadelabs.com/e/3969db90361f9f10e02ee432bb90328b",
+    panoramaSource: "artistic-impression",
+    panoramaCredit: "Generated with Blockade Labs Skybox AI.",
     audioTracks: [
       {
         id: "enchey-intro",
