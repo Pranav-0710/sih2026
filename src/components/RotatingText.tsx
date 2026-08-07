@@ -222,11 +222,20 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>((props, ref)
   return (
     <motion.span className={cn("text-rotate", mainClassName)} {...rest} layout transition={transition}>
       <span className="text-rotate-sr-only">{texts[currentTextIndex]}</span>
+      {/*
+        Only the outer pill (above) carries `layout` — it's the one that
+        should smoothly resize between differently-wide words. This inner
+        span used to carry a second, unconstrained `layout` animation too;
+        since it's a brand-new element on every key change (not one that
+        persists across renders), that second layout pass had nothing
+        real to interpolate from and instead fired a springy width/position
+        guess that fought with the outer pill's own resize — the visible
+        result was a horizontal lurch that buried the per-letter roll.
+      */}
       <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
         <motion.span
           key={currentTextIndex}
           className={cn(resolvedSplitBy === "lines" ? "text-rotate-lines" : "text-rotate")}
-          layout
           aria-hidden="true"
         >
           {elements.map((wordObj, wordIndex, array) => {
@@ -234,7 +243,11 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>((props, ref)
               .slice(0, wordIndex)
               .reduce((sum, word) => sum + word.characters.length, 0);
             return (
-              <span key={wordIndex} className={cn("text-rotate-word", splitLevelClassName)}>
+              <span
+                key={wordIndex}
+                className={cn("text-rotate-word", splitLevelClassName)}
+                style={{ perspective: "300px", transformStyle: "preserve-3d" }}
+              >
                 {wordObj.characters.map((char, charIndex) => (
                   <motion.span
                     key={charIndex}
