@@ -124,22 +124,46 @@ const HeroSection = () => {
                 rendering them incorrectly. The pill itself still resizes
                 smoothly between all four via the `layout` prop.
               */}
-              <motion.span variants={lineVariants} className="inline-flex items-baseline gap-4">
+              <motion.span
+                variants={lineVariants}
+                className="inline-flex items-baseline gap-4"
+                style={{ perspective: 500 }}
+              >
+                {/*
+                  A genuine "roll": each character tips in on rotateX, like a
+                  drum/odometer digit turning over, rather than sliding
+                  vertically. transformPerspective is set per-character (not
+                  just on the parent) so every letter gets its own vanishing
+                  point and rolls independently instead of the whole pill
+                  warping as one flat plane.
+                */}
                 <RotatingText
                   texts={SIKKIM_NAMES.map((n) => n.name)}
                   splitBy={(text) => (isAsciiOnly(text) ? "characters" : "words")}
                   staggerFrom="last"
-                  staggerDuration={0.03}
+                  staggerDuration={0.035}
                   rotationInterval={2600}
                   auto
                   onNext={setNameIndex}
-                  initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
-                  animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
-                  exit={reduceMotion ? { opacity: 0 } : { y: "-110%", opacity: 0 }}
+                  initial={
+                    reduceMotion
+                      ? { opacity: 0 }
+                      : { rotateX: 90, y: "40%", opacity: 0, transformPerspective: 400 }
+                  }
+                  animate={
+                    reduceMotion
+                      ? { opacity: 1 }
+                      : { rotateX: 0, y: "0%", opacity: 1, transformPerspective: 400 }
+                  }
+                  exit={
+                    reduceMotion
+                      ? { opacity: 0 }
+                      : { rotateX: -90, y: "-40%", opacity: 0, transformPerspective: 400 }
+                  }
                   transition={
                     reduceMotion
                       ? { duration: 0.4 }
-                      : { type: "spring", damping: 30, stiffness: 380 }
+                      : { type: "spring", damping: 22, stiffness: 260 }
                   }
                   mainClassName="font-multiscript inline-flex items-center rounded-lg bg-heritage px-4 py-1 font-bold not-italic text-[#1a1207] md:px-5"
                   splitLevelClassName="overflow-hidden pb-[0.1em] -mb-[0.1em]"
