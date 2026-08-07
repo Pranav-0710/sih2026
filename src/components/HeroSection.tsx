@@ -1,6 +1,13 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { HeroMediaCarousel } from "./HeroMediaCarousel";
+import RotatingText from "./RotatingText";
 import { useRef } from "react";
+
+/** Real sites, ending on the umbrella name — not generic synonym filler. */
+const ROTATING_WORDS = ["Rumtek", "Pemayangtse", "Tashiding", "Enchey", "Sikkim"];
+
+const gradientTextClass =
+  "animate-gradient-text bg-gradient-to-r from-heritage via-accent to-heritage bg-clip-text pr-[0.08em] italic text-transparent";
 
 /**
  * Hero lines rise out from behind a mask, one after the next — the reveal
@@ -86,11 +93,39 @@ const HeroSection = () => {
                 ))}
               </span>
               <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-                <motion.span
-                  variants={lineVariants}
-                  className="animate-gradient-text inline-block bg-gradient-to-r from-heritage via-accent to-heritage bg-clip-text pr-[0.08em] italic text-transparent"
-                >
-                  Sikkim
+                {/*
+                  This outer motion.span handles the ONE-TIME entrance —
+                  same staggered rise as "Discover the Soul of" above, driven
+                  by the parent container's variants. RotatingText's own
+                  initial/animate/exit only govern its *subsequent* swaps
+                  (animatePresenceInitial stays false), so the first name
+                  doesn't animate in twice.
+
+                  splitBy="words" is deliberate: every entry in
+                  ROTATING_WORDS is a single word, so this keeps each name
+                  as one gradient-clipped span rather than fragmenting it
+                  into a per-character gradient, which would look like the
+                  colour was restarting mid-word.
+                */}
+                <motion.span variants={lineVariants} className="inline-block">
+                  <RotatingText
+                    texts={ROTATING_WORDS}
+                    splitBy="words"
+                    rotationInterval={2200}
+                    auto={!reduceMotion}
+                    staggerDuration={0}
+                    initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
+                    animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
+                    exit={reduceMotion ? { opacity: 0 } : { y: "-120%", opacity: 0 }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0.4 }
+                        : { type: "spring", damping: 30, stiffness: 400 }
+                    }
+                    mainClassName="inline-flex"
+                    splitLevelClassName="overflow-hidden"
+                    elementLevelClassName={gradientTextClass}
+                  />
                 </motion.span>
               </span>
             </h1>
