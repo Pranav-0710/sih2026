@@ -112,7 +112,13 @@ const HeroSection = () => {
                     texts={ROTATING_WORDS}
                     splitBy="words"
                     rotationInterval={2200}
-                    auto={!reduceMotion}
+                    // Always keeps rotating — this is content change, the
+                    // same rule the hero video carousel follows, not
+                    // decorative motion. Only the slide-vs-fade transition
+                    // style below responds to reduced-motion; gating `auto`
+                    // on it too would freeze the headline on "Rumtek"
+                    // forever for anyone with that preference on.
+                    auto
                     staggerDuration={0}
                     initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
                     animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
