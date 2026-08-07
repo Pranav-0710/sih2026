@@ -51,7 +51,15 @@ export interface RotatingTextProps
   staggerFrom?: "first" | "last" | "center" | "random" | number;
   loop?: boolean;
   auto?: boolean;
-  splitBy?: "characters" | "words" | "lines" | string;
+  /**
+   * A resolver function lets the split strategy vary per text, which matters
+   * here: Devanagari and Tibetan glyphs shape and combine contextually
+   * (conjuncts, subjoined stacks, matras), so splitting them into isolated
+   * per-character spans can break how they render. Restricting the
+   * per-letter cascade to scripts that are actually safe to split — plain
+   * Latin — avoids that risk while still allowing it where it's safe.
+   */
+  splitBy?: "characters" | "words" | "lines" | string | ((text: string) => "characters" | "words" | "lines" | string);
   onNext?: (index: number) => void;
   mainClassName?: string;
   splitLevelClassName?: string;
@@ -111,24 +119,25 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>((props, ref)
 
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
-  const elements = useMemo<WordSplit[]>(() => {
-    const currentText = texts[currentTextIndex] ?? "";
+  const currentText = texts[currentTextIndex] ?? "";
+  const resolvedSplitBy = typeof splitBy === "function" ? splitBy(currentText) : splitBy;
 
-    if (splitBy === "characters") {
+  const elements = useMemo<WordSplit[]>(() => {
+    if (resolvedSplitBy === "characters") {
       const words = currentText.split(" ");
       return words.map((word, i) => ({
         characters: splitIntoCharacters(word),
         needsSpace: i !== words.length - 1,
       }));
     }
-    if (splitBy === "words") {
+    if (resolvedSplitBy === "words") {
       const words = currentText.split(" ");
       return words.map((word, i) => ({
         characters: [word],
         needsSpace: i !== words.length - 1,
       }));
     }
-    if (splitBy === "lines") {
+    if (resolvedSplitBy === "lines") {
       const lines = currentText.split("\n");
       return lines.map((line, i) => ({
         characters: [line],
@@ -136,12 +145,12 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>((props, ref)
       }));
     }
 
-    const parts = currentText.split(splitBy);
+    const parts = currentText.split(resolvedSplitBy);
     return parts.map((part, i) => ({
       characters: [part],
       needsSpace: i !== parts.length - 1,
     }));
-  }, [texts, currentTextIndex, splitBy]);
+  }, [currentText, resolvedSplitBy]);
 
   const getStaggerDelay = useCallback(
     (index: number, totalChars: number) => {
@@ -216,7 +225,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>((props, ref)
       <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
         <motion.span
           key={currentTextIndex}
-          className={cn(splitBy === "lines" ? "text-rotate-lines" : "text-rotate")}
+          className={cn(resolvedSplitBy === "lines" ? "text-rotate-lines" : "text-rotate")}
           layout
           aria-hidden="true"
         >

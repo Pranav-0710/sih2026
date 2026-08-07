@@ -45,6 +45,10 @@ const line = {
 
 const HEADLINE_WORDS = ["Discover", "the", "Soul", "of"];
 
+/** True for plain Latin text — the per-letter cascade is only safe for this. */
+const isAsciiOnly = (text: string) =>
+  Array.from(text).every((ch) => (ch.codePointAt(0) ?? 0) <= 0x7f);
+
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
   visible: {
@@ -112,18 +116,22 @@ const HeroSection = () => {
                 (animatePresenceInitial stays false), so the first name does
                 not play two entrance animations back to back.
 
-                splitBy="words" keeps each name as a single span. Splitting
-                per character would break the Devanagari and Tibetan entries,
-                whose glyphs shape and combine contextually — slicing them
-                into separate elements would render them incorrectly.
+                splitBy is a resolver rather than a fixed value: the
+                per-letter cascade (matching the React Bits reference) only
+                runs for plain-ASCII text — i.e. "Sikkim". Devanagari and
+                Tibetan shape and combine contextually, so the Nepali,
+                Hindi and Sikkimese entries stay whole-word to avoid
+                rendering them incorrectly. The pill itself still resizes
+                smoothly between all four via the `layout` prop.
               */}
               <motion.span variants={lineVariants} className="inline-flex items-baseline gap-4">
                 <RotatingText
                   texts={SIKKIM_NAMES.map((n) => n.name)}
-                  splitBy="words"
+                  splitBy={(text) => (isAsciiOnly(text) ? "characters" : "words")}
+                  staggerFrom="last"
+                  staggerDuration={0.03}
                   rotationInterval={2600}
                   auto
-                  staggerDuration={0}
                   onNext={setNameIndex}
                   initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
                   animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
@@ -133,7 +141,7 @@ const HeroSection = () => {
                       ? { duration: 0.4 }
                       : { type: "spring", damping: 30, stiffness: 380 }
                   }
-                  mainClassName="font-multiscript inline-flex items-center rounded-lg bg-heritage px-4 py-1 not-italic text-[#1a1207] md:px-5"
+                  mainClassName="font-multiscript inline-flex items-center rounded-lg bg-heritage px-4 py-1 font-bold not-italic text-[#1a1207] md:px-5"
                   splitLevelClassName="overflow-hidden pb-[0.1em] -mb-[0.1em]"
                 />
               </motion.span>
