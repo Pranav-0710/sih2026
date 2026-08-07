@@ -34,14 +34,14 @@ interface Feature {
  * the stock "generated landing page" look. Structure now comes from rules
  * and numbering rather than from cards floating on shadows.
  */
-const FeatureTile = ({ feature, i }: { feature: Feature; i: number }) => {
+const FeatureTile = ({ feature }: { feature: Feature }) => {
   const { featured } = feature;
 
+  // No per-tile scroll animation here — the whole grid rises together as
+  // one block (see the ScrollReveal wrapping the section body below), so
+  // an individual tile only needs its own hover behaviour.
   return (
-    <ScrollReveal
-      delay={Math.min(i, 4) * 0.07}
-      className={cn("min-h-[13rem] rounded-sm", feature.span)}
-    >
+    <div className={cn("min-h-[13rem]", feature.span)}>
       <Link
         to={feature.path}
         className={cn(
@@ -126,7 +126,7 @@ const FeatureTile = ({ feature, i }: { feature: Feature; i: number }) => {
           </div>
         </div>
       </Link>
-    </ScrollReveal>
+    </div>
   );
 };
 
@@ -196,7 +196,14 @@ const FeaturesSection = () => {
 
   return (
     <section className="bg-background py-24 md:py-32">
-      <div className="container mx-auto px-6 lg:px-8">
+      {/*
+        One reveal for the whole section body — masthead, grid and CTA rise
+        together as a single block on scroll, rather than each tile
+        animating separately. Only the content moves; the section's own
+        bg-background never does, so there's no gap opening up against the
+        section above it as this rises.
+      */}
+      <ScrollReveal className="container mx-auto px-6 lg:px-8">
         {/* Section masthead — label, rule, then the statement. */}
         <div className="mb-16 md:mb-20">
           <div className="flex items-center gap-3">
@@ -216,8 +223,8 @@ const FeaturesSection = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:auto-rows-[13rem] lg:grid-cols-4">
-          {features.map((feature, i) => (
-            <FeatureTile key={feature.path} feature={feature} i={i} />
+          {features.map((feature) => (
+            <FeatureTile key={feature.path} feature={feature} />
           ))}
         </div>
 
@@ -234,7 +241,7 @@ const FeaturesSection = () => {
             />
           </Link>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 };

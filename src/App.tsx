@@ -16,6 +16,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import PageFade from "./components/PageFade";
 import RouteLoader from "./components/RouteLoader";
 import ErrorBoundary from "./components/ErrorBoundary";
+import SmoothScroll from "./components/SmoothScroll";
 
 // Everything below is route-only, so it doesn't need to be in the initial
 // bundle — split it into its own chunk, downloaded on first visit to that
@@ -52,7 +53,9 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <MainLayout />
+              <SmoothScroll>
+                <MainLayout />
+              </SmoothScroll>
             </BrowserRouter>
           </TooltipProvider>
         </ThemeProvider>

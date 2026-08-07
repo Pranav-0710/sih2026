@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -14,15 +13,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 const KoraPreview = () => {
   return (
     <section className="bg-gray-900 py-24 md:py-32">
-      <div className="container mx-auto px-6 lg:px-8">
+      <ScrollReveal className="container mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, amount: 0.2 }}
-            className="lg:col-span-5"
-          >
+          <div className="lg:col-span-5">
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-heritage" />
               <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
@@ -74,62 +67,54 @@ const KoraPreview = () => {
                 strokeWidth={1.5}
               />
             </Link>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, amount: 0.25 }}
-            className="lg:col-span-6 lg:col-start-7"
-          >
-            <ScrollReveal className="rounded-sm" delay={0.15}>
-              <div className="rounded-sm border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <span className="font-display text-lg text-white">Kora</span>
-                  <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                    <span className="h-1.5 w-1.5 rounded-full bg-heritage" />
-                    Online
+          <div className="lg:col-span-6 lg:col-start-7">
+            <div className="rounded-sm border border-white/10 bg-white/[0.03] p-6 md:p-8">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <span className="font-display text-lg text-white">Kora</span>
+                <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <span className="h-1.5 w-1.5 rounded-full bg-heritage" />
+                  Online
+                </span>
+              </div>
+
+              <div className="mt-6 space-y-5 text-sm">
+                <div className="flex justify-end">
+                  <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
+                    I only have 2 days and I'm starting in Gangtok — which
+                    monastery should I visit first?
+                  </p>
+                </div>
+
+                <div className="max-w-[92%] border-l-2 border-heritage pl-4">
+                  <p className="leading-relaxed text-white/75">
+                    Start with the two closest to Gangtok. Rumtek, the seat of
+                    the Karma Kagyu lineage, sits about 24&nbsp;km out across the
+                    valley. Enchey is barely 3&nbsp;km from town and is known for
+                    its masked Cham dances. Both fit comfortably into one day.
+                  </p>
+                </div>
+
+                <div className="flex justify-end">
+                  <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
+                    Perfect, and what about day two?
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-1.5 pt-1">
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage" />
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.15s]" />
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.3s]" />
+                  <span className="ml-2 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                    Kora is typing
                   </span>
                 </div>
-
-                <div className="mt-6 space-y-5 text-sm">
-                  <div className="flex justify-end">
-                    <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
-                      I only have 2 days and I'm starting in Gangtok — which
-                      monastery should I visit first?
-                    </p>
-                  </div>
-
-                  <div className="max-w-[92%] border-l-2 border-heritage pl-4">
-                    <p className="leading-relaxed text-white/75">
-                      Start with the two closest to Gangtok. Rumtek, the seat of
-                      the Karma Kagyu lineage, sits about 24&nbsp;km out across the
-                      valley. Enchey is barely 3&nbsp;km from town and is known for
-                      its masked Cham dances. Both fit comfortably into one day.
-                    </p>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
-                      Perfect, and what about day two?
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 pt-1">
-                    <span className="h-1 w-1 animate-bounce rounded-full bg-heritage" />
-                    <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.15s]" />
-                    <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.3s]" />
-                    <span className="ml-2 text-[11px] uppercase tracking-[0.18em] text-white/40">
-                      Kora is typing
-                    </span>
-                  </div>
-                </div>
               </div>
-            </ScrollReveal>
-          </motion.div>
+            </div>
+          </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 };
