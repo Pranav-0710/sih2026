@@ -30,7 +30,7 @@ const Explore = () => {
 
           <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
             <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
-              Four monasteries, four centuries of practice
+              Beyond Temples, Beyond Time
             </h1>
             <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
               The history, culture and geography behind each site — and a

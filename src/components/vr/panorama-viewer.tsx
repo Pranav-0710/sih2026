@@ -29,6 +29,8 @@ interface Location {
   description: string
   image: string
   panoramaImage?: string
+  panoramaSource?: "photograph" | "artistic-impression"
+  panoramaCredit?: string
   hotspots?: HotspotData[]
   audioTracks?: any[]
   educationalContent?: any

@@ -43,6 +43,14 @@ Wikipedia and Sikkim tourism references, including:
 - [Tashiding Monastery](https://en.wikipedia.org/wiki/Tashiding_Monastery) — 1641 founding, Thongwa Rangdrol chorten, Bumchu festival
 - [Enchey Monastery](https://en.wikipedia.org/wiki/Enchey_Monastery) — 1909 construction, Lama Druptob Karpo, Cham dances
 
+Visitor hours displayed in the homepage monastery cards were checked against
+[Incredible India](https://www.incredibleindia.gov.in/en/sikkim/pelling/pemayangtse-monastery)
+(Pemayangtse), the Government of India's
+[Swadesh Darshan 2.0 Sikkim plan](https://sd2.tourism.gov.in/DocumentRepoFiles/MasterPlan/MPa73cf981-1e7e-4fea-af16-dbce64b2862b.pdf)
+(Tashiding), [Taj Hotels' Gangtok visitor guide](https://www.tajhotels.com/en-in/hotels/taj-guras-kutir-gangtok/places-to-visit)
+(Rumtek), and a current [Gangtok visitor guide](https://india-guide.in/destinations/gangtok/timings/)
+(Enchey). Hours can change for religious observances and should be confirmed locally before travel.
+
 > Note: panoramic (360°) imagery of these specific monasteries is not freely
 > available under an open licence. The current build uses the static photography
 > credited above; true panoramic capture is documented as future scope rather

@@ -29,9 +29,10 @@ const KoraPreview = () => {
             </h2>
 
             <p className="mt-6 text-lg leading-relaxed text-white/60">
-              Named for the ritual circuit walked clockwise around a monastery.
-              Kora answers questions on history, lineage, festivals and
-              etiquette — and plans a route across the four sites.
+              Named for the ritual circuit walked clockwise around a monastery,
+              Kora answers questions on history, lineage, festivals, etiquette,
+              and helps you discover Sikkim's rich Buddhist heritage with intelligent,
+              personalized guidance.
             </p>
 
             {/* Concrete capabilities with real answers behind them, rather

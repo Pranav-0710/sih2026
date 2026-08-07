@@ -58,7 +58,11 @@ export interface MonasteryLocation {
   id: string
   name: string
   type: string
+  foundingYear: string
+  sect: string
   description: string
+  /** Published visitor hours; religious services may affect access. */
+  openingHours: string
   image: string
   /**
    * A 360° panorama for this monastery. Two forms are supported and are
@@ -108,8 +112,11 @@ export const locations: MonasteryLocation[] = [
     id: "rumtek",
     name: "Rumtek Monastery",
     type: "Karma Kagyu Seat",
+    foundingYear: "1734",
+    sect: "Karma Kagyu",
     description:
       "Step inside the Dharma Chakra Centre, the largest monastery in Sikkim and the principal seat of the Karma Kagyu lineage outside Tibet.",
+    openingHours: "6:00 AM – 6:00 PM",
     image: "/vr-assets/rumtek-monastery.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/6b765851fda20aae3e2a0cea82220e14",
     panoramaSource: "artistic-impression",
@@ -212,8 +219,11 @@ export const locations: MonasteryLocation[] = [
     id: "pemayangtse",
     name: "Pemayangtse Monastery",
     type: "Nyingma Monastery",
+    foundingYear: "1705",
+    sect: "Nyingma",
     description:
       "Explore the 'Perfect Sublime Lotus' — one of Sikkim's oldest and most revered monasteries, crowned by a seven-tiered wooden vision of paradise.",
+    openingHours: "8:00 AM – 4:00 PM",
     image: "/vr-assets/pemayangtse-monastery.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/5568ac69449b7c77f8c81662000bfd54",
     panoramaSource: "artistic-impression",
@@ -314,8 +324,11 @@ export const locations: MonasteryLocation[] = [
     id: "tashiding",
     name: "Tashiding Monastery",
     type: "Sacred Monastery",
+    foundingYear: "1641",
+    sect: "Nyingma",
     description:
       "Visit the monastery widely held to be the holiest in Sikkim, where a single glance at the Thongwa Rangdrol chorten is said to cleanse a lifetime of sin.",
+    openingHours: "10:00 AM – 4:00 PM",
     image: "/vr-assets/tashiding-monastery.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/1f012dec7c86c0a4193436f020cd092b",
     panoramaSource: "artistic-impression",
@@ -421,8 +434,11 @@ export const locations: MonasteryLocation[] = [
     id: "enchey",
     name: "Enchey Monastery",
     type: "Nyingma Monastery",
+    foundingYear: "1909",
+    sect: "Nyingma",
     description:
       "Walk through 'The Solitary Temple' above Gangtok, a pine-shrouded Nyingma monastery famed for its masked Cham dances.",
+    openingHours: "9:00 AM – 5:00 PM",
     image: "/vr-assets/enchey-monastery.jpg",
     panoramaImage: "https://skybox.blockadelabs.com/e/3969db90361f9f10e02ee432bb90328b",
     panoramaSource: "artistic-impression",

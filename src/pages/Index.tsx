@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import KoraPreview from "@/components/TripGeniePreview";
 import MonasteryShowcase from "@/components/MonasteryShowcase";
+import LocalExperiencesCarousel from "@/components/LocalExperiencesCarousel";
 import Footer from "@/components/Footer";
 import PageLayout from "@/components/PageLayout";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -63,6 +64,16 @@ const Index = () => {
 
             <div className="mt-12">
               <MonasteryShowcase />
+            </div>
+
+            <div className="mt-24 border-t border-foreground/10 pt-16">
+              <h3 className="font-display text-3xl tracking-tight text-foreground md:text-4xl">
+                Make the Most of Your Visit
+                <span className="block mt-2 text-xl font-sans text-muted-foreground">Eat. Stay. Explore. Shop.</span>
+              </h3>
+              <div className="mt-10">
+                <LocalExperiencesCarousel />
+              </div>
             </div>
           </ScrollReveal>
         </section>

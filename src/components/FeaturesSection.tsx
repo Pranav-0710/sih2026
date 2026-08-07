@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import ProgressiveImage from "@/components/ProgressiveImage";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -24,6 +25,28 @@ interface Feature {
   image?: string;
   span: string;
 }
+
+const featureGridVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const featureTileVariants: Variants = {
+  hidden: { opacity: 0, y: 64, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.72,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
 
 /**
  * Feature tile.
@@ -41,7 +64,10 @@ const FeatureTile = ({ feature }: { feature: Feature }) => {
   // one block (see the ScrollReveal wrapping the section body below), so
   // an individual tile only needs its own hover behaviour.
   return (
-    <div className={cn("min-h-[13rem]", feature.span)}>
+    <motion.div
+      variants={featureTileVariants}
+      className={cn("min-h-[13rem]", feature.span)}
+    >
       <Link
         to={feature.path}
         className={cn(
@@ -126,12 +152,13 @@ const FeatureTile = ({ feature }: { feature: Feature }) => {
           </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 };
 
 const FeaturesSection = () => {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
 
   const features: Feature[] = [
     {
@@ -196,13 +223,7 @@ const FeaturesSection = () => {
 
   return (
     <section className="bg-background py-24 md:py-32">
-      {/*
-        One reveal for the whole section body — masthead, grid and CTA rise
-        together as a single block on scroll, rather than each tile
-        animating separately. Only the content moves; the section's own
-        bg-background never does, so there's no gap opening up against the
-        section above it as this rises.
-      */}
+      {/* Only content moves; the section background stays fixed to avoid gaps. */}
       <ScrollReveal className="container mx-auto px-6 lg:px-8">
         {/* Section masthead — label, rule, then the statement. */}
         <div className="mb-16 md:mb-20">
@@ -222,11 +243,17 @@ const FeaturesSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:auto-rows-[13rem] lg:grid-cols-4">
+        <motion.div
+          className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:auto-rows-[13rem] lg:grid-cols-4"
+          variants={featureGridVariants}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.25 }}
+        >
           {features.map((feature) => (
             <FeatureTile key={feature.path} feature={feature} />
           ))}
-        </div>
+        </motion.div>
 
         <div className="mt-14 flex justify-center">
           <Link
