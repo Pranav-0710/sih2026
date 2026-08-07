@@ -4,9 +4,36 @@
  * Historical details are sourced from Wikipedia and Sikkim tourism references —
  * see CREDITS.md at the repo root for image attribution and source links.
  *
- * Note: `panoramaImage` is intentionally omitted. No openly-licensed 360°
- * capture exists for these monasteries, so the viewer falls back to the real
- * photography in `image` rather than substituting a generic skybox.
+ * Note: `panoramaImage` is currently unset on every monastery. No openly-
+ * licensed 360° capture of these specific sites was found (Wikimedia
+ * Commons has no equirectangular panoramas of them), so the viewer falls
+ * back to the real photography in `image` rather than substituting a
+ * generic skybox.
+ *
+ * TO ADD A 360° PANORAMA
+ * ----------------------
+ * Set `panoramaImage` on a monastery below. The viewer detects the form
+ * automatically:
+ *
+ *   panoramaImage: "https://skybox.blockadelabs.com/e/<id>",
+ *   panoramaSource: "artistic-impression",
+ *   panoramaCredit: "Generated with Blockade Labs Skybox AI.",
+ *
+ * ...embeds that service's own 360 viewer in an iframe (verified working),
+ * while a direct equirectangular image URL or local file:
+ *
+ *   panoramaImage: "/vr-assets/rumtek-360.jpg",
+ *   panoramaSource: "photograph",
+ *
+ * ...is rendered onto a sphere in WebGL with drag-to-look.
+ *
+ * Set `panoramaSource` honestly. A generated skybox is an artistic
+ * impression of the site, and the viewer labels it as such on screen — on
+ * a heritage-preservation project, presenting generated imagery as a
+ * record of a real building is the one thing not worth doing for a nicer
+ * demo. Make sure any generated environment actually depicts a Himalayan
+ * Buddhist monastery, too: a plausible-looking skybox of the wrong kind of
+ * place is worse than the honest photography fallback.
  */
 
 export interface MonasteryHotspot {
@@ -26,7 +53,27 @@ export interface MonasteryLocation {
   type: string
   description: string
   image: string
+  /**
+   * A 360° panorama for this monastery. Two forms are supported and are
+   * detected automatically by the viewer:
+   *
+   *  - A direct equirectangular image (`.jpg`/`.png`/`.webp`, local or
+   *    remote) — rendered onto a sphere in WebGL, with drag-to-look.
+   *  - Any other http(s) URL — treated as a third-party 360 viewer page
+   *    (e.g. a Blockade Labs skybox share link) and embedded in an iframe,
+   *    letting that service do its own sphere rendering.
+   */
   panoramaImage?: string
+  /**
+   * Where the panorama came from. This is not cosmetic: an AI-generated
+   * skybox is an artistic impression, not a record of the building, and on
+   * a heritage-preservation project it has to be labelled as such rather
+   * than presented as documentation of the real interior. The viewer shows
+   * a badge whenever this is "artistic-impression".
+   */
+  panoramaSource?: "photograph" | "artistic-impression"
+  /** Attribution line shown alongside the panorama, if any. */
+  panoramaCredit?: string
   audioTracks?: Array<{
     id: string
     title: string

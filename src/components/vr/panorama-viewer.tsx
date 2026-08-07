@@ -590,8 +590,20 @@ export function PanoramaViewer({
     },
   ]
 
-  // Check if we should use iframe for Skybox content
-  const isSkyboxUrl = location.panoramaImage && location.panoramaImage.startsWith('http')
+  /*
+   * Decide how to render the panorama.
+   *
+   * This used to be `panoramaImage.startsWith('http')`, which sent *any*
+   * remote URL to the iframe branch — including a directly-linked
+   * equirectangular photo, which would then appear as a flat image in a
+   * frame with no sphere projection and no drag-to-look. Detect a real
+   * image by extension instead, so remotely-hosted 360 photographs get the
+   * WebGL sphere and only genuine viewer pages get iframed.
+   */
+  const panoramaUrl = location.panoramaImage
+  const isDirectImage = Boolean(panoramaUrl && /\.(jpe?g|png|webp|avif)(\?|#|$)/i.test(panoramaUrl))
+  const isEmbeddedViewer = Boolean(panoramaUrl && /^https?:\/\//i.test(panoramaUrl) && !isDirectImage)
+  const isArtistic = location.panoramaSource === "artistic-impression"
 
   return (
     <div className="fixed inset-0 z-[60] bg-black">
@@ -607,11 +619,13 @@ export function PanoramaViewer({
         </div>
       )}
 
-      {isSkyboxUrl ? (
+      {isEmbeddedViewer ? (
         <iframe
-          src={location.panoramaImage}
+          src={panoramaUrl}
+          title={`360° panorama of ${location.name}`}
           className="w-full h-full border-0"
-          allow="fullscreen"
+          allow="fullscreen; accelerometer; gyroscope; xr-spatial-tracking"
+          referrerPolicy="no-referrer-when-downgrade"
           onLoad={() => setIsLoading(false)}
           onError={() => setIsLoading(false)}
         />
@@ -745,7 +759,10 @@ export function PanoramaViewer({
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
         <div className="bg-black/80 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
-          {hasPanorama && (
+          {/* Zoom/reset drive this component's own WebGL camera, so they are
+              meaningless over an embedded third-party viewer — that iframe
+              has its own controls and can't be driven from out here. */}
+          {hasPanorama && !isEmbeddedViewer && (
             <>
               <Button
                 variant="ghost"
@@ -822,11 +839,29 @@ export function PanoramaViewer({
         </div>
       </div>
 
+      {/* Provenance. An AI-generated skybox is an artistic impression of the
+          monastery, not a photographic record of it — say so plainly on the
+          view itself rather than burying it in credits. */}
+      {isArtistic && (
+        <div className="absolute left-4 bottom-20 z-10 max-w-xs border border-white/25 bg-black/60 px-3 py-2 backdrop-blur-sm">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-heritage">
+            Artistic impression
+          </p>
+          <p className="mt-1 text-[11px] leading-relaxed text-white/70">
+            A generated 360° environment evoking this site — not a photographic
+            record of the building.
+            {location.panoramaCredit ? ` ${location.panoramaCredit}` : ""}
+          </p>
+        </div>
+      )}
+
       <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-white text-center z-10">
         <p className="text-sm opacity-75">
-          {hasPanorama
-            ? "Drag to explore 360° • Scroll or zoom controls to adjust view • "
-            : ""}
+          {isEmbeddedViewer
+            ? "Drag inside the view to look around • "
+            : hasPanorama
+              ? "Drag to explore 360° • Scroll or zoom controls to adjust view • "
+              : ""}
           {location.hotspots && location.hotspots.length > 0 ? "Click Info for hotspots • " : ""}
           {location.educationalContent ? "Click Book for learning • " : ""}
           Click Star for quiz
