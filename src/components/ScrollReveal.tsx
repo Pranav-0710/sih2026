@@ -21,6 +21,13 @@ interface ScrollRevealProps {
  * for anyone not in dark mode. The reveal itself should never depend on the
  * viewer's OS theme.
  *
+ * That default is plain black, not gray-900: measured against this site's
+ * actual dark-theme card colour (hsl(20 25% 10%) ≈ rgb(32,23,19)),
+ * gray-900 (rgb(17,24,39)) is nearly the same perceived brightness — the
+ * panel would barely read as a distinct block once a viewer is in dark
+ * mode. Black keeps a real, verifiable brightness gap against both themes'
+ * surfaces instead of just "looking dark enough" in isolation.
+ *
  * Reduced motion drops the sliding panel but still reveals via a plain
  * opacity crossfade, rather than skipping the panel outright. An earlier
  * version bailed out to a static div with no animation at all here — the
@@ -33,7 +40,7 @@ interface ScrollRevealProps {
 const ScrollReveal = ({
   children,
   className,
-  blockClassName = "bg-gray-900",
+  blockClassName = "bg-black",
   delay = 0,
   amount = 0.3,
 }: ScrollRevealProps) => {
