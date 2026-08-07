@@ -8,8 +8,8 @@ const Footer = () => {
     { name: "Heritage Trails", path: "/heritage" },
     { name: "Kora", path: "/trip-genie" },
     { name: "Community", path: "/community" },
-    { name: "FunScapes", path: "/funscapes" },
-    { name: "Bookings", path: "/bookings" },
+    { name: "Cultural Calendar", path: "/calendar" },
+    { name: "Digital Archive", path: "/archive" },
   ];
 
   const legalLinks = [

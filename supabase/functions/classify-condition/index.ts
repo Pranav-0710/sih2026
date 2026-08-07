@@ -88,22 +88,50 @@ serve(async (req) => {
     const text = description.trim().slice(0, MAX_INPUT_LENGTH);
     const result = await classifySeverity(text);
 
-    // Persist the classification if a report id was given. Uses the service
-    // role key so this write bypasses RLS (the report author already owns
-    // the row, but severity is an AI-derived field, not user-editable).
+    // Persist the classification if a report id was given.
+    //
+    // SECURITY: this write uses the service-role key, which bypasses RLS —
+    // so the row must be scoped to the caller here, in application code, or
+    // any client holding the (public, bundled) anon key could pass an
+    // arbitrary reportId and overwrite another user's report severity,
+    // corrupting the admin triage dashboard. The caller's identity is
+    // established from their own session JWT (forwarded automatically by
+    // supabase.functions.invoke) via a second, unprivileged client, and the
+    // update is scoped to rows that user actually owns.
     if (typeof reportId === "string" && reportId.length > 0) {
-      const supabase = createClient(
+      const authHeader = req.headers.get("Authorization");
+      const callerClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+        Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+        { global: { headers: { Authorization: authHeader ?? "" } } },
       );
 
-      const { error: updateError } = await supabase
-        .from("condition_reports")
-        .update({ severity: result.severity, severity_confidence: result.confidence })
-        .eq("id", reportId);
+      const {
+        data: { user },
+      } = await callerClient.auth.getUser();
 
-      if (updateError) {
-        console.error(`Failed to persist severity for report ${reportId}:`, updateError);
+      if (!user) {
+        console.error(`Refused to persist severity for report ${reportId}: no authenticated caller.`);
+      } else {
+        const supabase = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+        );
+
+        const { error: updateError, count } = await supabase
+          .from("condition_reports")
+          .update(
+            { severity: result.severity, severity_confidence: result.confidence },
+            { count: "exact" },
+          )
+          .eq("id", reportId)
+          .eq("reporter_id", user.id);
+
+        if (updateError) {
+          console.error(`Failed to persist severity for report ${reportId}:`, updateError);
+        } else if (!count) {
+          console.error(`Refused to persist severity for report ${reportId}: not owned by caller ${user.id}.`);
+        }
       }
     }
 

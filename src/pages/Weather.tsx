@@ -119,7 +119,7 @@ const Weather: React.FC = () => {
   return (
     <>
     <Navigation />
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 pt-24">
       <h1 className="text-3xl font-bold text-center mb-6">Weather Dashboard</h1>
 
       <div className="flex justify-center mb-6 space-x-2">

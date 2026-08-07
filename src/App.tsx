@@ -83,9 +83,13 @@ const MainLayout = () => {
           <Route path="/community" element={<PageFade><Community /></PageFade>} />
           <Route path="/emergency" element={<PageFade><Emergency /></PageFade>} />
           <Route path="/vr-experience" element={<PageFade><VRExperiencePage /></PageFade>} />
-          <Route path="/sentiment-analysis" element={<PageFade><SentimentAnalysis /></PageFade>} />
           <Route element={<AdminRoute />}>
             <Route path="/dashboard" element={<PageFade><Dashboard /></PageFade>} />
+            {/* Was unguarded while /dashboard was gated, despite both being
+                admin-only per the same role === "admin" nav condition — the
+                nav link was hidden, but the route itself rendered fully for
+                anyone who typed the URL. */}
+            <Route path="/sentiment-analysis" element={<PageFade><SentimentAnalysis /></PageFade>} />
           </Route>
           <Route path="/ar-vr-experience" element={<PageFade><VRExperiencePage /></PageFade>} />
           <Route path="/transport" element={<PageFade><Transport /></PageFade>} />
