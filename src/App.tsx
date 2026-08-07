@@ -29,7 +29,6 @@ const Emergency = lazy(() => import("./pages/Emergency"));
 const SentimentAnalysis = lazy(() => import("./pages/SentimentAnalysis"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const VRExperiencePage = lazy(() => import("./pages/VRExperience"));
-const Transport = lazy(() => import("./pages/Transport"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Explore = lazy(() => import("./pages/Explore"));
 const CulturalCalendar = lazy(() => import("./pages/Calendar"));
@@ -94,8 +93,6 @@ const MainLayout = () => {
                 anyone who typed the URL. */}
             <Route path="/sentiment-analysis" element={<PageFade><SentimentAnalysis /></PageFade>} />
           </Route>
-          <Route path="/ar-vr-experience" element={<PageFade><VRExperiencePage /></PageFade>} />
-          <Route path="/transport" element={<PageFade><Transport /></PageFade>} />
           <Route path="/explore" element={<PageFade><Explore /></PageFade>} />
           <Route path="/calendar" element={<PageFade><CulturalCalendar /></PageFade>} />
           <Route path="/archive" element={<PageFade><DigitalArchive /></PageFade>} />

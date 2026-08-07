@@ -47,7 +47,6 @@ export function Navigation() {
         { name: t("nav.archive"), path: "/archive" },
         { name: t("nav.heritageTrails"), path: "/heritage" },
         { name: t("nav.virtual360"), path: "/vr-experience" },
-        { name: t("nav.routeX"), path: "/transport" },
       ],
     },
     { name: t("nav.community"), path: "/community" },
