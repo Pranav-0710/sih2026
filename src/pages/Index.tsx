@@ -36,8 +36,8 @@ const Index = () => {
         <section className="relative z-10 bg-background pb-24 md:pb-32">
           <ScrollReveal className="container mx-auto px-6 lg:px-8">
             <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-primary" />
-              <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-primary">
+              <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
+              <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
                 The Circuit
               </span>
             </div>

@@ -16,8 +16,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
-        display: ["'Playfair Display'", "serif"],
+        sans: ["'DM Sans'", "system-ui", "sans-serif"],
+        display: ["Fraunces", "Georgia", "serif"],
+        mono: ["'DM Mono'", "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

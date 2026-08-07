@@ -48,7 +48,11 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <FontSizeProvider>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme" attribute="class" enableSystem={true}> {/* Wrap with ThemeProvider */}
+        {/* Dark is the designed art direction ("Lamplight" — see index.css),
+            not merely a supported alternative, so it is the default rather
+            than deferring to the OS. The toggle still works, and light mode
+            is a warm parchment rather than white. */}
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme" attribute="class" enableSystem={false}>
           <TooltipProvider>
             <Toaster />
             <Sonner />

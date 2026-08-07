@@ -72,8 +72,8 @@ const Games = () => {
       <div className="min-h-screen bg-background py-20 md:py-28">
         <ScrollReveal className="container mx-auto px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <span className="h-px w-8 bg-primary" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-primary">
+            <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
               Game Corner
             </span>
           </div>
@@ -115,7 +115,7 @@ const Games = () => {
                       </div>
 
                       <div className="mt-10">
-                        <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-primary">
+                        <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
                           {game.tagline}
                         </p>
                         <h2 className="mt-2 font-display text-xl tracking-tight text-foreground">
@@ -149,7 +149,7 @@ const Games = () => {
               >
                 <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-foreground/10 pt-8">
                   <div>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-primary">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
                       {activeGame.tagline}
                     </p>
                     <h1 className="mt-2 font-display text-3xl tracking-tight text-foreground md:text-4xl">

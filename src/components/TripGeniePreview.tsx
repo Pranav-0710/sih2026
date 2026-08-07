@@ -17,7 +17,7 @@ const KoraPreview = () => {
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-heritage" />
+              <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
               <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
                 AI Monastery Guide
               </span>

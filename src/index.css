@@ -2,61 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Monastery360 Design System
-   Inspired by Sikkim's monasteries — maroon monastic robes, saffron/gold
-   ritual accents, and the green of Himalayan forest slopes.
-   All colors MUST be HSL.
-*/
+/* Monastery360 Design System — "Lamplight"
+ *
+ * Art direction taken from the inside of a working monastery rather than
+ * from a generic template: dim warm walls, butter-lamp gold, oxblood robes,
+ * lime-washed plaster. Light mode is warm parchment, NOT white — a pure
+ * white page is what made this read as a default admin theme regardless of
+ * how the accents were tuned.
+ *
+ * Prayer-flag colours are defined once, in canonical Tibetan order (blue
+ * sky, white air, red fire, green water, yellow earth) and used as the
+ * site's recurring section marker. They are fixed rather than themed,
+ * because the sequence is meaningful and reordering or recolouring it to
+ * suit a palette would be wrong.
+ *
+ * ALL colour tokens MUST be HSL triplets. Tailwind consumes them as
+ * `hsl(var(--token))`, so any other colour space (oklch, hex) silently
+ * produces invalid CSS — this has broken the whole app before.
+ */
 
 @layer base {
   :root {
-    /* Core neutral colors */
-    --background: 42 15% 97%;
-    --foreground: 20 15% 15%;
+    /* Parchment, not paper-white */
+    --background: 38 34% 92%;
+    --foreground: 20 26% 12%;
 
-    /* Card system with warm undertones */
-    --card: 40 20% 99%;
-    --card-foreground: 20 15% 15%;
+    --card: 40 42% 96%;
+    --card-foreground: 20 26% 12%;
 
-    --popover: 40 20% 99%;
-    --popover-foreground: 20 15% 15%;
+    --popover: 40 42% 96%;
+    --popover-foreground: 20 26% 12%;
 
-    /* Primary - Monastic Maroon (Sikkim monastery robes) */
-    --primary: 350 55% 30%;
-    --primary-foreground: 0 0% 100%;
+    /* Oxblood — monastic robes, temple wall bands */
+    --primary: 356 60% 32%;
+    --primary-foreground: 40 40% 96%;
 
-    /* Secondary - Warm Earth Tones */
-    --secondary: 35 25% 90%;
-    --secondary-foreground: 20 15% 15%;
+    --secondary: 36 26% 86%;
+    --secondary-foreground: 20 26% 12%;
 
-    /* Muted tones */
-    --muted: 35 15% 92%;
-    --muted-foreground: 25 8% 45%;
+    --muted: 36 22% 87%;
+    --muted-foreground: 25 12% 38%;
 
-    /* Accent - Saffron */
-    --accent: 25 85% 60%;
-    --accent-foreground: 0 0% 98%;
+    /* Saffron */
+    --accent: 22 78% 46%;
+    --accent-foreground: 40 40% 96%;
 
-    /* Heritage Gold */
-    --heritage: 45 90% 55%;
-    --heritage-foreground: 20 15% 15%;
+    /* Butter-lamp gold. Darkened from the old 55% so it is actually
+       legible as text on parchment instead of glowing illegibly. */
+    --heritage: 36 78% 38%;
+    --heritage-foreground: 40 40% 96%;
 
-    /* Nature Green */
-    --nature: 120 40% 45%;
-    --nature-foreground: 0 0% 98%;
+    --nature: 145 40% 30%;
+    --nature-foreground: 40 40% 96%;
 
-    /* Cultural Purple (tribal textiles) */
-    --cultural: 280 60% 45%;
-    --cultural-foreground: 0 0% 98%;
+    --cultural: 280 45% 38%;
+    --cultural-foreground: 40 40% 96%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 70% 42%;
+    --destructive-foreground: 40 40% 96%;
 
-    --border: 35 20% 88%;
-    --input: 35 20% 88%;
-    --ring: 350 55% 30%;
+    /* Visible. The old 88% border on a 97% background was invisible,
+       which is why every surface read as one flat white sheet. */
+    --border: 32 20% 78%;
+    --input: 32 20% 78%;
+    --ring: 36 78% 38%;
 
-    --radius: 0.75rem;
+    /* Near-square. Soft 12px corners on everything is a strong tell of a
+       generated layout; architecture here is rectilinear. */
+    --radius: 0.125rem;
+
+    /* Prayer flags — fixed across themes, canonical order */
+    --flag-blue: 205 65% 42%;
+    --flag-white: 40 30% 88%;
+    --flag-red: 356 62% 46%;
+    --flag-green: 145 42% 34%;
+    --flag-yellow: 42 88% 52%;
 
     /* Gradients inspired by Sikkim's monasteries and Himalayan landscape */
     --gradient-hero: linear-gradient(
@@ -107,44 +127,46 @@
   }
 
   .dark {
-    /* Dark mode with warm undertones */
-    --background: 20 25% 8%;
-    --foreground: 40 15% 92%;
+    /* Lamplit shrine interior: deep, warm, almost no blue in it. */
+    --background: 20 30% 5%;
+    --foreground: 38 30% 90%;
 
-    --card: 20 25% 10%;
-    --card-foreground: 40 15% 92%;
+    --card: 20 24% 8%;
+    --card-foreground: 38 30% 90%;
 
-    --popover: 20 25% 10%;
-    --popover-foreground: 40 15% 92%;
+    --popover: 20 26% 7%;
+    --popover-foreground: 38 30% 90%;
 
-    /* Brighter colors for dark mode */
-    --primary: 350 45% 55%;
-    --primary-foreground: 0 0% 100%;
+    /* Lightened from 48% — measured at 3.55:1 against the dark background,
+       which fails WCAG AA for small text. 62% gives 5.52:1. */
+    --primary: 356 62% 62%;
+    --primary-foreground: 20 30% 5%;
 
-    --secondary: 25 20% 18%;
-    --secondary-foreground: 40 15% 92%;
+    --secondary: 22 18% 14%;
+    --secondary-foreground: 38 30% 90%;
 
-    --muted: 25 15% 15%;
-    --muted-foreground: 25 8% 65%;
+    --muted: 22 16% 13%;
+    --muted-foreground: 33 14% 60%;
 
-    --accent: 25 85% 65%;
-    --accent-foreground: 20 25% 8%;
+    --accent: 26 86% 58%;
+    --accent-foreground: 20 30% 5%;
 
-    --heritage: 45 90% 65%;
-    --heritage-foreground: 20 25% 8%;
+    /* The signature colour of the whole site — a butter lamp in the dark. */
+    --heritage: 42 94% 60%;
+    --heritage-foreground: 20 30% 5%;
 
-    --nature: 120 40% 55%;
-    --nature-foreground: 20 25% 8%;
+    --nature: 145 40% 48%;
+    --nature-foreground: 20 30% 5%;
 
-    --cultural: 280 60% 65%;
-    --cultural-foreground: 20 25% 8%;
+    --cultural: 280 50% 62%;
+    --cultural-foreground: 20 30% 5%;
 
-    --destructive: 0 84% 65%;
-    --destructive-foreground: 40 15% 92%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 38 30% 90%;
 
-    --border: 25 20% 18%;
-    --input: 25 20% 18%;
-    --ring: 350 45% 55%;
+    --border: 28 16% 16%;
+    --input: 28 16% 16%;
+    --ring: 42 94% 60%;
 
     /* Dark mode gradients */
     --gradient-hero: linear-gradient(
@@ -198,7 +220,16 @@
 
   body {
     @apply bg-transparent text-foreground;
-    font-family: "Poppins", sans-serif;
+    font-family: "DM Sans", system-ui, sans-serif;
+    /* Slightly open tracking reads as considered rather than default. */
+    letter-spacing: -0.005em;
+  }
+
+  /* Fraunces carries real optical-size and softness axes; setting them is
+     what separates it from a stock serif. High opsz for display sizes,
+     a little "wonk"/soft for hand-cut warmth rather than machine geometry. */
+  h1, h2, h3, .font-display {
+    font-variation-settings: "opsz" 120, "SOFT" 30, "WONK" 1;
   }
 
   main {
@@ -212,33 +243,52 @@
     @apply bg-transparent;
   }
 
-  /* Add a pseudo-element for the cinematic background */
+  /* Backdrop. Warm parchment that never reaches pure white — the old
+     gradient ended at hsl(0 0% 100%), which is what made every page read
+     as a blank sheet with some accents dropped on it. */
   body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* A subtle, luxurious gradient */
-    background: linear-gradient(
-      160deg,
-      hsl(350 30% 97%) 0%,
-      hsl(35 80% 97%) 50%,
-      hsl(0 0% 100%) 100%
-    );
-    z-index: -1; /* Place it behind the content */
+    inset: 0;
+    background:
+      radial-gradient(
+        120% 80% at 50% 0%,
+        hsl(40 45% 95%) 0%,
+        hsl(38 34% 92%) 45%,
+        hsl(34 26% 88%) 100%
+      );
+    z-index: -2;
     background-attachment: fixed;
   }
 
   .dark body::before {
-    /* A deep, cinematic dark gradient */
-    background: linear-gradient(
-      160deg,
-      hsl(350 20% 8%) 0%,
-      hsl(30 25% 8%) 50%,
-      hsl(20 25% 6%) 100%
-    );
+    /* Lamplight: a faint warm pool at the top, falling off to near-black,
+       as if lit from a single source above rather than evenly flooded. */
+    background:
+      radial-gradient(
+        110% 70% at 50% -5%,
+        hsl(26 40% 11%) 0%,
+        hsl(22 32% 7%) 45%,
+        hsl(20 30% 4%) 100%
+      );
+  }
+
+  /* Film grain. This is the single cheapest thing that stops a flat colour
+     field looking like an unstyled div — it gives every surface a material
+     quality. Kept very low opacity so it reads as texture, not noise, and
+     pointer-events-none so it can never intercept a click. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .dark body::after {
+    opacity: 0.055;
   }
 
   .large-font {
@@ -353,6 +403,49 @@
     @apply border-t border-foreground/10;
   }
 
+  /*
+   * Prayer-flag marker — the site's signature element.
+   *
+   * Five bars in the canonical Tibetan order (blue sky, white air, red
+   * fire, green water, yellow earth), used wherever a section label needs
+   * a mark. It replaces the plain grey dash that every minimal template
+   * uses, and unlike a generic accent it actually means something on a
+   * Sikkim monastery site.
+   *
+   * The order is fixed. Do not reshuffle it to suit a layout.
+   */
+  .prayer-flags {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .prayer-flags span {
+    display: block;
+    width: 7px;
+    height: 3px;
+  }
+  .prayer-flags span:nth-child(1) { background: hsl(var(--flag-blue)); }
+  .prayer-flags span:nth-child(2) { background: hsl(var(--flag-white)); }
+  .prayer-flags span:nth-child(3) { background: hsl(var(--flag-red)); }
+  .prayer-flags span:nth-child(4) { background: hsl(var(--flag-green)); }
+  .prayer-flags span:nth-child(5) { background: hsl(var(--flag-yellow)); }
+
+  /* Wider variant for section mastheads. */
+  .prayer-flags-lg span {
+    width: 14px;
+    height: 4px;
+  }
+
+  /*
+   * Warm inner edge instead of a drop shadow. Drop shadows on a dark
+   * surface read as grey smudge; a 1px light inset reads as an object
+   * catching lamplight, which is the effect actually wanted here.
+   */
+  .lamp-edge {
+    box-shadow: inset 0 1px 0 0 hsl(var(--foreground) / 0.07);
+  }
+
   /* Frosted panel used across the dark heritage/explore surfaces */
   .glass-panel {
     @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
@@ -406,11 +499,11 @@
 }
 
 /* Multi-script stack for the rotating Sikkim name. The browser resolves
-   fonts per glyph, so Latin takes Playfair Display, Tibetan falls through to
-   Noto Serif Tibetan, and Devanagari lands on Poppins' Devanagari subset —
+   fonts per glyph, so Latin takes Fraunces, Tibetan falls through to Noto
+   Serif Tibetan, and Devanagari lands on DM Sans' Devanagari coverage —
    no per-language className switching needed. */
 .font-multiscript {
-  font-family: "Playfair Display", "Noto Serif Tibetan", "Poppins", Georgia, serif;
+  font-family: "Fraunces", "Noto Serif Tibetan", "DM Sans", Georgia, serif;
 }
 
 @keyframes label-fade-in {

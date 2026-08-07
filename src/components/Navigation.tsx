@@ -30,7 +30,7 @@ const NavLinkItem = ({ to, children, className = "" }) => (
     }
   >
     {children}
-    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-primary to-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-heritage scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
   </NavLink>
 );
 
@@ -105,7 +105,7 @@ export function Navigation() {
     >
       <div
         className={cn(
-          "flex items-center px-6 py-3 rounded-2xl transition-all duration-500 ease-out floating-navbar",
+          "flex items-center px-6 py-3 rounded-sm transition-all duration-500 ease-out floating-navbar",
           transparent
             ? "nav-transparent bg-transparent border border-transparent shadow-none h-[4.5rem]"
             : scrolled
@@ -157,10 +157,10 @@ export function Navigation() {
                       it's exposed to assistive tech only. */}
                   <SheetTitle className="sr-only">Site navigation</SheetTitle>
                   <Link to="/" className="flex items-center space-x-3 px-4">
-                    <div className="bg-gradient-to-br from-nature to-primary p-2 rounded-xl shadow-soft">
+                    <div className="rounded-sm bg-heritage/15 p-2">
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
-                    <span className="font-bold text-lg bg-gradient-to-r from-primary to-nature bg-clip-text text-transparent">
+                    <span className="font-display text-lg text-foreground">
                       Monastery360
                     </span>
                   </Link>
@@ -219,7 +219,7 @@ export function Navigation() {
                     ) : (
                       <Button
                         onClick={() => navigate("/auth")}
-                        className="w-full font-semibold py-2 px-4 rounded-xl bg-gradient-to-r from-primary to-nature text-white shadow-soft hover:shadow-medium transition-all duration-300 transform hover:-translate-y-0.5"
+                        className="w-full rounded-sm bg-heritage px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.16em] text-heritage-foreground transition-colors duration-300 hover:bg-accent"
                       >
                         Get Started
                       </Button>
@@ -344,7 +344,7 @@ export function Navigation() {
                 <Button
                   onClick={() => navigate("/auth")}
                   className={cn(
-                    "font-semibold rounded-xl bg-gradient-to-r from-primary to-nature text-white shadow-soft hover:shadow-medium transition-all duration-300 transform hover:-translate-y-0.5",
+                    "rounded-sm bg-heritage px-5 text-[12px] font-medium uppercase tracking-[0.16em] text-heritage-foreground transition-colors duration-300 hover:bg-accent",
                     scrolled ? "px-4 py-2 text-sm" : "px-6 py-2 text-sm"
                   )}
                 >

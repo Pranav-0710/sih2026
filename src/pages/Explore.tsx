@@ -22,8 +22,8 @@ const Explore = () => {
       <div className="min-h-screen bg-background py-20 md:py-28">
         <ScrollReveal className="container mx-auto px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <span className="h-px w-8 bg-primary" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-primary">
+            <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
               The Buddhist Circuit
             </span>
           </div>
@@ -65,7 +65,7 @@ const Explore = () => {
                   </div>
 
                   <div className={`md:col-span-6 ${flipped ? "md:order-1 md:col-start-1" : ""}`}>
-                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-primary">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
                       {site.type}
                     </p>
                     <h2 className="mt-3 font-display text-3xl tracking-tight text-foreground md:text-4xl">
