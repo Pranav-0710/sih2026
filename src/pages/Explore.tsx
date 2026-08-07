@@ -1,111 +1,118 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Compass, Headphones, ShieldAlert } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProgressiveImage from "@/components/ProgressiveImage";
-import { Button } from "@/components/ui/button";
+import ScrollReveal from "@/components/ScrollReveal";
 import { locations } from "@/data/monasteries";
+import { getStory } from "@/data/stories";
 
+/**
+ * The Buddhist Circuit index.
+ *
+ * Rebuilt to the editorial system used across the rest of the site: hairline
+ * rules, mono numerals and plain imagery, in place of the blurred ambient
+ * orbs, rounded-3xl cards on heavy shadows, and gradient-filled buttons that
+ * were here before. Each entry now also links to its story tour, which is
+ * the strongest thing to offer from a page whose whole job is "read more
+ * about this monastery".
+ */
 const Explore = () => {
   return (
-    <PageLayout noTopPadding noBackground>
-      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
-        {/* Ambient light */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 left-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
-          <div className="absolute top-1/2 right-0 h-[26rem] w-[26rem] translate-x-1/3 rounded-full bg-heritage/15 blur-[130px]" />
-        </div>
-
-        <div className="relative z-10 container mx-auto px-4 pt-28 pb-24">
-          {/* Header */}
-          <div className="mx-auto mb-16 max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
-              <Compass className="h-3.5 w-3.5" />
+    <PageLayout>
+      <div className="min-h-screen bg-background py-20 md:py-28">
+        <ScrollReveal className="container mx-auto px-6 lg:px-8">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-primary" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-primary">
               The Buddhist Circuit
             </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Explore Sikkim's{" "}
-              <span className="text-gradient-heritage">Monasteries</span>
+          </div>
+
+          <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
+            <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
+              Four monasteries, four centuries of practice
             </h1>
-            <p className="mt-4 text-lg leading-relaxed text-white/60">
-              A closer look at the history, culture and geography behind each
-              site.
+            <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
+              The history, culture and geography behind each site — and a
+              narrated tour through all of them.
             </p>
           </div>
 
-          {/* Sites */}
-          <div className="space-y-24">
+          <div className="mt-16 space-y-20 md:space-y-28">
             {locations.map((site, index) => {
               const flipped = index % 2 === 1;
+              const story = getStory(site.id);
+
               return (
-                <motion.article
+                <article
                   key={site.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.25 }}
-                  transition={{ duration: 0.6 }}
-                  className="grid grid-cols-1 items-center gap-10 md:grid-cols-2"
+                  className="grid grid-cols-1 items-start gap-10 md:grid-cols-12 md:gap-12"
                 >
-                  {/* Image */}
                   <div
-                    className={`relative ${flipped ? "md:order-2" : ""}`}
+                    className={`md:col-span-6 ${flipped ? "md:order-2 md:col-start-7" : ""}`}
                   >
-                    <div
-                      aria-hidden
-                      className="absolute -inset-4 rounded-[2rem] bg-heritage/10 blur-2xl"
-                    />
-                    <div className="group relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+                    <div className="group relative overflow-hidden rounded-sm">
                       <ProgressiveImage
                         src={site.image}
                         alt={site.name}
-                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="aspect-[4/3] w-full object-cover transition-transform [transition-duration:1400ms] ease-out group-hover:scale-[1.05]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                      <span className="absolute left-5 top-5 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
-                        {site.type}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                      <span className="absolute left-4 top-4 font-mono text-[11px] tabular-nums tracking-widest text-white/75">
+                        {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>
                   </div>
 
-                  {/* Copy */}
-                  <div className={flipped ? "md:order-1" : ""}>
-                    <span className="font-display text-6xl font-semibold leading-none text-white/10">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h2 className="mt-2 font-display text-3xl font-semibold text-white md:text-4xl">
+                  <div className={`md:col-span-6 ${flipped ? "md:order-1 md:col-start-1" : ""}`}>
+                    <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-primary">
+                      {site.type}
+                    </p>
+                    <h2 className="mt-3 font-display text-3xl tracking-tight text-foreground md:text-4xl">
                       {site.name}
                     </h2>
-                    <p className="mt-4 leading-relaxed text-white/65">
+                    <p className="mt-5 leading-relaxed text-muted-foreground">
                       {site.educationalContent?.history}
                     </p>
 
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <Button
-                        asChild
-                        className="bg-gradient-to-r from-primary to-accent font-semibold text-white hover:opacity-90"
+                    <div className="mt-8 grid grid-cols-2 border-t border-foreground/10">
+                      <Link
+                        to="/vr-experience"
+                        className="group/link flex flex-col gap-1 border-r border-foreground/10 py-4 pr-4"
                       >
-                        <Link to="/vr-experience">
-                          <Headphones className="mr-2 h-4 w-4" />
-                          Take the virtual tour
-                        </Link>
-                      </Button>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="border-white/20 bg-white/5 font-semibold text-white hover:bg-white/10 hover:text-white"
+                        <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground">
+                          Story tour
+                          <ArrowUpRight
+                            className="h-3 w-3 text-foreground/40 transition-transform duration-500 ease-out group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                            strokeWidth={1.5}
+                          />
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          {story ? `${story.chapters.length} chapters` : "Virtual experience"}
+                        </span>
+                      </Link>
+                      <Link
+                        to="/report-condition"
+                        className="group/link flex flex-col gap-1 py-4 pl-4"
                       >
-                        <Link to="/report-condition">
-                          <ShieldAlert className="mr-2 h-4 w-4" />
-                          Report a condition issue
-                        </Link>
-                      </Button>
+                        <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground">
+                          Report a condition
+                          <ArrowUpRight
+                            className="h-3 w-3 text-foreground/40 transition-transform duration-500 ease-out group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                            strokeWidth={1.5}
+                          />
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          Help preserve this site
+                        </span>
+                      </Link>
                     </div>
                   </div>
-                </motion.article>
+                </article>
               );
             })}
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </PageLayout>
   );

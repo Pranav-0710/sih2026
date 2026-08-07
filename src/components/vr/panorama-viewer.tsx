@@ -594,7 +594,7 @@ export function PanoramaViewer({
   const isSkyboxUrl = location.panoramaImage && location.panoramaImage.startsWith('http')
 
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <div className="fixed inset-0 z-[60] bg-black">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
           <div className="text-center">
