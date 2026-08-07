@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
 import {
   Bot,
   MapPin,
   Users,
   Shield,
   ShieldAlert,
-  Compass,
   Camera,
   ArrowUpRight,
 } from "lucide-react";
@@ -13,96 +11,122 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import ProgressiveImage from "@/components/ProgressiveImage";
 
-const iconColorVariants: Record<string, string> = {
-  primary: "bg-primary/10 text-primary",
-  heritage: "bg-heritage/15 text-heritage",
-  accent: "bg-accent/10 text-accent",
-  nature: "bg-nature/10 text-nature",
-  destructive: "bg-destructive/10 text-destructive",
-  cultural: "bg-cultural/10 text-cultural",
-};
+interface Feature {
+  icon: typeof Bot;
+  title: string;
+  description: string;
+  cta: string;
+  path: string;
+  index: string;
+  featured?: boolean;
+  image?: string;
+  span: string;
+}
 
 /**
- * Bento tile. Content is always visible — nothing is hidden behind a hover,
- * so everything is readable on touch devices and on a projector.
+ * Feature tile.
+ *
+ * Deliberately plain: a hairline border, a numeral, an unfilled icon and a
+ * rule above the CTA. The previous version leaned on tinted icon pills,
+ * heavy shadows, large corner radii and a lift-and-scale hover, which is
+ * the stock "generated landing page" look. Structure now comes from rules
+ * and numbering rather than from cards floating on shadows.
  */
-const BentoTile = ({ feature, index }) => {
-  const featured = feature.featured;
+const FeatureTile = ({ feature, i }: { feature: Feature; i: number }) => {
+  const { featured } = feature;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5, delay: Math.min(index, 4) * 0.08 }}
-      className={cn("min-h-[190px]", feature.span)}
+      transition={{ duration: 0.55, delay: Math.min(i, 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      className={cn("min-h-[13rem]", feature.span)}
     >
       <Link
         to={feature.path}
         className={cn(
-          "group relative flex h-full flex-col justify-end overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:-translate-y-1.5",
+          "group relative flex h-full flex-col justify-between overflow-hidden rounded-sm p-6 md:p-7",
           featured
-            ? "border-white/10 text-white shadow-2xl hover:shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)]"
-            : "border-border bg-card shadow-sm hover:border-primary/30 hover:shadow-xl"
+            ? "text-white"
+            : "border border-foreground/10 bg-card transition-colors duration-500 hover:border-foreground/35"
         )}
       >
-        {/* Featured tiles get real photography behind the copy */}
-        {featured && (
+        {featured && feature.image && (
           <>
-            <img
+            <ProgressiveImage
               src={feature.image}
               alt=""
               aria-hidden
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              wrapperClassName="absolute inset-0"
+              className="h-full w-full object-cover transition-transform [transition-duration:1200ms] ease-out group-hover:scale-[1.06]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/25" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/20" />
           </>
         )}
 
-        <div className="relative">
-          <div
+        <div className="relative flex items-start justify-between">
+          <feature.icon
             className={cn(
-              "mb-4 flex h-11 w-11 items-center justify-center rounded-xl",
-              featured
-                ? "bg-white/15 text-white backdrop-blur"
-                : iconColorVariants[feature.color]
+              "h-5 w-5",
+              featured ? "text-heritage" : "text-foreground/70"
+            )}
+            strokeWidth={1.5}
+          />
+          <span
+            className={cn(
+              "font-mono text-[11px] tabular-nums tracking-widest",
+              featured ? "text-white/45" : "text-foreground/30"
             )}
           >
-            <feature.icon className="h-5 w-5" />
-          </div>
+            {feature.index}
+          </span>
+        </div>
 
+        <div className="relative mt-10">
           <h3
             className={cn(
-              "font-display font-semibold tracking-tight",
+              "font-display tracking-tight",
               featured
-                ? "text-2xl text-white md:text-3xl"
-                : "text-lg text-foreground"
+                ? "text-2xl text-white md:text-[1.75rem]"
+                : "text-xl text-foreground"
             )}
           >
             {feature.title}
           </h3>
-
           <p
             className={cn(
-              "mt-2 leading-relaxed",
-              featured
-                ? "max-w-md text-sm text-white/75"
-                : "text-sm text-muted-foreground"
+              "mt-2.5 text-sm leading-relaxed",
+              featured ? "max-w-md text-white/70" : "text-muted-foreground"
             )}
           >
             {feature.description}
           </p>
 
-          <span
+          <div
             className={cn(
-              "mt-4 inline-flex items-center gap-1.5 text-sm font-semibold transition-transform duration-300 group-hover:translate-x-1",
-              featured ? "text-heritage" : "text-primary"
+              "mt-5 flex items-center justify-between border-t pt-3.5",
+              featured ? "border-white/20" : "border-foreground/10"
             )}
           >
-            {feature.cta}
-            <ArrowUpRight className="h-4 w-4" />
-          </span>
+            <span
+              className={cn(
+                "text-[11px] font-medium uppercase tracking-[0.18em]",
+                featured ? "text-heritage" : "text-foreground/70"
+              )}
+            >
+              {feature.cta}
+            </span>
+            <ArrowUpRight
+              className={cn(
+                "h-4 w-4 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
+                featured ? "text-heritage" : "text-foreground/50"
+              )}
+              strokeWidth={1.5}
+            />
+          </div>
         </div>
       </Link>
     </motion.div>
@@ -112,14 +136,14 @@ const BentoTile = ({ feature, index }) => {
 const FeaturesSection = () => {
   const { t } = useTranslation();
 
-  const features = [
+  const features: Feature[] = [
     {
       icon: Bot,
       title: t("features.kora.title"),
       description: t("features.kora.description"),
       cta: "Chat with Kora",
-      color: "primary",
       path: "/trip-genie",
+      index: "01",
       featured: true,
       image: "/vr-assets/rumtek-monastery.jpg",
       span: "lg:col-span-2 lg:row-span-2",
@@ -129,8 +153,8 @@ const FeaturesSection = () => {
       title: t("features.condition_report.title"),
       description: t("features.condition_report.description"),
       cta: "Submit a report",
-      color: "heritage",
       path: "/report-condition",
+      index: "02",
       featured: true,
       image: "/vr-assets/tashiding-monastery.jpg",
       span: "lg:col-span-2",
@@ -140,8 +164,8 @@ const FeaturesSection = () => {
       title: t("features.virtual_tours.title"),
       description: t("features.virtual_tours.description"),
       cta: "Start the tour",
-      color: "accent",
       path: "/vr-experience",
+      index: "03",
       span: "lg:col-span-1",
     },
     {
@@ -149,8 +173,8 @@ const FeaturesSection = () => {
       title: t("features.heritage.title"),
       description: t("features.heritage.description"),
       cta: "Open the map",
-      color: "cultural",
       path: "/heritage",
+      index: "04",
       span: "lg:col-span-1",
     },
     {
@@ -158,8 +182,8 @@ const FeaturesSection = () => {
       title: t("features.community_wall.title"),
       description: t("features.community_wall.description"),
       cta: "Join the conversation",
-      color: "nature",
       path: "/community",
+      index: "05",
       span: "lg:col-span-2",
     },
     {
@@ -167,45 +191,51 @@ const FeaturesSection = () => {
       title: t("features.emergency_assistance.title"),
       description: t("features.emergency_assistance.description"),
       cta: "See safety info",
-      color: "destructive",
       path: "/emergency",
+      index: "06",
       span: "lg:col-span-2",
     },
   ];
 
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 text-primary mb-4">
-            <Compass className="h-5 w-5" />
-            <span className="font-semibold">{t("features.title")}</span>
+    <section className="bg-background py-24 md:py-32">
+      <div className="container mx-auto px-6 lg:px-8">
+        {/* Section masthead — label, rule, then the statement. */}
+        <div className="mb-16 md:mb-20">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-primary" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-primary">
+              {t("features.title")}
+            </span>
           </div>
-          <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-4 tracking-tight">
-            {t("features.description")}
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            {t("features.long_description")}
-          </p>
+          <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
+            <h2 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
+              {t("features.description")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
+              {t("features.long_description")}
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[minmax(190px,auto)]">
-          {features.map((feature, index) => (
-            <BentoTile key={feature.path} feature={feature} index={index} />
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:auto-rows-[13rem] lg:grid-cols-4">
+          {features.map((feature, i) => (
+            <FeatureTile key={feature.path} feature={feature} i={i} />
           ))}
         </div>
 
-        <div className="text-center mt-16">
-          <Button
-            size="lg"
-            asChild
-            className="font-bold text-lg px-8 py-6 rounded-2xl bg-gradient-to-r from-primary to-nature text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+        <div className="mt-14 flex justify-center">
+          <Link
+            to="/explore"
+            style={{ "--wipe": "hsl(var(--primary))" } as React.CSSProperties}
+            className="btn-wipe group inline-flex items-center gap-3 border border-foreground/25 bg-transparent px-8 py-4 text-[13px] font-medium uppercase tracking-[0.18em] text-foreground hover:border-transparent hover:text-white"
           >
-            <Link to="/explore">
-              <Camera className="h-6 w-6 mr-3" />
-              {t("features.start_exploring_now")}
-            </Link>
-          </Button>
+            {t("features.start_exploring_now")}
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              strokeWidth={1.5}
+            />
+          </Link>
         </div>
       </div>
     </section>

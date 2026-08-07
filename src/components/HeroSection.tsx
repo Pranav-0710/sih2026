@@ -1,13 +1,25 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { HeroMediaCarousel } from "./HeroMediaCarousel";
 import RotatingText from "./RotatingText";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-/** Real sites, ending on the umbrella name — not generic synonym filler. */
-const ROTATING_WORDS = ["Rumtek", "Pemayangtse", "Tashiding", "Enchey", "Sikkim"];
-
-const gradientTextClass =
-  "animate-gradient-text bg-gradient-to-r from-heritage via-accent to-heritage bg-clip-text pr-[0.08em] italic text-transparent";
+/**
+ * "Sikkim" through the languages actually spoken there.
+ *
+ * འབྲས་ལྗོངས (Wylie: 'bras ljongs) — "Drenjong/Denjong", Valley of Rice — is
+ * the Sikkimese Bhutia endonym, verified against Wikipedia's Sikkimese Bhutia
+ * and Sikkim articles rather than transliterated by guesswork.
+ *
+ * Note Nepali and Hindi render the name identically in Devanagari (सिक्किम).
+ * That is correct, not a duplicate — the label beneath the pill is what makes
+ * the repeat legible as two separate languages instead of a frozen rotation.
+ */
+const SIKKIM_NAMES = [
+  { name: "Sikkim", language: "English" },
+  { name: "འབྲས་ལྗོངས", language: "Sikkimese" },
+  { name: "सिक्किम", language: "Nepali" },
+  { name: "सिक्किम", language: "Hindi" },
+];
 
 /**
  * Hero lines rise out from behind a mask, one after the next — the reveal
@@ -45,6 +57,7 @@ const fadeUp = {
 const HeroSection = () => {
   const ref = useRef(null);
   const reduceMotion = useReducedMotion();
+  const [nameIndex, setNameIndex] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -92,49 +105,52 @@ const HeroSection = () => {
                   </span>
                 ))}
               </span>
-              <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-                {/*
-                  This outer motion.span handles the ONE-TIME entrance —
-                  same staggered rise as "Discover the Soul of" above, driven
-                  by the parent container's variants. RotatingText's own
-                  initial/animate/exit only govern its *subsequent* swaps
-                  (animatePresenceInitial stays false), so the first name
-                  doesn't animate in twice.
+              {/*
+                The outer motion.span drives the ONE-TIME entrance, staggered
+                in with "Discover the Soul of" above. RotatingText's own
+                initial/animate/exit govern only its subsequent swaps
+                (animatePresenceInitial stays false), so the first name does
+                not play two entrance animations back to back.
 
-                  splitBy="words" is deliberate: every entry in
-                  ROTATING_WORDS is a single word, so this keeps each name
-                  as one gradient-clipped span rather than fragmenting it
-                  into a per-character gradient, which would look like the
-                  colour was restarting mid-word.
-                */}
-                <motion.span variants={lineVariants} className="inline-block">
-                  <RotatingText
-                    texts={ROTATING_WORDS}
-                    splitBy="words"
-                    rotationInterval={2200}
-                    // Always keeps rotating — this is content change, the
-                    // same rule the hero video carousel follows, not
-                    // decorative motion. Only the slide-vs-fade transition
-                    // style below responds to reduced-motion; gating `auto`
-                    // on it too would freeze the headline on "Rumtek"
-                    // forever for anyone with that preference on.
-                    auto
-                    staggerDuration={0}
-                    initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
-                    animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
-                    exit={reduceMotion ? { opacity: 0 } : { y: "-120%", opacity: 0 }}
-                    transition={
-                      reduceMotion
-                        ? { duration: 0.4 }
-                        : { type: "spring", damping: 30, stiffness: 400 }
-                    }
-                    mainClassName="inline-flex"
-                    splitLevelClassName="overflow-hidden"
-                    elementLevelClassName={gradientTextClass}
-                  />
-                </motion.span>
-              </span>
+                splitBy="words" keeps each name as a single span. Splitting
+                per character would break the Devanagari and Tibetan entries,
+                whose glyphs shape and combine contextually — slicing them
+                into separate elements would render them incorrectly.
+              */}
+              <motion.span variants={lineVariants} className="inline-flex items-baseline gap-4">
+                <RotatingText
+                  texts={SIKKIM_NAMES.map((n) => n.name)}
+                  splitBy="words"
+                  rotationInterval={2600}
+                  auto
+                  staggerDuration={0}
+                  onNext={setNameIndex}
+                  initial={reduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
+                  animate={reduceMotion ? { opacity: 1 } : { y: "0%", opacity: 1 }}
+                  exit={reduceMotion ? { opacity: 0 } : { y: "-110%", opacity: 0 }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0.4 }
+                      : { type: "spring", damping: 30, stiffness: 380 }
+                  }
+                  mainClassName="font-multiscript inline-flex items-center rounded-lg bg-heritage px-4 py-1 not-italic text-[#1a1207] md:px-5"
+                  splitLevelClassName="overflow-hidden pb-[0.1em] -mb-[0.1em]"
+                />
+              </motion.span>
             </h1>
+
+            {/* Names the language currently shown. Without this, the Nepali
+                and Hindi frames — identical in Devanagari — would read as a
+                stalled rotation rather than two distinct languages. */}
+            <motion.div variants={fadeUp} className="mt-5 flex items-center gap-3">
+              <span className="h-px w-8 bg-heritage/60" />
+              <span
+                key={nameIndex}
+                className="animate-fade-in text-[11px] font-medium uppercase tracking-[0.28em] text-heritage"
+              >
+                {SIKKIM_NAMES[nameIndex]?.language}
+              </span>
+            </motion.div>
 
             <motion.p
               variants={fadeUp}

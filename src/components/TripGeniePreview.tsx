@@ -1,115 +1,129 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bot, Sparkles, MessageCircle, ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
+/**
+ * Kora preview.
+ *
+ * The mock conversation mirrors what the deployed edge function actually
+ * answers — grounded in the four monasteries, no invented sites. Emoji
+ * bullets were removed: they read as filler, and the real assistant
+ * replies in prose.
+ */
 const KoraPreview = () => {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
+    <section className="bg-gray-900 py-24 md:py-32">
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true, amount: 0.2 }}
-            className="space-y-8"
+            className="lg:col-span-5"
           >
-            <div className="inline-flex items-center space-x-2 bg-primary/10 rounded-full px-4 py-2 text-primary">
-              <Bot className="h-5 w-5" />
-              <span className="font-semibold">AI Monastery Guide</span>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-heritage" />
+              <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
+                AI Monastery Guide
+              </span>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="font-display text-4xl md:text-5xl font-semibold leading-tight text-gray-800 tracking-tight">
-                Meet <span className="text-primary">Kora</span>, Your Circuit Guide
-              </h2>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                Named for the ritual circuit walked around a monastery, Kora helps you plan a self-guided Buddhist Circuit, answering questions about monastery history, rituals, and routes across Sikkim.
-              </p>
-            </div>
+            <h2 className="mt-8 font-display text-4xl leading-[1.1] tracking-tight text-white md:text-5xl">
+              Meet Kora,
+              <span className="block text-white/55">your circuit guide</span>
+            </h2>
 
-            <div className="grid grid-cols-2 gap-6 pt-4">
-              {[ { icon: Star, text: "Smart Recommendations" },
-                 { icon: MessageCircle, text: "24/7 Chat Support" },
-                 { icon: Sparkles, text: "Instant Itineraries" },
-                 { icon: ArrowRight, text: "Local Insights" } ].map(item => (
-                <div key={item.text} className="flex items-center space-x-3">
-                  <div className="bg-primary/10 p-3 rounded-lg">
-                    <item.icon className="h-5 w-5 text-primary" />
-                  </div>
-                  <span className="font-semibold text-gray-700">{item.text}</span>
+            <p className="mt-6 text-lg leading-relaxed text-white/60">
+              Named for the ritual circuit walked clockwise around a monastery.
+              Kora answers questions on history, lineage, festivals and
+              etiquette — and plans a route across the four sites.
+            </p>
+
+            {/* Concrete capabilities with real answers behind them, rather
+                than the previous generic "24/7 support" style claims. */}
+            <dl className="mt-10 space-y-0 border-t border-white/10">
+              {[
+                { term: "Grounded", detail: "Answers limited to the four monasteries — it says so when it doesn't know." },
+                { term: "Streaming", detail: "Replies arrive word by word, first token in under a second." },
+                { term: "Contextual", detail: "Remembers your budget, dates and interests across the conversation." },
+              ].map((item) => (
+                <div
+                  key={item.term}
+                  className="grid grid-cols-3 gap-4 border-b border-white/10 py-4"
+                >
+                  <dt className="text-[11px] uppercase tracking-[0.18em] text-heritage">
+                    {item.term}
+                  </dt>
+                  <dd className="col-span-2 text-sm leading-relaxed text-white/60">
+                    {item.detail}
+                  </dd>
                 </div>
               ))}
-            </div>
+            </dl>
 
-            <div className="pt-6">
-              <Button 
-                size="lg"
-                asChild
-                className="font-bold text-lg px-8 py-6 rounded-2xl bg-gradient-to-r from-primary to-nature text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 animate-button-glow"
-              >
-                <Link to="/trip-genie">
-                  <Bot className="h-6 w-6 mr-3" />
-                  Chat with Kora
-                </Link>
-              </Button>
-            </div>
+            <Link
+              to="/trip-genie"
+              style={{ "--wipe": "hsl(var(--heritage))" } as React.CSSProperties}
+              className="btn-wipe group mt-10 inline-flex items-center gap-3 border border-white/30 px-8 py-4 text-[13px] font-medium uppercase tracking-[0.18em] text-white hover:border-transparent hover:text-[#1a1207]"
+            >
+              Chat with Kora
+              <ArrowUpRight
+                className="h-4 w-4 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                strokeWidth={1.5}
+              />
+            </Link>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }} 
-            whileInView={{ opacity: 1, scale: 1 }} 
-            transition={{ duration: 0.6, ease: "easeOut" }} 
-            viewport={{ once: true, amount: 0.4 }}
-            className="relative"
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true, amount: 0.25 }}
+            className="lg:col-span-6 lg:col-start-7"
           >
-            <Card className="bg-gray-800/90 backdrop-blur-2xl border-white/10 shadow-2xl shadow-black/30 rounded-3xl text-white">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="bg-heritage p-3 rounded-full shadow-lg">
-                    <Bot className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">Kora</h4>
-                    <div className="flex items-center space-x-1.5">
-                      <div className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
-                      <span className="text-sm text-white/70">Online</span>
-                    </div>
-                  </div>
+            <div className="rounded-sm border border-white/10 bg-white/[0.03] p-6 md:p-8">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <span className="font-display text-lg text-white">Kora</span>
+                <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <span className="h-1.5 w-1.5 rounded-full bg-heritage" />
+                  Online
+                </span>
+              </div>
+
+              <div className="mt-6 space-y-5 text-sm">
+                <div className="flex justify-end">
+                  <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
+                    I only have 2 days and I'm starting in Gangtok — which
+                    monastery should I visit first?
+                  </p>
                 </div>
 
-                <div className="space-y-4 text-sm">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 ml-8 max-w-xs self-end rounded-br-none">
-                    <p>I only have 2 days and I'm starting in Gangtok — which monastery should I visit first?</p>
-                  </div>
-
-                  <div className="bg-heritage/20 backdrop-blur-sm rounded-xl p-4 mr-8 max-w-md self-start rounded-bl-none">
-                    <p className="font-semibold mb-2">Start with what's near Gangtok:</p>
-                    <ul className="text-white/90 space-y-1.5 text-xs">
-                      <li>🏛️ Rumtek Monastery — seat of the Karma Kagyu lineage</li>
-                      <li>🙏 Enchey Monastery — known for its Cham dances</li>
-                      <li className="font-bold pt-1">📍 Both reachable in a single day near Gangtok</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 ml-8 max-w-xs self-end rounded-br-none">
-                    <p>Perfect, and what about day two?</p>
-                  </div>
+                <div className="max-w-[92%] border-l-2 border-heritage pl-4">
+                  <p className="leading-relaxed text-white/75">
+                    Start with the two closest to Gangtok. Rumtek, the seat of
+                    the Karma Kagyu lineage, sits about 24&nbsp;km out across the
+                    valley. Enchey is barely 3&nbsp;km from town and is known for
+                    its masked Cham dances. Both fit comfortably into one day.
+                  </p>
                 </div>
 
-                <div className="flex items-center space-x-2 mt-4 pt-2">
-                  <div className="flex space-x-1.5">
-                    <div className="w-2 h-2 bg-heritage rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-heritage rounded-full animate-bounce [animation-delay:0.1s]"></div>
-                    <div className="w-2 h-2 bg-heritage rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                  </div>
-                  <span className="text-xs text-white/60">Kora is typing...</span>
+                <div className="flex justify-end">
+                  <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
+                    Perfect, and what about day two?
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="flex items-center gap-1.5 pt-1">
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage" />
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.15s]" />
+                  <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.3s]" />
+                  <span className="ml-2 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                    Kora is typing
+                  </span>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

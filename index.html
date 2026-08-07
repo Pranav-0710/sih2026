@@ -32,7 +32,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Poppins ships a Devanagari subset (covers the Nepali/Hindi names);
+         Noto Serif Tibetan is loaded for the Sikkimese Bhutia name
+         འབྲས་ལྗོངས, which neither Poppins nor Playfair Display contains and
+         which would otherwise render as empty .notdef boxes. -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Noto+Serif+Tibetan:wght@500;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>

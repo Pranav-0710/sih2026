@@ -302,6 +302,41 @@
     --tw-prose-td-borders: theme(colors.white);
   }
 
+  /*
+   * Directional wipe on hover, replacing the gradient-fill + scale-up
+   * buttons used previously. Implemented with background-position rather
+   * than a ::before overlay: pseudo-element approaches need z-index games
+   * to sit behind the label, and bare text nodes inside <Button> can't be
+   * lifted above them with a child selector.
+   *
+   * --wipe sets the incoming colour; the element's own background shows
+   * until the wipe crosses it.
+   */
+  .btn-wipe {
+    background-image: linear-gradient(
+      to right,
+      var(--wipe, hsl(20 15% 12%)) 50%,
+      transparent 50%
+    );
+    background-size: 202% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+      color 0.35s ease, border-color 0.35s ease;
+  }
+  .btn-wipe:hover {
+    background-position: 0 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-wipe {
+      transition-duration: 0.01ms;
+    }
+  }
+
+  /* Hairline rule used to structure the editorial sections. */
+  .rule {
+    @apply border-t border-foreground/10;
+  }
+
   /* Frosted panel used across the dark heritage/explore surfaces */
   .glass-panel {
     @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
@@ -351,6 +386,33 @@
     .page-content {
       padding-top: 6rem;
     }
+  }
+}
+
+/* Multi-script stack for the rotating Sikkim name. The browser resolves
+   fonts per glyph, so Latin takes Playfair Display, Tibetan falls through to
+   Noto Serif Tibetan, and Devanagari lands on Poppins' Devanagari subset —
+   no per-language className switching needed. */
+.font-multiscript {
+  font-family: "Playfair Display", "Noto Serif Tibetan", "Poppins", Georgia, serif;
+}
+
+@keyframes label-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: label-fade-in 0.5s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation-duration: 0.01ms;
   }
 }
 
