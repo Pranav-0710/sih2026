@@ -8,6 +8,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import ProgressiveImage from "@/components/ProgressiveImage";
+import ScrollReveal from "@/components/ScrollReveal";
 import { cn } from "@/lib/utils";
 
 /** Founding years and lineages match the sourced data in data/monasteries.ts. */
@@ -68,7 +69,7 @@ const MonasteryShowcase = () => {
                 aria-label={`Explore ${site.name} Monastery`}
                 className="group relative block w-full overflow-hidden rounded-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                <div className="relative aspect-[4/5] overflow-hidden">
+                <ScrollReveal className="aspect-[4/5]" delay={i * 0.08}>
                   <ProgressiveImage
                     src={site.image}
                     alt={site.name}
@@ -92,7 +93,7 @@ const MonasteryShowcase = () => {
                       {site.meta}
                     </p>
                   </div>
-                </div>
+                </ScrollReveal>
               </button>
             </CarouselItem>
           ))}

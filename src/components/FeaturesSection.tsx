@@ -8,10 +8,10 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import ProgressiveImage from "@/components/ProgressiveImage";
+import ScrollReveal from "@/components/ScrollReveal";
 
 interface Feature {
   icon: typeof Bot;
@@ -38,12 +38,9 @@ const FeatureTile = ({ feature, i }: { feature: Feature; i: number }) => {
   const { featured } = feature;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.55, delay: Math.min(i, 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-      className={cn("min-h-[13rem]", feature.span)}
+    <ScrollReveal
+      delay={Math.min(i, 4) * 0.07}
+      className={cn("min-h-[13rem] rounded-sm", feature.span)}
     >
       <Link
         to={feature.path}
@@ -129,7 +126,7 @@ const FeatureTile = ({ feature, i }: { feature: Feature; i: number }) => {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </ScrollReveal>
   );
 };
 
