@@ -16,21 +16,22 @@ export function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        {/* h-11 w-11 rather than shadcn's size="icon" (h-9 = 36px), which is
+            under the 44x44 minimum touch target on mobile. */}
+        <Button variant="ghost" size="icon" className="h-11 w-11 rounded-sm">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
+      {/* No "System" entry: the provider runs with enableSystem={false}, so
+          setTheme("system") was a dead option that silently did nothing. */}
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

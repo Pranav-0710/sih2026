@@ -123,7 +123,7 @@ export function Navigation() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                  className="h-11 w-11 rounded-sm text-foreground/80 transition-colors duration-300 hover:bg-primary/10 hover:text-foreground"
                 >
                   <Globe className="h-5 w-5" />
                   <span className="sr-only">Translate</span>
@@ -141,7 +141,7 @@ export function Navigation() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                  className="h-11 w-11 rounded-sm text-foreground/80 transition-colors duration-300 hover:bg-primary/10 hover:text-foreground"
                 >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle Menu</span>
@@ -294,7 +294,7 @@ export function Navigation() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
+                    className="h-11 w-11 rounded-sm text-foreground/80 transition-colors duration-300 hover:bg-primary/10 hover:text-foreground"
                   >
                     <Globe className="h-5 w-5" />
                     <span className="sr-only">Translate</span>
