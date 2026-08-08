@@ -20,7 +20,11 @@
     "siteNavigation": "Site navigation",
     "toggleMenu": "Toggle Menu",
     "translate": "Translate",
-    "monastery360": "Monastery360"
+    "monastery360": "Monastery360",
+    "sikkim": "Sikkim",
+    "sikkimHighlight": "Sikkim",
+    "and": "and",
+    "signIn": "Sign in"
   },
   "nav": {
     "home": "Home",
@@ -112,7 +116,7 @@
     "chatWithKora": "Chat with Kora",
     "koraIsTyping": "Kora is typing",
     "mockQuestion1": "I only have 2 days and I'm starting in Gangtok — which monastery should I visit first?",
-    "mockAnswer1": "Start with the two closest to Gangtok. Rumtek, the seat of the Karma Kagyu lineage, sits about 24\u00a0km out across the valley. Enchey is barely 3\u00a0km from town and is known for its masked Cham dances. Both fit comfortably into one day.",
+    "mockAnswer1": "Start with the two closest to Gangtok. Rumtek, the seat of the Karma Kagyu lineage, sits about 24 km out across the valley. Enchey is barely 3 km from town and is known for its masked Cham dances. Both fit comfortably into one day.",
     "mockQuestion2": "Perfect, and what about day two?"
   },
   "footer": {
@@ -201,7 +205,20 @@
     "suggestedQ2": "What's the difference between Nyingma and Kagyu monasteries?",
     "suggestedQ3": "Best time to visit for the Bumchu festival",
     "suggestedQ4": "Monastery etiquette I should know before visiting",
-    "suggestedQ5": "Which monastery has the most impressive architecture?"
+    "suggestedQ5": "Which monastery has the most impressive architecture?",
+    "micPermissionError": "Microphone Permission Blocked",
+    "micPermissionErrorDesc": "Please allow microphone access in your browser settings to use voice-to-text.",
+    "speechError": "Voice Input Error",
+    "speechErrorDesc": "There was an error recognizing speech. Please try again.",
+    "unsupportedSpeech": "Unsupported Browser",
+    "unsupportedSpeechDesc": "Speech recognition is not supported in this browser. Please use Chrome, Safari or Edge.",
+    "ttsUnsupported": "Speech synthesis unsupported",
+    "ttsUnsupportedDesc": "Text-to-speech is not supported by your browser.",
+    "stopReading": "Stop reading",
+    "readAloud": "Read aloud",
+    "stopListening": "Stop listening",
+    "startListening": "Start voice typing",
+    "listening": "Listening..."
   },
   "community": {
     "title": "Community Wall",
@@ -271,7 +288,25 @@
     "locationCaptured": "Location captured",
     "locationCapturedDesc": "Your coordinates have been copied to clipboard",
     "locationError": "Location error",
-    "locationErrorDesc": "Unable to get your location. Please enable location services."
+    "locationErrorDesc": "Unable to get your location. Please enable location services.",
+    "locationName": {
+      "stnmhospital": "STNM Hospital",
+      "sikkimtouristinformationcentre": "Sikkim Tourist Information Centre",
+      "pakyongairport": "Pakyong Airport",
+      "policecontrolroom": "Police Control Room"
+    },
+    "locationType": {
+      "hospital": "Hospital",
+      "touristinfo": "Tourist Info",
+      "airport": "Airport",
+      "police": "Police"
+    },
+    "locationAddress": {
+      "stnmhospital": "Sochakgang, Gangtok, Sikkim",
+      "sikkimtouristinformationcentre": "M.G. Marg, Gangtok, East Sikkim",
+      "pakyongairport": "Pakyong, ~31 km south of Gangtok",
+      "policecontrolroom": "Gangtok, East Sikkim"
+    }
   },
   "calendar": {
     "label": "Cultural Calendar",
@@ -295,7 +330,15 @@
     "clearSearch": "Clear search",
     "showingKeyword": "Showing keyword results",
     "aiUnavailable": "AI search is unavailable right now.",
-    "creditsNote": "All images are sourced from Wikimedia Commons under Creative Commons licences and remain the copyright of their photographers. Each entry links to its source page for full licence terms."
+    "creditsNote": "All images are sourced from Wikimedia Commons under Creative Commons licences and remain the copyright of their photographers. Each entry links to its source page for full licence terms.",
+    "category": {
+      "all": "All",
+      "chortenstupa": "Chorten & Stupa",
+      "interiorshrine": "Interior & Shrine",
+      "muralpainting": "Mural & Painting",
+      "ritualobject": "Ritual Object",
+      "statueiconography": "Statue & Iconography"
+    }
   },
   "games": {
     "label": "Game Corner",
@@ -325,7 +368,9 @@
     "feelsLike": "Feels like:",
     "wind": "Wind:",
     "humidity": "Humidity:",
-    "forecast": "5-Day Forecast"
+    "forecast": "5-Day Forecast",
+    "errorFetch": "Could not fetch weather data.",
+    "errorUnexpected": "An unexpected error occurred."
   },
   "notFound": {
     "title": "This trail doesn't lead anywhere",
@@ -352,7 +397,13 @@
     "crowdsourcedConservation": "Crowdsourced Conservation",
     "aiPoweredPlanning": "AI-Powered Planning",
     "discoverSoul": "Discover the Soul of",
-    "heroSubtitle": "Step inside centuries-old monasteries, explore Himalayan Buddhist heritage, and help preserve it for the next generation."
+    "heroSubtitle": "Step inside centuries-old monasteries, explore Himalayan Buddhist heritage, and help preserve it for the next generation.",
+    "creatingAccount": "Creating account...",
+    "createAccount": "Create Account",
+    "signUpWithGoogle": "Sign up with Google",
+    "termsAgreementPrefix": "By continuing, you agree to our",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy"
   },
   "profile": {
     "title": "Profile",
@@ -386,17 +437,135 @@
     "submitted": "Report submitted successfully. Thank you for helping preserve Sikkim's heritage!"
   },
   "privacy": {
-    "title": "Privacy Policy"
+    "title": "Privacy Policy",
+    "intro": "This privacy policy has been compiled to better serve those who are concerned with how their 'Personally identifiable information' (PII) is being used online. PII, as used in US privacy law and information security, is information that can be used on its own or with other information to identify, contact, or locate a single person, or to identify an individual in context. Please read our privacy policy carefully to get a clear understanding of how we collect, use, protect or otherwise handle your Personally Identifiable Information in accordance with our website.",
+    "whatInfoTitle": "What personal information do we collect from the people that visit our blog, website or app?",
+    "whatInfoDesc": "When ordering or registering on our site, as appropriate, you may be asked to enter your name, email address, mailing address, phone number or other details to help you with your experience.",
+    "whenCollectTitle": "When do we collect information?",
+    "whenCollectDesc": "We collect information from you when you register on our site, place an order, subscribe to a newsletter, respond to a survey, fill out a form or enter information on our site.",
+    "howUseTitle": "How do we use your information?",
+    "howUseDesc": "We may use the information we collect from you when you register, make a purchase, sign up for our newsletter, respond to a survey or marketing communication, surf the website, or use certain other site features in the following ways:",
+    "usePoint1": "To personalize user's experience and to allow us to deliver the type of content and product offerings in which you are most interested.",
+    "usePoint2": "To improve our website in order to better serve you.",
+    "usePoint3": "To allow us to better service you in responding to your customer service requests.",
+    "usePoint4": "To administer a contest, promotion, survey or other site feature.",
+    "usePoint5": "To quickly process your transactions.",
+    "usePoint6": "To send periodic emails regarding your order or other products and services."
   },
   "terms": {
-    "title": "Terms of Service"
+    "title": "Terms of Service",
+    "intro": "Please read these terms of service carefully before using our website.",
+    "conditionsTitle": "Conditions of Use",
+    "conditionsDesc": "We will provide their services to you, which are subject to the conditions stated below in this document. Every time you visit this website, use its services or make a purchase, you accept the following conditions. This is why we urge you to read them carefully.",
+    "privacyTitle": "Privacy Policy",
+    "privacyDesc": "Before you continue using our website we advise you to read our privacy policy regarding our user data collection. It will help you better understand our practices.",
+    "copyrightTitle": "Copyright",
+    "copyrightDesc": "Content published on this website (digital downloads, images, texts, graphics, logos) is the property of and/or its content creators and protected by international copyright laws. The entire compilation of the content found on this website is the exclusive property of , with copyright authorship for this compilation by .",
+    "communicationsTitle": "Communications",
+    "communicationsDesc": "The entire communication with us is electronic. Every time you send us an email or visit our website, you are going to be communicating with us. You hereby consent to receive communications from us. If you subscribe to the news on our website, you are going to receive regular emails from us. We will continue to communicate with you by posting news and notices on our website and by sending you emails. You also agree that all notices, disclosures, agreements and other communications we provide to you electronically meet the legal requirements that such communications be in writing."
   },
   "cookies": {
-    "title": "Cookie Policy"
+    "title": "Cookie Policy",
+    "intro": "This is the Cookie Policy for Monastery360, accessible from the website.",
+    "whatTitle": "What Are Cookies",
+    "whatDesc": "As is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience. This page describes what information they gather, how we use it and why we sometimes need to store these cookies. We will also share how you can prevent these cookies from being stored however this may downgrade or 'break' certain elements of the sites functionality.",
+    "howTitle": "How We Use Cookies",
+    "howDesc": "We use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site. It is recommended that you leave on all cookies if you are not sure whether you need them or not in case they are used to provide a service that you use.",
+    "disablingTitle": "Disabling Cookies",
+    "disablingDesc": "You can prevent the setting of cookies by adjusting the settings on your browser (see your browser Help for how to do this). Be aware that disabling cookies will affect the functionality of this and many other websites that you visit. Disabling cookies will usually result in also disabling certain functionality and features of this site. Therefore it is recommended that you do not disable cookies."
   },
   "errorBoundary": {
     "title": "Something went wrong",
     "description": "An unexpected error occurred. Please try refreshing the page.",
     "reload": "Reload page"
+  },
+  "report": {
+    "locationErrorTitle": "Couldn't get location",
+    "locationErrorDesc": "You can still submit the report without it.",
+    "authRequired": "Sign in required",
+    "authRequiredDesc": "Please sign in to submit a condition report.",
+    "selectMonastery": "Select a monastery",
+    "descTooShort": "Description too short",
+    "descTooShortDesc": "Please describe the issue in a bit more detail.",
+    "submitted": "Report submitted",
+    "submittedNoClassify": "Saved, but AI severity classification didn't complete. An admin will review it.",
+    "submittedAndClassified": "Report submitted and classified",
+    "submissionFailed": "Submission failed",
+    "tryAgain": "Please try again.",
+    "title": "Report a Condition Issue",
+    "subtitle": "Spotted damage, erosion, or overcrowding at a monastery? Your report helps Sikkim's Department of Cultural Affairs & Heritage prioritize restoration.",
+    "newReport": "New Report",
+    "newReportDesc": "Reports are reviewed by an AI severity model immediately after submission.",
+    "monasteryLabel": "Monastery",
+    "selectMonasteryPlaceholder": "Select a monastery",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe what you observed — e.g. cracked wall, water damage to murals, overcrowding near the shrine...",
+    "photoLabel": "Photo (optional)",
+    "changePhoto": "Change photo",
+    "addPhoto": "Add photo",
+    "locationLabel": "Location (optional)",
+    "captureLocation": "Capture current location",
+    "aiAssessment": "AI severity assessment",
+    "submitReport": "Submit Report",
+    "toSubmitReport": "to submit a report."
+  },
+  "aria": {
+    "goTo": "Go to",
+    "previousExperience": "Previous experience",
+    "nextExperience": "Next experience",
+    "previousMonastery": "Previous monastery",
+    "nextMonastery": "Next monastery"
+  },
+  "monasteries": {
+    "rumtek": {
+      "name": "Rumtek Monastery",
+      "type": "Karma Kagyu Seat",
+      "sect": "Karma Kagyu",
+      "history": "The original monastery at Rumtek was built in 1734 by Wangchuk Dorje, the 9th Karmapa, under the patronage of the fourth Chogyal, Gyurmed Namgyal. By the 1950s it had fallen almost entirely into ruin. When the 16th Karmapa fled Tibet in 1959 following the Chinese occupation, he chose Rumtek as his seat in exile and rebuilt it from the ground up. Construction was completed in 1966, and the sacred relics and ritual objects carried out of Tibet were installed in the new shrine that same year."
+    },
+    "pemayangtse": {
+      "name": "Pemayangtse Monastery",
+      "type": "Nyingma Monastery",
+      "sect": "Nyingma",
+      "history": "Pemayangtse began around 1650 as a small shrine called Tsangkhang, founded by Lhatsun Chenpo, one of the three lamas who consecrated the first Chogyal of Sikkim. In 1705 it was moved to its present hilltop site and formally established as a monastery by Chogyal Chakdor Namgyal together with Lama Khanchen Rolpai Dorje, its first head lama, in honour of Guru Padmasambhava. Its name means 'Perfect Sublime Lotus'."
+    },
+    "tashiding": {
+      "name": "Tashiding Monastery",
+      "type": "Sacred Monastery",
+      "sect": "Nyingma",
+      "history": "Tashiding was founded in 1641 by Ngadak Sempa Chempo Phunshok Rigzing of the Nyingma school. Its name means 'The Devoted Central Glory'. The monastery occupies a heart-shaped hill between the Rathong and Rangeet rivers — a site said to have been identified by Guru Padmasambhava himself, who is believed to have shot an arrow into the air and built where it landed."
+    },
+    "enchey": {
+      "name": "Enchey Monastery",
+      "type": "Nyingma Monastery",
+      "sect": "Nyingma",
+      "history": "The site owes its origin to Lama Druptob Karpo, a tantric master of the Nyingma order renowned in local tradition for the power of flight, who established a hermitage on this ridge. The present monastery was constructed in 1909 during the rule of Sidkeong Tulku, and was built in a Chinese pagoda style that sets it apart from Sikkim's older monasteries. Its name, Enchey, means 'the solitary temple'."
+    }
+  },
+  "festivals": {
+    "bumchu": {
+      "timing": "Fourteenth and fifteenth days of the first month",
+      "name": "Bumchu",
+      "summary": "A sacred vase of holy water is opened, and its level read as a prophecy for the year ahead.",
+      "detail": "Held at Sikkim's holiest monastery, Bumchu centres on a sealed vase of holy water opened once a year. The level of water inside is read as a forecast: full foretells prosperity, low foretells hardship. The approach to the monastery is lined with mani stone slabs, each hand-carved with mantras."
+    },
+    "losar": {
+      "timing": "February to March",
+      "name": "Losar — Tibetan New Year",
+      "summary": "Masked Cham dances fill the courtyard as monks enact the subjugation of obstructive forces.",
+      "detail": "Rumtek's open forecourt hosts masked Cham dances during the Tibetan new year, with monks in elaborate costume performing the subjugation of obstructive forces. The monastery is the principal seat of the Karma Kagyu order, and the courtyard is open to visitors during festival days."
+    },
+    "cham": {
+      "timing": "December to January",
+      "name": "Cham & Singhe Chaam",
+      "summary": "The masked Cham, danced to dispel obstructive forces, alongside the Singhe Chaam snow lion dance.",
+      "detail": "Enchey is best known for its festival dances: the masked Cham, performed to dispel obstructive forces, and the Singhe Chaam or snow lion dance. Both are performed in the monastery's courtyard by monks of the Nyingma order."
+    },
+    "pang-lhabsol": {
+      "timing": "Follows the Tibetan lunar calendar",
+      "name": "Pang Lhabsol",
+      "summary": "A distinctly Sikkimese festival honouring Kanchenjunga as the state's guardian deity.",
+      "detail": "Pang Lhabsol venerates Mount Kanchenjunga as Sikkim's protective deity — a rare instance of a mountain itself being honoured as a guardian. It is among the most distinctly Sikkimese observances in the Buddhist calendar."
+    }
   }
 }

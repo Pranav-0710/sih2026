@@ -109,11 +109,11 @@ const Auth = () => {
               </div>
 
               <h2 className="text-4xl font-bold mb-4 leading-tight">
-                {t("auth.promoDiscoverSoul", "Discover the Soul of")} <br />
+                {t("auth.discoverSoul", "Discover the Soul of")} <br />
                 <span className="text-accent">{t("common.sikkimHighlight", "Sikkim")}</span>
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                {t("auth.promoDesc", "Step inside centuries-old monasteries, explore Himalayan Buddhist heritage, and help preserve it for the next generation.")}
+                {t("auth.heroSubtitle", "Step inside centuries-old monasteries, explore Himalayan Buddhist heritage, and help preserve it for the next generation.")}
               </p>
             </motion.div>
 
@@ -127,19 +127,19 @@ const Auth = () => {
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Trees className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">{t("auth.promoFlagships", "4 Flagship Monasteries")}</span>
+                <span className="text-white/90">{t("auth.flagshipMonasteries", "4 Flagship Monasteries")}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Star className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">{t("auth.promoConservation", "Crowdsourced Conservation")}</span>
+                <span className="text-white/90">{t("auth.crowdsourcedConservation", "Crowdsourced Conservation")}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <MapPin className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">{t("auth.promoAI", "AI-Powered Planning")}</span>
+                <span className="text-white/90">{t("auth.aiPoweredPlanning", "AI-Powered Planning")}</span>
               </div>
             </motion.div>
           </div>
@@ -182,7 +182,7 @@ const Auth = () => {
                     {t("auth.welcomeBack", "Welcome Back")}
                   </CardTitle>
                   <CardDescription className="text-lg text-muted-foreground">
-                    {t("auth.welcomeSubtitle", "Sign in to explore Sikkim's monastery heritage")}
+                    {t("auth.signInSubtitle", "Sign in to explore Sikkim's monastery heritage")}
                   </CardDescription>
                 </CardHeader>
 
@@ -231,7 +231,7 @@ const Auth = () => {
                             htmlFor="password"
                             className="text-sm font-medium text-foreground"
                           >
-                            {t("auth.passwordLabel", "Password")}
+                            {t("auth.password", "Password")}
                           </Label>
                           <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -332,7 +332,7 @@ const Auth = () => {
                             <Input
                               id="fullName"
                               type="text"
-                              placeholder={t("auth.fullNamePlaceholder", "Your full name")}
+                              placeholder={t("auth.namePlaceholder", "Your full name")}
                               className="pl-10 h-11 bg-background/50 border-border/50 focus:border-heritage focus:ring-heritage/20"
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
@@ -367,7 +367,7 @@ const Auth = () => {
                             htmlFor="password"
                             className="text-sm font-medium text-foreground"
                           >
-                            {t("auth.passwordLabel", "Password")}
+                            {t("auth.password", "Password")}
                           </Label>
                           <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

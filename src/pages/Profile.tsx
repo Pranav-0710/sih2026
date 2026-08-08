@@ -29,8 +29,9 @@ const Profile = () => {
       try {
         await updateUser({ data: { full_name: newName } });
         toast({ title: t("common.success", "Success"), description: t("profile.nameUpdated", "Your name has been updated.") });
-      } catch (error: any) {
-        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        toast({ title: t("common.error", "Error"), description: message, variant: "destructive" });
       }
     }
   };
@@ -43,9 +44,10 @@ const Profile = () => {
       try {
         await reauthenticate();
         await updateUserEmail(newEmail);
-        toast({ title: t("common.success", "Success"), description: t("profile.emailUpdateSent", "A confirmation email has been sent to your new email address.") });
-      } catch (error: any) {
-        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
+        toast({ title: t("common.success", "Success"), description: t("profile.emailUpdated", "A confirmation email has been sent to your new email address.") });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        toast({ title: t("common.error", "Error"), description: message, variant: "destructive" });
       }
     }
   };
@@ -59,8 +61,9 @@ const Profile = () => {
         await reauthenticate();
         await updateUser({ password: newPassword });
         toast({ title: t("common.success", "Success"), description: t("profile.passwordUpdated", "Your password has been updated.") });
-      } catch (error: any) {
-        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        toast({ title: t("common.error", "Error"), description: message, variant: "destructive" });
       }
     }
   };

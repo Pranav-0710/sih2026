@@ -157,7 +157,7 @@ export const Heritage: React.FC = () => {
 
   return (
     <PageLayout noTopPadding noBackground>
-      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
+      <div className="relative min-h-screen overflow-hidden bg-background">
         {/* Ambient light — keeps the dark canvas from reading as empty space */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-40 left-1/4 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
@@ -168,17 +168,17 @@ export const Heritage: React.FC = () => {
         <div className="relative z-10 container mx-auto px-4 pt-28 pb-16">
           {/* Header */}
           <div className="mx-auto mb-10 max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
               <Compass className="h-3.5 w-3.5" />
               {t("heritage.label")}
             </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
               {t("heritage.title")}{" "}
               <span className="bg-gradient-to-r from-heritage to-accent bg-clip-text text-transparent">
                 {t("heritage.titleHighlight")}
               </span>
             </h1>
-            <p className="mt-3 text-white/60">
+            <p className="mt-3 text-muted-foreground">
               {t("heritage.subtitle")}
             </p>
           </div>
@@ -186,13 +186,13 @@ export const Heritage: React.FC = () => {
           <div className="grid items-start gap-6 lg:grid-cols-12">
             {/* ---------- Left: search, filters, site list ---------- */}
             <div className="space-y-4 lg:col-span-3">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
+              <div className="rounded-2xl border border-border bg-card p-4 backdrop-blur-xl">
                 <div className="relative">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder={t("heritage.searchPlaceholder", "Search monasteries...")}
-                    className="border-white/15 bg-white/5 pl-9 text-white placeholder:text-white/40 focus-visible:ring-heritage/40"
+                    className="border-border bg-card pl-9 text-foreground placeholder:text-muted-foreground focus-visible:ring-heritage/40"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     disabled={isTourRunning}
@@ -209,7 +209,7 @@ export const Heritage: React.FC = () => {
                         "rounded-full px-3 py-1 text-xs font-medium transition-all disabled:opacity-40",
                         activeCategory === category
                           ? "bg-heritage text-black"
-                          : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                          : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
                       )}
                     >
                       {t(`heritage.category${category}`, category)}
@@ -241,7 +241,7 @@ export const Heritage: React.FC = () => {
               {/* Site list */}
               <div className="space-y-2">
                 {filteredSpots.length === 0 && (
-                  <p className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/50">
+                  <p className="rounded-xl border border-border bg-card p-4 text-center text-sm text-muted-foreground">
                     {t("heritage.noResults", "No monasteries match that search.")}
                   </p>
                 )}
@@ -259,7 +259,7 @@ export const Heritage: React.FC = () => {
                         "flex w-full items-center gap-3 rounded-xl border p-2.5 text-left transition-all",
                         isActive
                           ? "border-heritage/60 bg-heritage/10 shadow-[0_0_24px_-6px] shadow-heritage/40"
-                          : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.07]"
+                          : "border-border bg-card hover:border-foreground/30 hover:bg-muted"
                       )}
                     >
                       <img
@@ -268,10 +268,10 @@ export const Heritage: React.FC = () => {
                         className="h-12 w-12 shrink-0 rounded-lg object-cover"
                       />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-white">
+                        <p className="truncate text-sm font-semibold text-foreground">
                           {t("monasteries." + spotId + ".name", spot.name).replace(" Monastery", "").replace(" मठ", "")}
                         </p>
-                        <p className="truncate text-xs text-white/50">
+                        <p className="truncate text-xs text-muted-foreground">
                           {spot.founded} · {t("monasteries." + spotId + ".sect", spot.order)}
                         </p>
                       </div>
@@ -363,7 +363,7 @@ export const Heritage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -14 }}
                     transition={{ duration: 0.3 }}
-                    className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl"
+                    className="overflow-hidden rounded-2xl border border-border bg-card backdrop-blur-xl"
                   >
                     {(() => {
                       const spotId = selected.name.split(" ")[0].toLowerCase();
@@ -375,14 +375,14 @@ export const Heritage: React.FC = () => {
                               alt={t("monasteries." + spotId + ".name", selected.name)}
                               className="h-full w-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1a]/20 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
                             <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
                               {t("heritage.category" + selected.category, selected.category)}
                             </span>
                           </div>
 
                           <div className="p-5">
-                            <h2 className="font-display text-2xl font-semibold text-white">
+                            <h2 className="font-display text-2xl font-semibold text-foreground">
                               {t("monasteries." + spotId + ".name", selected.name)}
                             </h2>
 
@@ -397,34 +397,34 @@ export const Heritage: React.FC = () => {
                                 .map((f) => (
                                   <div
                                     key={f.label}
-                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+                                    className="rounded-lg border border-border bg-card px-3 py-2"
                                   >
-                                    <p className="text-[10px] uppercase tracking-wider text-white/40">
+                                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                                       {f.label}
                                     </p>
-                                    <p className="text-xs font-medium text-white/90">
+                                    <p className="text-xs font-medium text-foreground/90">
                                       {f.value}
                                     </p>
                                   </div>
                                 ))}
                             </div>
 
-                            <p className="mt-4 text-sm leading-relaxed text-white/70">
+                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                               {t("monasteries." + spotId + ".history", selected.desc)}
                             </p>
 
                             {/* Live weather */}
-                            <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                              <p className="mb-2 text-[10px] uppercase tracking-wider text-white/40">
+                            <div className="mt-4 rounded-xl border border-border bg-card p-3">
+                              <p className="mb-2 text-[10px] uppercase tracking-wider text-muted-foreground">
                                 {t("heritage.conditionsNow", "Conditions right now")}
                               </p>
                               {loading && (
-                                <p className="text-sm text-white/50">
+                                <p className="text-sm text-muted-foreground">
                                   {t("heritage.loadingWeather", "Loading weather...")}
                                 </p>
                               )}
                               {error && (
-                                <p className="text-sm text-white/50">
+                                <p className="text-sm text-muted-foreground">
                                   {t("heritage.weatherUnavailable", "Weather unavailable right now.")}
                                 </p>
                               )}
@@ -436,10 +436,10 @@ export const Heritage: React.FC = () => {
                                     className="h-10 w-10"
                                   />
                                   <div>
-                                    <p className="text-lg font-semibold text-white">
+                                    <p className="text-lg font-semibold text-foreground">
                                       {Math.round(weather.main.temp)}°C
                                     </p>
-                                    <p className="text-xs capitalize text-white/60">
+                                    <p className="text-xs capitalize text-muted-foreground">
                                       {weather.weather[0].description} · {t("heritage.feelsLike", "feels like")}{" "}
                                       {Math.round(weather.main.feels_like)}°C
                                     </p>
@@ -449,7 +449,7 @@ export const Heritage: React.FC = () => {
                             </div>
 
                             <Button
-                              className="mt-4 w-full bg-white/10 font-semibold text-white hover:bg-white/20"
+                              className="mt-4 w-full bg-muted font-semibold text-foreground hover:bg-muted"
                               onClick={() => window.open(selected.wiki, "_blank")}
                             >
                               {t("common.learnMore", "Learn more")}
@@ -461,9 +461,9 @@ export const Heritage: React.FC = () => {
                     })()}
                   </motion.div>
                 ) : (
-                  <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-6 text-center">
-                    <MapPin className="mb-3 h-8 w-8 text-white/25" />
-                    <p className="text-sm text-white/50">
+                  <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card p-6 text-center">
+                    <MapPin className="mb-3 h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
                       {t("heritage.selectMarker", "Select a marker on the map to see its story.")}
                     </p>
                   </div>

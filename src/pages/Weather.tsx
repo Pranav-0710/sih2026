@@ -127,7 +127,7 @@ const Weather: React.FC = () => {
       <div className="flex justify-center mb-6 space-x-2">
         <Input
           type="text"
-          placeholder={t("weather.cityPlaceholder", "Enter city name")}
+          placeholder={t("weather.enterCity", "Enter city name")}
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="max-w-sm"
@@ -140,7 +140,7 @@ const Weather: React.FC = () => {
         <Button onClick={fetchWeather}>{t("weather.getWeather", "Get Weather")}</Button>
       </div>
 
-      {loading && <p className="text-center text-lg">{t("weather.loading", "Loading weather data...")}</p>}
+      {loading && <p className="text-center text-lg">{t("weather.loadingWeather", "Loading weather data...")}</p>}
       {error && <p className="text-center text-red-500 text-lg">{error}</p>}
 
       {weather && (
@@ -165,7 +165,7 @@ const Weather: React.FC = () => {
 
       {forecast.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold mb-4">{t("weather.forecastTitle", "5-Day Forecast")}</h2>
+          <h2 className="text-2xl font-bold mb-4">{t("weather.forecast", "5-Day Forecast")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {forecast.map((day) => (
               <Card key={day.dt} className="text-center">

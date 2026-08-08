@@ -76,7 +76,7 @@ const Games = () => {
           <div className="flex items-center gap-3">
             <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
             <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
-              {t("games.cornerLabel", "Game Corner")}
+              {t("games.label", "Game Corner")}
             </span>
           </div>
 
@@ -91,10 +91,10 @@ const Games = () => {
               >
                 <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
                   <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
-                    {t("games.heading", "Learn the circuit by playing it")}
+                    {t("games.title", "Learn the circuit by playing it")}
                   </h1>
                   <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
-                    {t("games.subheading", "Three short games built from the same sourced monastery content as the tours — chronology, vocabulary and recall.")}
+                    {t("games.subtitle", "Three short games built from the same sourced monastery content as the tours — chronology, vocabulary and recall.")}
                   </p>
                 </div>
 
@@ -128,7 +128,7 @@ const Games = () => {
 
                         <div className="mt-5 flex items-center justify-between border-t border-foreground/10 pt-3.5">
                           <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/70">
-                            {scores[game.id] !== undefined ? `${t("games.bestScore", "Best")} ${scores[game.id]}` : t("games.play", "Play")}
+                            {scores[game.id] !== undefined ? t("common.best", "Best {{score}}", { score: scores[game.id] }) : t("common.play", "Play")}
                           </span>
                           <ArrowUpRight
                             className="h-4 w-4 text-foreground/50 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -165,7 +165,7 @@ const Games = () => {
                       className="h-3.5 w-3.5 transition-transform duration-500 ease-out group-hover:-translate-x-0.5"
                       strokeWidth={1.5}
                     />
-                    {t("games.allGames", "All games")}
+                    {t("common.allGames", "All games")}
                   </button>
                 </div>
 

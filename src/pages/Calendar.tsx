@@ -1,110 +1,164 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { CalendarDays, Info, Moon, Sun, MapPin } from "lucide-react";
+import { Info, Moon, Sun, MapPin, ArrowUpRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProgressiveImage from "@/components/ProgressiveImage";
-import { Button } from "@/components/ui/button";
+import { StackedCards, StackCard } from "@/components/StackedCards";
 import { festivals } from "@/data/festivals";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Cultural calendar.
+ *
+ * Rebuilt onto the shared palette and the scroll-stacked deck (this design
+ * was lost in a merge that favoured an older local copy — restored here,
+ * this time wired to i18n from the start).
+ *
+ * Uses the existing `calendar.*` / `monasteries.*` / `festivals.*`
+ * translation keys already present and fully translated in all three
+ * locale files, rather than inventing new ones — headline copy matches
+ * those existing strings so the page is translated for free instead of
+ * needing fresh Hindi/Nepali text written for a redesign.
+ */
 const CulturalCalendar = () => {
   const { t } = useTranslation();
+
   return (
-    <PageLayout noTopPadding noBackground>
-      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 left-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
-          <div className="absolute bottom-0 right-0 h-[26rem] w-[26rem] translate-x-1/3 rounded-full bg-heritage/15 blur-[130px]" />
+    <PageLayout>
+      <div className="min-h-screen bg-background pb-10 pt-24 md:pt-28">
+        <div className="container mx-auto px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="prayer-flags prayer-flags-lg" aria-hidden>
+                <span /><span /><span /><span /><span />
+              </span>
+              <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
+                {t("calendar.label", "Cultural Calendar")}
+              </span>
+            </div>
+
+            <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
+              <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-foreground md:col-span-7 md:text-7xl">
+                {t("calendar.title", "Festivals of the")}
+                <span className="block text-muted-foreground">
+                  {t("calendar.titleHighlight", "Buddhist Circuit")}
+                </span>
+              </h1>
+              <div className="md:col-span-5 md:pt-3">
+                <p className="text-base leading-relaxed text-muted-foreground">
+                  {t(
+                    "calendar.subtitle",
+                    "The rituals, masked dances and prophecies that mark the monastic year across Sikkim."
+                  )}
+                </p>
+
+                {/* Honesty note — these dates genuinely cannot be pinned to a
+                    Gregorian calendar without a lunar conversion table. */}
+                <div className="mt-6 flex items-start gap-3 border-l-2 border-heritage/60 pl-4">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-heritage" strokeWidth={1.5} />
+                  <p className="text-[13px] leading-relaxed text-muted-foreground">
+                    {t("calendar.lunarNote", "These festivals follow the")}{" "}
+                    <span className="text-foreground">
+                      {t("calendar.lunarCalendar", "Tibetan lunar calendar")}
+                    </span>
+                    {t(
+                      "calendar.lunarNoteEnd",
+                      ", so their position in the western year shifts annually. The traditional timing is shown below — please confirm exact dates with the monastery or Sikkim tourism before travelling."
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 pt-28 pb-24">
-          {/* Header */}
-          <div className="mx-auto mb-10 max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
-              <CalendarDays className="h-3.5 w-3.5" />
-              {t("calendar.label", "Cultural Calendar")}
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              {t("calendar.titlePrefix", "Festivals of the")}{" "}
-              <span className="text-gradient-heritage">{t("calendar.titleHighlight", "Buddhist Circuit")}</span>
-            </h1>
-            <p className="mt-4 text-lg leading-relaxed text-white/60">
-              {t("calendar.subtitle", "The rituals, masked dances and prophecies that mark the monastic year across Sikkim.")}
-            </p>
-          </div>
-
-          {/* Honesty note — these dates genuinely cannot be pinned to a
-              Gregorian calendar without a lunar conversion table. */}
-          <div className="mx-auto mb-14 flex max-w-2xl items-start gap-3 rounded-2xl border border-heritage/25 bg-heritage/10 p-4">
-            <Info className="mt-0.5 h-5 w-5 shrink-0 text-heritage" />
-            <p className="text-sm leading-relaxed text-white/70">
-              {t("calendar.disclaimerPrefix", "These festivals follow the")}{" "}
-              <span className="font-medium text-white">
-                {t("calendar.disclaimerHighlight", "Tibetan lunar calendar")}
-              </span>
-              {t("calendar.disclaimerSuffix", ", so their position in the western year shifts annually. The traditional timing is shown below — please confirm exact dates with the monastery or Sikkim tourism before travelling.")}
-            </p>
-          </div>
-
-          {/* Festivals */}
-          <div className="mx-auto max-w-4xl space-y-6">
+        <div className="container mx-auto mt-16 px-6 lg:px-8">
+          <StackedCards>
             {festivals.map((festival, index) => (
-              <motion.article
-                key={festival.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: Math.min(index, 3) * 0.08 }}
-                className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl md:flex"
-              >
-                <ProgressiveImage
-                  src={festival.image}
-                  alt={festival.monasteryName}
-                  wrapperClassName="md:w-64 shrink-0"
-                  className="h-48 w-full object-cover md:h-full"
-                />
+              <StackCard key={festival.id} index={index}>
+                <article className="lamp-edge relative h-[74vh] min-h-[30rem] overflow-hidden rounded-sm border border-foreground/10 bg-card">
+                  <ProgressiveImage
+                    src={festival.image}
+                    alt={t("monasteries." + festival.monasteryId + ".name", festival.monasteryName)}
+                    wrapperClassName="absolute inset-0"
+                    className="h-full w-full object-cover"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(8,6,5,0.97) 0%, rgba(8,6,5,0.90) 30%, rgba(8,6,5,0.62) 55%, rgba(8,6,5,0.20) 100%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(8,6,5,0.85) 0%, rgba(8,6,5,0.15) 45%, rgba(8,6,5,0.55) 100%)",
+                    }}
+                  />
 
-                <div className="flex-1 p-6">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-heritage/15 px-3 py-1 text-[11px] font-medium text-heritage">
-                      {festival.timingBasis === "lunar" ? (
-                        <Moon className="h-3 w-3" />
-                      ) : (
-                        <Sun className="h-3 w-3" />
-                      )}
-                      {t("festivals." + festival.id + ".timing", festival.timing)}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50">
-                      <MapPin className="h-3 w-3" />
-                      {t("monasteries." + festival.monasteryId + ".name", festival.monasteryName)}
-                    </span>
+                  <div className="relative flex h-full flex-col justify-between p-7 md:p-12">
+                    <div className="flex items-start justify-between">
+                      <span className="prayer-flags prayer-flags-lg" aria-hidden>
+                        <span /><span /><span /><span /><span />
+                      </span>
+                      <span className="font-mono text-[11px] tabular-nums tracking-widest text-white/55">
+                        {String(index + 1).padStart(2, "0")} / {String(festivals.length).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <div className="max-w-2xl">
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                        <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
+                          {festival.timingBasis === "lunar" ? (
+                            <Moon className="h-3 w-3" strokeWidth={1.5} />
+                          ) : (
+                            <Sun className="h-3 w-3" strokeWidth={1.5} />
+                          )}
+                          {t("festivals." + festival.id + ".timing", festival.timing)}
+                        </span>
+                        <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/50">
+                          <MapPin className="h-3 w-3" strokeWidth={1.5} />
+                          {t("monasteries." + festival.monasteryId + ".name", festival.monasteryName)}
+                        </span>
+                      </div>
+
+                      <h2 className="mt-4 font-display text-4xl leading-[1.02] tracking-tight text-white md:text-6xl">
+                        {t("festivals." + festival.id + ".name", festival.name)}
+                      </h2>
+                      <p className="mt-4 max-w-xl text-base text-white/85 md:text-lg">
+                        {t("festivals." + festival.id + ".summary", festival.summary)}
+                      </p>
+                      <p className="mt-4 max-w-xl border-t border-white/15 pt-4 text-sm leading-relaxed text-white/65">
+                        {t("festivals." + festival.id + ".detail", festival.detail)}
+                      </p>
+
+                      <Link
+                        to="/explore"
+                        className="group mt-7 inline-flex items-center gap-2.5 border border-white/25 px-6 py-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/85 transition-colors hover:border-white/60 hover:text-white"
+                      >
+                        {t("calendar.readAbout", "Read about {{name}}", {
+                          name: t("monasteries." + festival.monasteryId + ".name", festival.monasteryName)
+                            .replace(" Monastery", "")
+                            .replace(" मठ", "")
+                            .replace(" गुम्बा", ""),
+                        })}
+                        <ArrowUpRight
+                          className="h-3.5 w-3.5 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                          strokeWidth={1.5}
+                        />
+                      </Link>
+                    </div>
                   </div>
-
-                  <h2 className="mt-3 font-display text-2xl font-semibold text-white">
-                    {t("festivals." + festival.id + ".name", festival.name)}
-                  </h2>
-                  <p className="mt-2 text-sm font-medium text-white/80">
-                    {t("festivals." + festival.id + ".summary", festival.summary)}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-white/60">
-                    {t("festivals." + festival.id + ".detail", festival.detail)}
-                  </p>
-
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="mt-5 border-white/20 bg-white/5 font-semibold text-white hover:bg-white/10 hover:text-white"
-                  >
-                    <Link to="/explore">
-                      {t("calendar.readAbout", "Read about")}{" "}
-                      {t("monasteries." + festival.monasteryId + ".name", festival.monasteryName).replace(" Monastery", "").replace(" मठ", "")}
-                    </Link>
-                  </Button>
-                </div>
-              </motion.article>
+                </article>
+              </StackCard>
             ))}
-          </div>
+          </StackedCards>
         </div>
       </div>
     </PageLayout>
