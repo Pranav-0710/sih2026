@@ -1,4 +1,3 @@
-// src/pages/heritage.tsx
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Play, StopCircle, Search, ExternalLink, Compass, MapPin } from "lucide-
 import PageLayout from "@/components/PageLayout";
 import { useWeather } from "@/hooks/useWeather";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 // Marker positions are computed from each monastery's real coordinates against
 // the bounds of the Sikkim location map (top 28.14, bottom 27.03, left 87.95,
@@ -79,6 +79,7 @@ const spots = [
 const categories = ["All", "Monastery", "Pilgrimage", "Festival"];
 
 export const Heritage: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedSpot, setSelectedSpot] = useState<number | null>(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -169,17 +170,16 @@ export const Heritage: React.FC = () => {
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
               <Compass className="h-3.5 w-3.5" />
-              Heritage Trails
+              {t("heritage.label")}
             </span>
             <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Explore the Monasteries of{" "}
+              {t("heritage.title")}{" "}
               <span className="bg-gradient-to-r from-heritage to-accent bg-clip-text text-transparent">
-                Sikkim
+                {t("heritage.titleHighlight")}
               </span>
             </h1>
             <p className="mt-3 text-white/60">
-              Discover centuries of Himalayan Buddhist heritage, mapped across
-              the hills of Sikkim.
+              {t("heritage.subtitle")}
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export const Heritage: React.FC = () => {
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
                   <Input
                     type="text"
-                    placeholder="Search monasteries..."
+                    placeholder={t("heritage.searchPlaceholder", "Search monasteries...")}
                     className="border-white/15 bg-white/5 pl-9 text-white placeholder:text-white/40 focus-visible:ring-heritage/40"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -212,7 +212,7 @@ export const Heritage: React.FC = () => {
                           : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
                       )}
                     >
-                      {category}
+                      {t(`heritage.category${category}`, category)}
                     </button>
                   ))}
                 </div>
@@ -228,11 +228,11 @@ export const Heritage: React.FC = () => {
                 >
                   {isTourRunning ? (
                     <>
-                      <StopCircle className="mr-2 h-4 w-4" /> Stop Tour
+                      <StopCircle className="mr-2 h-4 w-4" /> {t("heritage.stopTour", "Stop Tour")}
                     </>
                   ) : (
                     <>
-                      <Play className="mr-2 h-4 w-4" /> Start Guided Tour
+                      <Play className="mr-2 h-4 w-4" /> {t("heritage.startGuidedTour", "Start Guided Tour")}
                     </>
                   )}
                 </Button>
@@ -242,7 +242,7 @@ export const Heritage: React.FC = () => {
               <div className="space-y-2">
                 {filteredSpots.length === 0 && (
                   <p className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/50">
-                    No monasteries match that search.
+                    {t("heritage.noResults", "No monasteries match that search.")}
                   </p>
                 )}
                 {filteredSpots.map((spot) => {
@@ -250,6 +250,7 @@ export const Heritage: React.FC = () => {
                     (s) => s.name === spot.name
                   );
                   const isActive = selectedSpot === originalIndex;
+                  const spotId = spot.name.split(" ")[0].toLowerCase();
                   return (
                     <button
                       key={spot.name}
@@ -263,15 +264,15 @@ export const Heritage: React.FC = () => {
                     >
                       <img
                         src={spot.img}
-                        alt={spot.name}
+                        alt={t("monasteries." + spotId + ".name", spot.name)}
                         className="h-12 w-12 shrink-0 rounded-lg object-cover"
                       />
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-white">
-                          {spot.name.replace(" Monastery", "")}
+                          {t("monasteries." + spotId + ".name", spot.name).replace(" Monastery", "").replace(" मठ", "")}
                         </p>
                         <p className="truncate text-xs text-white/50">
-                          {spot.founded} · {spot.order}
+                          {spot.founded} · {t("monasteries." + spotId + ".sect", spot.order)}
                         </p>
                       </div>
                     </button>
@@ -364,99 +365,106 @@ export const Heritage: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl"
                   >
-                    <div className="relative h-44">
-                      <img
-                        src={selected.img}
-                        alt={selected.name}
-                        className="h-full w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1a]/20 to-transparent" />
-                      <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
-                        {selected.category}
-                      </span>
-                    </div>
-
-                    <div className="p-5">
-                      <h2 className="font-display text-2xl font-semibold text-white">
-                        {selected.name}
-                      </h2>
-
-                      <div className="mt-4 grid grid-cols-2 gap-2">
-                        {[
-                          { label: "Founded", value: selected.founded },
-                          { label: "Order", value: selected.order },
-                          { label: "District", value: selected.district },
-                          { label: "Elevation", value: selected.elevation },
-                        ]
-                          .filter((f) => f.value)
-                          .map((f) => (
-                            <div
-                              key={f.label}
-                              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
-                            >
-                              <p className="text-[10px] uppercase tracking-wider text-white/40">
-                                {f.label}
-                              </p>
-                              <p className="text-xs font-medium text-white/90">
-                                {f.value}
-                              </p>
-                            </div>
-                          ))}
-                      </div>
-
-                      <p className="mt-4 text-sm leading-relaxed text-white/70">
-                        {selected.desc}
-                      </p>
-
-                      {/* Live weather */}
-                      <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                        <p className="mb-2 text-[10px] uppercase tracking-wider text-white/40">
-                          Conditions right now
-                        </p>
-                        {loading && (
-                          <p className="text-sm text-white/50">
-                            Loading weather...
-                          </p>
-                        )}
-                        {error && (
-                          <p className="text-sm text-white/50">
-                            Weather unavailable right now.
-                          </p>
-                        )}
-                        {weather && (
-                          <div className="flex items-center gap-3">
+                    {(() => {
+                      const spotId = selected.name.split(" ")[0].toLowerCase();
+                      return (
+                        <>
+                          <div className="relative h-44">
                             <img
-                              src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-                              alt={weather.weather[0].description}
-                              className="h-10 w-10"
+                              src={selected.img}
+                              alt={t("monasteries." + spotId + ".name", selected.name)}
+                              className="h-full w-full object-cover"
                             />
-                            <div>
-                              <p className="text-lg font-semibold text-white">
-                                {Math.round(weather.main.temp)}°C
-                              </p>
-                              <p className="text-xs capitalize text-white/60">
-                                {weather.weather[0].description} · feels like{" "}
-                                {Math.round(weather.main.feels_like)}°C
-                              </p>
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e1a] via-[#0a0e1a]/20 to-transparent" />
+                            <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white backdrop-blur">
+                              {t("heritage.category" + selected.category, selected.category)}
+                            </span>
                           </div>
-                        )}
-                      </div>
 
-                      <Button
-                        className="mt-4 w-full bg-white/10 font-semibold text-white hover:bg-white/20"
-                        onClick={() => window.open(selected.wiki, "_blank")}
-                      >
-                        Learn more
-                        <ExternalLink className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
+                          <div className="p-5">
+                            <h2 className="font-display text-2xl font-semibold text-white">
+                              {t("monasteries." + spotId + ".name", selected.name)}
+                            </h2>
+
+                            <div className="mt-4 grid grid-cols-2 gap-2">
+                              {[
+                                { label: t("heritage.founded", "Founded"), value: selected.founded },
+                                { label: t("heritage.order", "Order"), value: t("monasteries." + spotId + ".sect", selected.order) },
+                                { label: t("heritage.district", "District"), value: selected.district },
+                                { label: t("heritage.elevation", "Elevation"), value: selected.elevation },
+                              ]
+                                .filter((f) => f.value)
+                                .map((f) => (
+                                  <div
+                                    key={f.label}
+                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+                                  >
+                                    <p className="text-[10px] uppercase tracking-wider text-white/40">
+                                      {f.label}
+                                    </p>
+                                    <p className="text-xs font-medium text-white/90">
+                                      {f.value}
+                                    </p>
+                                  </div>
+                                ))}
+                            </div>
+
+                            <p className="mt-4 text-sm leading-relaxed text-white/70">
+                              {t("monasteries." + spotId + ".history", selected.desc)}
+                            </p>
+
+                            {/* Live weather */}
+                            <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                              <p className="mb-2 text-[10px] uppercase tracking-wider text-white/40">
+                                {t("heritage.conditionsNow", "Conditions right now")}
+                              </p>
+                              {loading && (
+                                <p className="text-sm text-white/50">
+                                  {t("heritage.loadingWeather", "Loading weather...")}
+                                </p>
+                              )}
+                              {error && (
+                                <p className="text-sm text-white/50">
+                                  {t("heritage.weatherUnavailable", "Weather unavailable right now.")}
+                                </p>
+                              )}
+                              {weather && (
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                                    alt={weather.weather[0].description}
+                                    className="h-10 w-10"
+                                  />
+                                  <div>
+                                    <p className="text-lg font-semibold text-white">
+                                      {Math.round(weather.main.temp)}°C
+                                    </p>
+                                    <p className="text-xs capitalize text-white/60">
+                                      {weather.weather[0].description} · {t("heritage.feelsLike", "feels like")}{" "}
+                                      {Math.round(weather.main.feels_like)}°C
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <Button
+                              className="mt-4 w-full bg-white/10 font-semibold text-white hover:bg-white/20"
+                              onClick={() => window.open(selected.wiki, "_blank")}
+                            >
+                              {t("common.learnMore", "Learn more")}
+                              <ExternalLink className="ml-2 h-4 w-4" />
+                            </Button>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </motion.div>
                 ) : (
                   <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-6 text-center">
                     <MapPin className="mb-3 h-8 w-8 text-white/25" />
                     <p className="text-sm text-white/50">
-                      Select a marker on the map to see its story.
+                      {t("heritage.selectMarker", "Select a marker on the map to see its story.")}
                     </p>
                   </div>
                 )}

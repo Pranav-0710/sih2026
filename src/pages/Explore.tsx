@@ -5,6 +5,7 @@ import ProgressiveImage from "@/components/ProgressiveImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import { locations } from "@/data/monasteries";
 import { getStory } from "@/data/stories";
+import { useTranslation } from "react-i18next";
 
 /**
  * The Buddhist Circuit index.
@@ -17,6 +18,8 @@ import { getStory } from "@/data/stories";
  * about this monastery".
  */
 const Explore = () => {
+  const { t } = useTranslation();
+
   return (
     <PageLayout>
       <div className="min-h-screen bg-background py-20 md:py-28">
@@ -24,17 +27,16 @@ const Explore = () => {
           <div className="flex items-center gap-3">
             <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
             <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
-              The Buddhist Circuit
+              {t("explore.label")}
             </span>
           </div>
 
           <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
             <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
-              Beyond Temples, Beyond Time
+              {t("explore.title")}
             </h1>
             <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
-              The history, culture and geography behind each site — and a
-              narrated tour through all of them.
+              {t("explore.subtitle")}
             </p>
           </div>
 
@@ -54,7 +56,7 @@ const Explore = () => {
                     <div className="group relative overflow-hidden rounded-sm">
                       <ProgressiveImage
                         src={site.image}
-                        alt={site.name}
+                        alt={t("monasteries." + site.id + ".name", site.name)}
                         className="aspect-[4/3] w-full object-cover transition-transform [transition-duration:1400ms] ease-out group-hover:scale-[1.05]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
@@ -66,13 +68,13 @@ const Explore = () => {
 
                   <div className={`md:col-span-6 ${flipped ? "md:order-1 md:col-start-1" : ""}`}>
                     <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
-                      {site.type}
+                      {t("monasteries." + site.id + ".type", site.type)}
                     </p>
                     <h2 className="mt-3 font-display text-3xl tracking-tight text-foreground md:text-4xl">
-                      {site.name}
+                      {t("monasteries." + site.id + ".name", site.name)}
                     </h2>
                     <p className="mt-5 leading-relaxed text-muted-foreground">
-                      {site.educationalContent?.history}
+                      {t("monasteries." + site.id + ".history", site.educationalContent?.history)}
                     </p>
 
                     <div className="mt-8 grid grid-cols-2 border-t border-foreground/10">
@@ -81,14 +83,14 @@ const Explore = () => {
                         className="group/link flex flex-col gap-1 border-r border-foreground/10 py-4 pr-4"
                       >
                         <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground">
-                          Story tour
+                          {t("explore.storyTour")}
                           <ArrowUpRight
                             className="h-3 w-3 text-foreground/40 transition-transform duration-500 ease-out group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
                             strokeWidth={1.5}
                           />
                         </span>
                         <span className="text-[11px] text-muted-foreground">
-                          {story ? `${story.chapters.length} chapters` : "Virtual experience"}
+                          {story ? t("explore.chapters", { count: story.chapters.length }) : t("explore.virtualExperience")}
                         </span>
                       </Link>
                       <Link
@@ -96,14 +98,14 @@ const Explore = () => {
                         className="group/link flex flex-col gap-1 py-4 pl-4"
                       >
                         <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground">
-                          Report a condition
+                          {t("explore.reportCondition")}
                           <ArrowUpRight
                             className="h-3 w-3 text-foreground/40 transition-transform duration-500 ease-out group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
                             strokeWidth={1.5}
                           />
                         </span>
                         <span className="text-[11px] text-muted-foreground">
-                          Help preserve this site
+                          {t("explore.helpPreserve")}
                         </span>
                       </Link>
                     </div>

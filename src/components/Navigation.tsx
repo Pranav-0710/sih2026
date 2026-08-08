@@ -126,13 +126,13 @@ export function Navigation() {
                   className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
                 >
                   <Globe className="h-5 w-5" />
-                  <span className="sr-only">Translate</span>
+                  <span className="sr-only">{t("common.translate")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
                 <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => changeLanguage('hi')}>हिन्दी</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage('ne')}>नेपाली</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => changeLanguage('ne')}>सिक्किमी (Sikkimese)</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <ModeToggle />
@@ -144,7 +144,7 @@ export function Navigation() {
                   className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
                 >
                   <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle Menu</span>
+                  <span className="sr-only">{t("common.toggleMenu")}</span>
                 </Button>
               </SheetTrigger>
               <SheetContent
@@ -155,7 +155,7 @@ export function Navigation() {
                   {/* Radix requires a title inside every dialog/sheet for
                       screen readers; the drawer is visually self-evident, so
                       it's exposed to assistive tech only. */}
-                  <SheetTitle className="sr-only">Site navigation</SheetTitle>
+                  <SheetTitle className="sr-only">{t("common.siteNavigation")}</SheetTitle>
                   <Link to="/" className="flex items-center space-x-3 px-4">
                     <div className="rounded-sm bg-heritage/15 p-2">
                       <MapPin className="h-5 w-5 text-white" />
@@ -169,7 +169,7 @@ export function Navigation() {
                       to="/"
                       className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
                     >
-                      Home
+                      {t("nav.home")}
                     </Link>
                     {mobileNavItems.map((item) => (
                       <Link
@@ -186,34 +186,34 @@ export function Navigation() {
                           to="/dashboard"
                           className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
                         >
-                          Dashboard
+                          {t("nav.dashboard")}
                         </Link>
                         <Link
                           to="/sentiment-analysis"
                           className="py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
                         >
-                          Feedback Analysis
+                          {t("nav.feedbackAnalysis")}
                         </Link>
                       </>
                     )}
                   </div>
                   <div className="px-4 pt-4 border-t border-border/50">
                     {loading ? (
-                      <div className="py-2 px-3 rounded-lg font-medium text-foreground/70">Loading...</div>
+                      <div className="py-2 px-3 rounded-lg font-medium text-foreground/70">{t("common.loading")}</div>
                     ) : user ? (
                       <div className="space-y-2">
                         <Link
                           to="/profile"
                           className="block py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-primary/10 transition-all duration-300"
                         >
-                          Profile
+                          {t("nav.profile")}
                         </Link>
                         <Button
                           onClick={signOut}
                           variant="ghost"
                           className="w-full justify-start py-2 px-3 rounded-lg font-medium text-foreground/70 hover:text-foreground hover:bg-destructive/10"
                         >
-                          Sign Out
+                          {t("nav.signOut")}
                         </Button>
                       </div>
                     ) : (
@@ -221,7 +221,7 @@ export function Navigation() {
                         onClick={() => navigate("/auth")}
                         className="w-full rounded-sm bg-heritage px-4 py-2.5 text-[12px] font-medium uppercase tracking-[0.16em] text-heritage-foreground transition-colors duration-300 hover:bg-accent"
                       >
-                        Get Started
+                        {t("nav.getStarted")}
                       </Button>
                     )}
                   </div>
@@ -242,7 +242,7 @@ export function Navigation() {
                   scrolled ? "space-x-4" : "space-x-6"
                 )}
               >
-                <NavLinkItem to="/">Home</NavLinkItem>
+                <NavLinkItem to="/">{t("nav.home")}</NavLinkItem>
                 {navItems.map((item) => {
                   return item.isDropdown ? (
                     <DropdownMenu key={item.name}>
@@ -280,9 +280,9 @@ export function Navigation() {
                 })}
                 {role === "admin" && (
                   <>
-                    <NavLinkItem to="/dashboard">Dashboard</NavLinkItem>
+                    <NavLinkItem to="/dashboard">{t("nav.dashboard")}</NavLinkItem>
                     <NavLinkItem to="/sentiment-analysis">
-                      Feedback Analysis
+                      {t("nav.feedbackAnalysis")}
                     </NavLinkItem>
                   </>
                 )}
@@ -297,13 +297,13 @@ export function Navigation() {
                     className="text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-xl transition-all duration-300"
                   >
                     <Globe className="h-5 w-5" />
-                    <span className="sr-only">Translate</span>
+                    <span className="sr-only">{t("common.translate")}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-strong rounded-xl p-1">
                   <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => changeLanguage('hi')}>हिन्दी</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLanguage('ne')}>नेपाली</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLanguage('ne')}>सिक्किमी (Sikkimese)</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <div id="google_translate_element" className="mr-3"></div>
@@ -329,14 +329,14 @@ export function Navigation() {
                         to="/profile"
                         className="font-medium px-3 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 text-foreground/70 hover:text-foreground w-full"
                       >
-                        Profile
+                        {t("nav.profile")}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={signOut}
                       className="font-medium px-3 py-2 rounded-lg transition-all duration-300 hover:bg-destructive/10 text-foreground/70 hover:text-destructive cursor-pointer"
                     >
-                      Sign Out
+                      {t("nav.signOut")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -348,7 +348,7 @@ export function Navigation() {
                     scrolled ? "px-4 py-2 text-sm" : "px-6 py-2 text-sm"
                   )}
                 >
-                  Get Started
+                  {t("nav.getStarted")}
                 </Button>
               )}
             </div>

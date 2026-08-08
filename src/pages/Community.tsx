@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -52,6 +53,7 @@ interface CommunityPost {
 }
 
 const Community = () => {
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [newPost, setNewPost] = useState({
@@ -88,8 +90,8 @@ const Community = () => {
     } catch (error) {
       console.error("Error fetching posts:", error);
       toast({
-        title: "Error",
-        description: "Failed to load community posts",
+        title: t("common.error", "Error"),
+        description: t("community.errorLoadPosts", "Failed to load community posts"),
         variant: "destructive",
       });
     } finally {
@@ -100,8 +102,8 @@ const Community = () => {
   const handleCreatePost = async () => {
     if (!user) {
       toast({
-        title: "Authentication required",
-        description: "Please sign in to create posts",
+        title: t("community.authRequired", "Authentication required"),
+        description: t("community.authRequiredDesc", "Please sign in to create posts"),
         variant: "destructive",
       });
       return;
@@ -109,8 +111,8 @@ const Community = () => {
 
     if (!newPost.content.trim()) {
       toast({
-        title: "Content required",
-        description: "Please add some content to your post",
+        title: t("community.contentRequired", "Content required"),
+        description: t("community.contentRequiredDesc", "Please add some content to your post"),
         variant: "destructive",
       });
       return;
@@ -135,8 +137,8 @@ const Community = () => {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Your post has been created!",
+        title: t("common.success", "Success"),
+        description: t("community.postCreated", "Your post has been created!"),
       });
 
       setNewPost({ title: "", content: "", location: "", tags: "" });
@@ -145,15 +147,15 @@ const Community = () => {
     } catch (error) {
       console.error("Error creating post:", error);
       toast({
-        title: "Error",
-        description: "Failed to create post",
+        title: t("common.error", "Error"),
+        description: t("community.errorCreatePost", "Failed to create post"),
         variant: "destructive",
       });
     }
   };
 
   const handleDeletePost = async (postId: string) => {
-    if (!confirm("Are you sure you want to delete this post?")) {
+    if (!confirm(t("community.deleteConfirm", "Are you sure you want to delete this post?"))) {
       return;
     }
 
@@ -166,15 +168,15 @@ const Community = () => {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Post deleted successfully!",
+        title: t("common.success", "Success"),
+        description: t("community.postDeleted", "Post deleted successfully!"),
       });
       fetchPosts();
     } catch (error) {
       console.error("Error deleting post:", error);
       toast({
-        title: "Error",
-        description: "Failed to delete post",
+        title: t("common.error", "Error"),
+        description: t("community.errorDeletePost", "Failed to delete post"),
         variant: "destructive",
       });
     }
@@ -231,11 +233,10 @@ const Community = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold text-foreground mb-2">
-              Community Wall
+              {t("community.title", "Community Wall")}
             </h1>
             <p className="text-muted-foreground">
-              Share your travel experiences and discover hidden gems from fellow
-              travelers
+              {t("community.subtitle", "Share your travel experiences and discover hidden gems from fellow travelers")}
             </p>
           </div>
 
@@ -243,16 +244,16 @@ const Community = () => {
             <DialogTrigger asChild>
               <Button variant="default" className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
-                Share Experience
+                {t("community.shareExperience", "Share Experience")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Share Your Travel Experience</DialogTitle>
+                <DialogTitle>{t("community.shareYourExperience", "Share Your Travel Experience")}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <Input
-                  placeholder="Add a title (optional)"
+                  placeholder={t("community.titlePlaceholder", "Add a title (optional)")}
                   value={newPost.title}
                   onChange={(e) =>
                     setNewPost((prev) => ({ ...prev, title: e.target.value }))
@@ -260,7 +261,7 @@ const Community = () => {
                 />
 
                 <Textarea
-                  placeholder="Share your experience, tips, or recommendations..."
+                  placeholder={t("community.contentPlaceholder", "Share your experience, tips, or recommendations...")}
                   value={newPost.content}
                   onChange={(e) =>
                     setNewPost((prev) => ({ ...prev, content: e.target.value }))
@@ -272,7 +273,7 @@ const Community = () => {
                   <div className="relative">
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Location"
+                      placeholder={t("community.locationPlaceholder", "Location")}
                       value={newPost.location}
                       onChange={(e) =>
                         setNewPost((prev) => ({
@@ -285,7 +286,7 @@ const Community = () => {
                   </div>
 
                   <Input
-                    placeholder="Tags (comma separated)"
+                    placeholder={t("community.tagsPlaceholder", "Tags (comma separated)")}
                     value={newPost.tags}
                     onChange={(e) =>
                       setNewPost((prev) => ({ ...prev, tags: e.target.value }))
@@ -298,14 +299,14 @@ const Community = () => {
                     variant="outline"
                     onClick={() => setIsCreateOpen(false)}
                   >
-                    Cancel
+                    {t("common.cancel", "Cancel")}
                   </Button>
                   <Button
                     onClick={handleCreatePost}
                     className="flex items-center gap-2"
                   >
                     <Send className="h-4 w-4" />
-                    Share Post
+                    {t("community.sharePost", "Share Post")}
                   </Button>
                 </div>
               </div>
@@ -328,10 +329,10 @@ const Community = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold">
-                        {post.profiles.full_name || "Anonymous"}
+                        {post.profiles.full_name || t("common.anonymous", "Anonymous")}
                       </h3>
                       {post.is_featured && (
-                        <Badge variant="secondary">Featured</Badge>
+                        <Badge variant="secondary">{t("common.featured", "Featured")}</Badge>
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -352,7 +353,7 @@ const Community = () => {
                       size="sm"
                       onClick={() => handleDeletePost(post.id)}
                     >
-                      Delete
+                      {t("common.delete", "Delete")}
                     </Button>
                   )}
                 </div>
@@ -402,7 +403,7 @@ const Community = () => {
                     className="flex items-center gap-2"
                   >
                     <Share2 className="h-4 w-4" />
-                    Share
+                    {t("common.share", "Share")}
                   </Button>
                 </div>
               </CardContent>
@@ -414,12 +415,12 @@ const Community = () => {
           <div className="text-center py-12 border border-dashed border-border rounded-xl">
             <Camera className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
-              No posts yet
+              {t("community.noPostsTitle", "No posts yet")}
             </h3>
             <p className="text-muted-foreground mb-5">
-              Be the first to share your travel experience!
+              {t("community.noPostsDesc", "Be the first to share your travel experience!")}
             </p>
-            <Button onClick={() => setIsCreateOpen(true)}>Share your story</Button>
+            <Button onClick={() => setIsCreateOpen(true)}>{t("community.shareYourStory", "Share your story")}</Button>
           </div>
         )}
       </div>

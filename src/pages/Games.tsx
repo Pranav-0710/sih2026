@@ -7,6 +7,7 @@ import { TimelineGame } from "@/components/games/TimelineGame"
 import { MantraMatchGame } from "@/components/games/MantraMatchGame"
 import { CircuitQuizGame } from "@/components/games/CircuitQuizGame"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "react-i18next";
 
 type GameId = "timeline" | "mantra" | "quiz"
 
@@ -62,6 +63,7 @@ const GAMES: GameMeta[] = [
 ]
 
 const Games = () => {
+  const { t } = useTranslation()
   const [active, setActive] = useState<GameId | null>(null)
   const [scores, setScores] = useState<Partial<Record<GameId, number>>>({})
 
@@ -74,7 +76,7 @@ const Games = () => {
           <div className="flex items-center gap-3">
             <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
             <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
-              Game Corner
+              {t("games.cornerLabel", "Game Corner")}
             </span>
           </div>
 
@@ -89,11 +91,10 @@ const Games = () => {
               >
                 <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
                   <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
-                    Learn the circuit by playing it
+                    {t("games.heading", "Learn the circuit by playing it")}
                   </h1>
                   <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
-                    Three short games built from the same sourced monastery
-                    content as the tours — chronology, vocabulary and recall.
+                    {t("games.subheading", "Three short games built from the same sourced monastery content as the tours — chronology, vocabulary and recall.")}
                   </p>
                 </div>
 
@@ -116,18 +117,18 @@ const Games = () => {
 
                       <div className="mt-10">
                         <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
-                          {game.tagline}
+                          {t("games." + game.id + ".tagline", game.tagline)}
                         </p>
                         <h2 className="mt-2 font-display text-xl tracking-tight text-foreground">
-                          {game.title}
+                          {t("games." + game.id + ".title", game.title)}
                         </h2>
                         <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                          {game.description}
+                          {t("games." + game.id + ".description", game.description)}
                         </p>
 
                         <div className="mt-5 flex items-center justify-between border-t border-foreground/10 pt-3.5">
                           <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/70">
-                            {scores[game.id] !== undefined ? `Best ${scores[game.id]}` : "Play"}
+                            {scores[game.id] !== undefined ? `${t("games.bestScore", "Best")} ${scores[game.id]}` : t("games.play", "Play")}
                           </span>
                           <ArrowUpRight
                             className="h-4 w-4 text-foreground/50 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -150,10 +151,10 @@ const Games = () => {
                 <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-foreground/10 pt-8">
                   <div>
                     <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-heritage">
-                      {activeGame.tagline}
+                      {t("games." + activeGame.id + ".tagline", activeGame.tagline)}
                     </p>
                     <h1 className="mt-2 font-display text-3xl tracking-tight text-foreground md:text-4xl">
-                      {activeGame.title}
+                      {t("games." + activeGame.id + ".title", activeGame.title)}
                     </h1>
                   </div>
                   <button
@@ -164,7 +165,7 @@ const Games = () => {
                       className="h-3.5 w-3.5 transition-transform duration-500 ease-out group-hover:-translate-x-0.5"
                       strokeWidth={1.5}
                     />
-                    All games
+                    {t("games.allGames", "All games")}
                   </button>
                 </div>
 

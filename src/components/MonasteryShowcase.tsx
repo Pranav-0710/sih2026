@@ -10,6 +10,7 @@ import {
 import ProgressiveImage from "@/components/ProgressiveImage";
 import { locations } from "@/data/monasteries";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const AUTOPLAY_MS = 5000;
 
@@ -23,6 +24,7 @@ const monasteries = locations.map((site) => ({
  * monastery data so the homepage never drifts from the detailed experiences.
  */
 const MonasteryShowcase = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [api, setApi] = useState<CarouselApi>();
   const [paused, setPaused] = useState(false);
@@ -75,7 +77,7 @@ const MonasteryShowcase = () => {
                   }
                   navigate("/explore");
                 }}
-                aria-label={`Explore ${site.name} Monastery`}
+                aria-label={`${t("features.explore")} ${site.name}`}
                 aria-expanded={revealedCard === site.id}
                 className={cn(
                   "group relative block w-full overflow-hidden rounded-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
@@ -123,7 +125,7 @@ const MonasteryShowcase = () => {
             <button
               key={site.id}
               onClick={() => api?.scrollTo(i)}
-              aria-label={`Go to ${site.displayName}`}
+              aria-label={`${t("aria.goTo", "Go to")} ${site.displayName}`}
               className={cn(
                 "h-px transition-all duration-500 ease-out",
                 i === selected ? "w-10 bg-primary" : "w-5 bg-foreground/25 hover:bg-foreground/50"
@@ -138,14 +140,14 @@ const MonasteryShowcase = () => {
         <div className="flex items-center gap-1">
           <button
             onClick={() => api?.scrollPrev()}
-            aria-label="Previous monastery"
+            aria-label={t("aria.previousMonastery", "Previous monastery")}
             className="flex h-10 w-10 items-center justify-center border border-foreground/15 text-foreground/70 transition-colors duration-300 hover:border-foreground/40 hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
           </button>
           <button
             onClick={() => api?.scrollNext()}
-            aria-label="Next monastery"
+            aria-label={t("aria.nextMonastery", "Next monastery")}
             className="flex h-10 w-10 items-center justify-center border border-foreground/15 text-foreground/70 transition-colors duration-300 hover:border-foreground/40 hover:text-foreground"
           >
             <ArrowRight className="h-4 w-4" strokeWidth={1.5} />

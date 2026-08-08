@@ -5,8 +5,10 @@ import PageLayout from "@/components/PageLayout";
 import ProgressiveImage from "@/components/ProgressiveImage";
 import { Button } from "@/components/ui/button";
 import { festivals } from "@/data/festivals";
+import { useTranslation } from "react-i18next";
 
 const CulturalCalendar = () => {
+  const { t } = useTranslation();
   return (
     <PageLayout noTopPadding noBackground>
       <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
@@ -20,15 +22,14 @@ const CulturalCalendar = () => {
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
               <CalendarDays className="h-3.5 w-3.5" />
-              Cultural Calendar
+              {t("calendar.label", "Cultural Calendar")}
             </span>
             <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Festivals of the{" "}
-              <span className="text-gradient-heritage">Buddhist Circuit</span>
+              {t("calendar.titlePrefix", "Festivals of the")}{" "}
+              <span className="text-gradient-heritage">{t("calendar.titleHighlight", "Buddhist Circuit")}</span>
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-white/60">
-              The rituals, masked dances and prophecies that mark the monastic
-              year across Sikkim.
+              {t("calendar.subtitle", "The rituals, masked dances and prophecies that mark the monastic year across Sikkim.")}
             </p>
           </div>
 
@@ -37,13 +38,11 @@ const CulturalCalendar = () => {
           <div className="mx-auto mb-14 flex max-w-2xl items-start gap-3 rounded-2xl border border-heritage/25 bg-heritage/10 p-4">
             <Info className="mt-0.5 h-5 w-5 shrink-0 text-heritage" />
             <p className="text-sm leading-relaxed text-white/70">
-              These festivals follow the{" "}
+              {t("calendar.disclaimerPrefix", "These festivals follow the")}{" "}
               <span className="font-medium text-white">
-                Tibetan lunar calendar
+                {t("calendar.disclaimerHighlight", "Tibetan lunar calendar")}
               </span>
-              , so their position in the western year shifts annually. The
-              traditional timing is shown below — please confirm exact dates
-              with the monastery or Sikkim tourism before travelling.
+              {t("calendar.disclaimerSuffix", ", so their position in the western year shifts annually. The traditional timing is shown below — please confirm exact dates with the monastery or Sikkim tourism before travelling.")}
             </p>
           </div>
 
@@ -73,22 +72,22 @@ const CulturalCalendar = () => {
                       ) : (
                         <Sun className="h-3 w-3" />
                       )}
-                      {festival.timing}
+                      {t("festivals." + festival.id + ".timing", festival.timing)}
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50">
                       <MapPin className="h-3 w-3" />
-                      {festival.monasteryName}
+                      {t("monasteries." + festival.monasteryId + ".name", festival.monasteryName)}
                     </span>
                   </div>
 
                   <h2 className="mt-3 font-display text-2xl font-semibold text-white">
-                    {festival.name}
+                    {t("festivals." + festival.id + ".name", festival.name)}
                   </h2>
                   <p className="mt-2 text-sm font-medium text-white/80">
-                    {festival.summary}
+                    {t("festivals." + festival.id + ".summary", festival.summary)}
                   </p>
                   <p className="mt-3 text-sm leading-relaxed text-white/60">
-                    {festival.detail}
+                    {t("festivals." + festival.id + ".detail", festival.detail)}
                   </p>
 
                   <Button
@@ -97,7 +96,10 @@ const CulturalCalendar = () => {
                     size="sm"
                     className="mt-5 border-white/20 bg-white/5 font-semibold text-white hover:bg-white/10 hover:text-white"
                   >
-                    <Link to="/explore">Read about {festival.monasteryName}</Link>
+                    <Link to="/explore">
+                      {t("calendar.readAbout", "Read about")}{" "}
+                      {t("monasteries." + festival.monasteryId + ".name", festival.monasteryName).replace(" Monastery", "").replace(" मठ", "")}
+                    </Link>
                   </Button>
                 </div>
               </motion.article>

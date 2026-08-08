@@ -11,8 +11,8 @@ i18n
     supportedLngs: ['en', 'hi', 'ne'],
     fallbackLng: 'en',
     detection: {
-      order: ['path', 'cookie', 'htmlTag', 'localStorage', 'subdomain'],
-      caches: ['cookie'],
+      order: ['localStorage', 'cookie', 'htmlTag'],
+      caches: ['localStorage', 'cookie'],
     },
     backend: {
       loadPath: '/locales/{{lng}}/translation.json',

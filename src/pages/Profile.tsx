@@ -8,8 +8,10 @@ import PageLayout from "@/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Footer from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { user, updateUser, updateUserEmail, reauthenticate, loading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -26,9 +28,9 @@ const Profile = () => {
     if (newName) {
       try {
         await updateUser({ data: { full_name: newName } });
-        toast({ title: "Success", description: "Your name has been updated." });
+        toast({ title: t("common.success", "Success"), description: t("profile.nameUpdated", "Your name has been updated.") });
       } catch (error: any) {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
       }
     }
   };
@@ -41,9 +43,9 @@ const Profile = () => {
       try {
         await reauthenticate();
         await updateUserEmail(newEmail);
-        toast({ title: "Success", description: "A confirmation email has been sent to your new email address." });
+        toast({ title: t("common.success", "Success"), description: t("profile.emailUpdateSent", "A confirmation email has been sent to your new email address.") });
       } catch (error: any) {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
       }
     }
   };
@@ -56,9 +58,9 @@ const Profile = () => {
       try {
         await reauthenticate();
         await updateUser({ password: newPassword });
-        toast({ title: "Success", description: "Your password has been updated." });
+        toast({ title: t("common.success", "Success"), description: t("profile.passwordUpdated", "Your password has been updated.") });
       } catch (error: any) {
-        toast({ title: "Error", description: error.message, variant: "destructive" });
+        toast({ title: t("common.error", "Error"), description: error.message, variant: "destructive" });
       }
     }
   };
@@ -70,40 +72,40 @@ const Profile = () => {
   return (
     <PageLayout>
     <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Profile</h1>
+      <h1 className="text-3xl font-bold mb-4">{t("profile.title", "Profile")}</h1>
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Update Name</CardTitle>
+            <CardTitle>{t("profile.updateName", "Update Name")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleNameUpdate}>
               <Input name="fullName" defaultValue={user?.user_metadata.full_name} className="mb-4" />
-              <Button type="submit">Update Name</Button>
+              <Button type="submit">{t("profile.updateName", "Update Name")}</Button>
             </form>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Update Email</CardTitle>
+            <CardTitle>{t("profile.updateEmail", "Update Email")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleEmailUpdate}>
-              <Input name="newEmail" type="email" placeholder="New Email" className="mb-4" />
-              <Input name="password" type="password" placeholder="Password" className="mb-4" />
-              <Button type="submit">Update Email</Button>
+              <Input name="newEmail" type="email" placeholder={t("profile.newEmailPlaceholder", "New Email")} className="mb-4" />
+              <Input name="password" type="password" placeholder={t("profile.passwordPlaceholder", "Password")} className="mb-4" />
+              <Button type="submit">{t("profile.updateEmail", "Update Email")}</Button>
             </form>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Update Password</CardTitle>
+            <CardTitle>{t("profile.updatePassword", "Update Password")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handlePasswordUpdate}>
-              <Input name="oldPassword" type="password" placeholder="Old Password" className="mb-4" />
-              <Input name="newPassword" type="password" placeholder="New Password" className="mb-4" />
-              <Button type="submit">Update Password</Button>
+              <Input name="oldPassword" type="password" placeholder={t("profile.oldPasswordPlaceholder", "Old Password")} className="mb-4" />
+              <Input name="newPassword" type="password" placeholder={t("profile.newPasswordPlaceholder", "New Password")} className="mb-4" />
+              <Button type="submit">{t("profile.updatePassword", "Update Password")}</Button>
             </form>
           </CardContent>
         </Card>

@@ -2,20 +2,23 @@ import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Youtube, ArrowRight 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   const quickLinks = [
-    { name: "Heritage Trails", path: "/heritage" },
-    { name: "Kora", path: "/trip-genie" },
-    { name: "Community", path: "/community" },
-    { name: "Cultural Calendar", path: "/calendar" },
-    { name: "Digital Archive", path: "/archive" },
+    { name: t("footer.heritageTrails"), path: "/heritage" },
+    { name: t("footer.kora"), path: "/trip-genie" },
+    { name: t("footer.community"), path: "/community" },
+    { name: t("footer.culturalCalendar"), path: "/calendar" },
+    { name: t("footer.digitalArchive"), path: "/archive" },
   ];
 
   const legalLinks = [
-    { name: "Privacy Policy", path: "/privacy" },
-    { name: "Terms of Service", path: "/terms" },
-    { name: "Cookie Policy", path: "/cookies" },
+    { name: t("footer.privacyPolicy"), path: "/privacy" },
+    { name: t("footer.termsOfService"), path: "/terms" },
+    { name: t("footer.cookiePolicy"), path: "/cookies" },
   ];
 
   const socialIcons = [
@@ -35,15 +38,15 @@ const Footer = () => {
               <div className="bg-gradient-to-br from-nature to-primary p-2.5 rounded-xl">
                 <MapPin className="h-6 w-6 text-white" />
               </div>
-              <span className="font-semibold text-lg">Monastery360</span>
+              <span className="font-semibold text-lg">{t("common.monastery360")}</span>
             </Link>
             <p className="text-gray-400 leading-relaxed">
-              Discover and help preserve Sikkim's centuries-old monasteries with our AI-powered digital heritage platform.
+              {t("footer.tagline")}
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-4 tracking-wide">Quick Links</h4>
+            <h4 className="font-bold text-lg mb-4 tracking-wide">{t("footer.quickLinks")}</h4>
             <ul className="space-y-3">
               {quickLinks.map(link => (
                 <li key={link.name}>
@@ -54,10 +57,10 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-4 tracking-wide">Newsletter</h4>
-            <p className="text-gray-400 mb-4">Subscribe for the latest travel inspiration and deals.</p>
+            <h4 className="font-bold text-lg mb-4 tracking-wide">{t("footer.newsletter")}</h4>
+            <p className="text-gray-400 mb-4">{t("footer.newsletterDesc")}</p>
             <div className="flex">
-              <Input type="email" placeholder="Your Email" className="bg-gray-800 border-gray-700 rounded-r-none" />
+              <Input type="email" placeholder={t("footer.emailPlaceholder")} className="bg-gray-800 border-gray-700 rounded-r-none" />
               <Button className="bg-primary rounded-l-none">
                 <ArrowRight className="h-5 w-5" />
               </Button>
@@ -65,7 +68,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-4 tracking-wide">Follow Us</h4>
+            <h4 className="font-bold text-lg mb-4 tracking-wide">{t("footer.followUs")}</h4>
             <div className="flex space-x-4">
               {socialIcons.map((social, index) => (
                 <Link key={index} to={social.path} className="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition-colors">
@@ -78,7 +81,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Monastery360. All rights reserved.
+            {t("footer.copyright", { year: new Date().getFullYear() })}
           </p>
           <div className="flex space-x-6 text-sm">
             {legalLinks.map(link => (

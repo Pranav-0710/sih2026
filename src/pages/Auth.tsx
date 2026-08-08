@@ -27,8 +27,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-sikkim.png";
+import { useTranslation } from "react-i18next";
 
 const Auth = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -102,17 +104,16 @@ const Auth = () => {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold">Monastery360</h1>
-                  <p className="text-white/90 text-lg">Sikkim</p>
+                  <p className="text-white/90 text-lg">{t("common.sikkim", "Sikkim")}</p>
                 </div>
               </div>
 
               <h2 className="text-4xl font-bold mb-4 leading-tight">
-                Discover the Soul of <br />
-                <span className="text-accent">Sikkim</span>
+                {t("auth.promoDiscoverSoul", "Discover the Soul of")} <br />
+                <span className="text-accent">{t("common.sikkimHighlight", "Sikkim")}</span>
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Step inside centuries-old monasteries, explore Himalayan
-                Buddhist heritage, and help preserve it for the next generation.
+                {t("auth.promoDesc", "Step inside centuries-old monasteries, explore Himalayan Buddhist heritage, and help preserve it for the next generation.")}
               </p>
             </motion.div>
 
@@ -126,19 +127,19 @@ const Auth = () => {
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Trees className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">4 Flagship Monasteries</span>
+                <span className="text-white/90">{t("auth.promoFlagships", "4 Flagship Monasteries")}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <Star className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">Crowdsourced Conservation</span>
+                <span className="text-white/90">{t("auth.promoConservation", "Crowdsourced Conservation")}</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-lg">
                   <MapPin className="h-5 w-5" />
                 </div>
-                <span className="text-white/90">AI-Powered Planning</span>
+                <span className="text-white/90">{t("auth.promoAI", "AI-Powered Planning")}</span>
               </div>
             </motion.div>
           </div>
@@ -166,7 +167,7 @@ const Auth = () => {
                 <h1 className="text-2xl font-bold text-foreground">
                   Monastery360
                 </h1>
-                <p className="text-muted-foreground">Sikkim</p>
+                <p className="text-muted-foreground">{t("common.sikkim", "Sikkim")}</p>
               </div>
             </motion.div>
 
@@ -178,10 +179,10 @@ const Auth = () => {
               <Card className="border-0 shadow-2xl bg-card/50 backdrop-blur-sm">
                 <CardHeader className="text-center pb-6">
                   <CardTitle className="text-3xl font-bold text-foreground mb-2">
-                    Welcome Back
+                    {t("auth.welcomeBack", "Welcome Back")}
                   </CardTitle>
                   <CardDescription className="text-lg text-muted-foreground">
-                    Sign in to explore Sikkim's monastery heritage
+                    {t("auth.welcomeSubtitle", "Sign in to explore Sikkim's monastery heritage")}
                   </CardDescription>
                 </CardHeader>
 
@@ -192,13 +193,13 @@ const Auth = () => {
                         value="signin"
                         className="text-sm font-medium"
                       >
-                        Sign In
+                        {t("auth.signIn", "Sign In")}
                       </TabsTrigger>
                       <TabsTrigger
                         value="signup"
                         className="text-sm font-medium"
                       >
-                        Sign Up
+                        {t("auth.signUp", "Sign Up")}
                       </TabsTrigger>
                     </TabsList>
 
@@ -209,7 +210,7 @@ const Auth = () => {
                             htmlFor="email"
                             className="text-sm font-medium text-foreground"
                           >
-                            Email Address
+                            {t("auth.emailAddress", "Email Address")}
                           </Label>
                           <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -230,7 +231,7 @@ const Auth = () => {
                             htmlFor="password"
                             className="text-sm font-medium text-foreground"
                           >
-                            Password
+                            {t("auth.passwordLabel", "Password")}
                           </Label>
                           <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -267,11 +268,11 @@ const Auth = () => {
                           {isLoading ? (
                             <div className="flex items-center gap-2">
                               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                              Signing in...
+                              {t("auth.signingIn", "Signing in...")}
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              Sign In
+                              {t("auth.signIn", "Sign In")}
                               <ArrowRight className="h-4 w-4" />
                             </div>
                           )}
@@ -284,7 +285,7 @@ const Auth = () => {
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
                           <span className="bg-card px-3 text-muted-foreground font-medium">
-                            Or continue with
+                            {t("auth.orContinueWith", "Or continue with")}
                           </span>
                         </div>
                       </div>
@@ -313,7 +314,7 @@ const Auth = () => {
                             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                           />
                         </svg>
-                        Sign in with Google
+                        {t("auth.signInWithGoogle", "Sign in with Google")}
                       </Button>
                     </TabsContent>
 
@@ -324,14 +325,14 @@ const Auth = () => {
                             htmlFor="fullName"
                             className="text-sm font-medium text-foreground"
                           >
-                            Full Name
+                            {t("auth.fullName", "Full Name")}
                           </Label>
                           <div className="relative">
                             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
                               id="fullName"
                               type="text"
-                              placeholder="Your full name"
+                              placeholder={t("auth.fullNamePlaceholder", "Your full name")}
                               className="pl-10 h-11 bg-background/50 border-border/50 focus:border-heritage focus:ring-heritage/20"
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
@@ -345,7 +346,7 @@ const Auth = () => {
                             htmlFor="email"
                             className="text-sm font-medium text-foreground"
                           >
-                            Email Address
+                            {t("auth.emailAddress", "Email Address")}
                           </Label>
                           <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -366,7 +367,7 @@ const Auth = () => {
                             htmlFor="password"
                             className="text-sm font-medium text-foreground"
                           >
-                            Password
+                            {t("auth.passwordLabel", "Password")}
                           </Label>
                           <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -404,11 +405,11 @@ const Auth = () => {
                           {isLoading ? (
                             <div className="flex items-center gap-2">
                               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                              Creating account...
+                              {t("auth.creatingAccount", "Creating account...")}
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              Create Account
+                              {t("auth.createAccount", "Create Account")}
                               <ArrowRight className="h-4 w-4" />
                             </div>
                           )}
@@ -421,7 +422,7 @@ const Auth = () => {
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
                           <span className="bg-card px-3 text-muted-foreground font-medium">
-                            Or continue with
+                            {t("auth.orContinueWith", "Or continue with")}
                           </span>
                         </div>
                       </div>
@@ -450,20 +451,20 @@ const Auth = () => {
                             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                           />
                         </svg>
-                        Sign up with Google
+                        {t("auth.signUpWithGoogle", "Sign up with Google")}
                       </Button>
                     </TabsContent>
                   </Tabs>
 
                   <div className="text-center pt-4">
                     <p className="text-xs text-muted-foreground">
-                      By continuing, you agree to our{" "}
+                      {t("auth.termsAgreementPrefix", "By continuing, you agree to our")}{" "}
                       <button className="text-heritage hover:underline font-medium">
-                        Terms of Service
+                        {t("auth.termsOfService", "Terms of Service")}
                       </button>{" "}
-                      and{" "}
+                      {t("common.and", "and")}{" "}
                       <button className="text-heritage hover:underline font-medium">
-                        Privacy Policy
+                        {t("auth.privacyPolicy", "Privacy Policy")}
                       </button>
                     </p>
                   </div>

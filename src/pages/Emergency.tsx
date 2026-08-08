@@ -15,54 +15,56 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import PageLayout from '@/components/PageLayout';
+import { useTranslation } from "react-i18next";
 
 const Emergency = () => {
+  const { t } = useTranslation();
   const [currentLocation, setCurrentLocation] = useState<{lat: number, lng: number} | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const { toast } = useToast();
 
   const emergencyContacts = [
     {
-      category: 'Police',
+      category: t('emergency.police', 'Police'),
       number: '100',
       icon: Shield,
       color: 'bg-blue-100 text-blue-800 border-blue-300',
-      description: 'For crime, theft, or security issues'
+      description: t('emergency.policeDesc', 'For crime, theft, or security issues')
     },
     {
-      category: 'Medical Emergency',
+      category: t('emergency.medicalEmergency', 'Medical Emergency'),
       number: '108',
       icon: Hospital,
       color: 'bg-red-100 text-red-800 border-red-300',
-      description: 'Ambulance and medical assistance'
+      description: t('emergency.medicalDesc', 'Ambulance and medical assistance')
     },
     {
-      category: 'Fire Emergency',
+      category: t('emergency.fireEmergency', 'Fire Emergency'),
       number: '101',
       icon: AlertTriangle,
       color: 'bg-orange-100 text-orange-800 border-orange-300',
-      description: 'Fire department and rescue services'
+      description: t('emergency.fireDesc', 'Fire department and rescue services')
     },
     {
-      category: 'Tourist Helpline',
+      category: t('emergency.touristHelpline', 'Tourist Helpline'),
       number: '1363',
       icon: HeadphonesIcon,
       color: 'bg-green-100 text-green-800 border-green-300',
-      description: '24/7 tourist assistance and information'
+      description: t('emergency.touristDesc', '24/7 tourist assistance and information')
     },
     {
-      category: 'Sikkim Tourism',
+      category: t('emergency.sikkimTourism', 'Sikkim Tourism'),
       number: '03592-209090',
       icon: MapPin,
       color: 'bg-purple-100 text-purple-800 border-purple-300',
-      description: 'Sikkim Tourist Information Centre, M.G. Marg, Gangtok'
+      description: t('emergency.sikkimTourismDesc', 'Sikkim Tourist Information Centre, M.G. Marg, Gangtok')
     },
     {
-      category: 'Roadside Assistance',
+      category: t('emergency.roadsideAssistance', 'Roadside Assistance'),
       number: '1073',
       icon: Car,
       color: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      description: 'Vehicle breakdown and road assistance'
+      description: t('emergency.roadsideDesc', 'Vehicle breakdown and road assistance')
     }
   ];
 
@@ -102,8 +104,8 @@ const Emergency = () => {
     
     if (!navigator.geolocation) {
       toast({
-        title: "Location not supported",
-        description: "Your browser doesn't support geolocation",
+        title: t("emergency.locationNotSupported", "Location not supported"),
+        description: t("emergency.locationNotSupportedDesc", "Your browser doesn't support geolocation"),
         variant: "destructive",
       });
       setIsGettingLocation(false);
@@ -124,16 +126,16 @@ const Emergency = () => {
         navigator.clipboard.writeText(locationText);
         
         toast({
-          title: "Location captured",
-          description: "Your coordinates have been copied to clipboard",
+          title: t("emergency.locationCaptured", "Location captured"),
+          description: t("emergency.locationCapturedDesc", "Your coordinates have been copied to clipboard"),
         });
       },
       (error) => {
         console.error('Geolocation error:', error);
         setIsGettingLocation(false);
         toast({
-          title: "Location error",
-          description: "Unable to get your location. Please enable location services.",
+          title: t("emergency.locationError", "Location error"),
+          description: t("emergency.locationErrorDesc", "Unable to get your location. Please enable location services."),
           variant: "destructive",
         });
       }
@@ -147,8 +149,8 @@ const Emergency = () => {
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      title: "Copied",
-      description: `${type} copied to clipboard`,
+      title: t("common.copied", "Copied"),
+      description: `${type} ${t("common.copied", "copied to clipboard").toLowerCase()}`,
     });
   };
 
@@ -173,10 +175,10 @@ const Emergency = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            Emergency Assistance
+            {t("emergency.title", "Emergency Assistance")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get immediate help when you need it most. Save these contacts and use location sharing for emergencies.
+            {t("emergency.subtitle", "Get immediate help when you need it most. Save these contacts and use location sharing for emergencies.")}
           </p>
         </div>
 
@@ -185,10 +187,10 @@ const Emergency = () => {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-red-800 flex items-center justify-center gap-2">
               <AlertTriangle className="h-6 w-6" />
-              Emergency SOS
+              {t("emergency.emergencySOS", "Emergency SOS")}
             </CardTitle>
             <CardDescription className="text-red-700">
-              In case of immediate emergency, call 112 (National Emergency Number)
+              {t("emergency.sosDescription", "In case of immediate emergency, call 112 (National Emergency Number)")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -199,7 +201,7 @@ const Emergency = () => {
                 className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
               >
                 <Phone className="h-5 w-5" />
-                Call 112 - Emergency
+                {t("emergency.callEmergency", "Call 112 - Emergency")}
               </Button>
               
               <Button
@@ -210,7 +212,7 @@ const Emergency = () => {
                 className="border-red-300 text-red-700 hover:bg-red-50 flex items-center gap-2"
               >
                 <NavigationIcon className="h-5 w-5" />
-                {isGettingLocation ? 'Getting Location...' : 'Share Location'}
+                {isGettingLocation ? t("emergency.gettingLocation", "Getting Location...") : t("emergency.shareLocation", "Share Location")}
               </Button>
             </div>
             
@@ -218,7 +220,7 @@ const Emergency = () => {
               <div className="bg-white p-4 rounded-lg border border-red-200">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h4 className="font-semibold text-red-800">Your Current Location:</h4>
+                    <h4 className="font-semibold text-red-800">{t("emergency.yourCurrentLocation", "Your Current Location:")}</h4>
                     <p className="text-sm text-red-700 font-mono">
                       {currentLocation.lat.toFixed(6)}, {currentLocation.lng.toFixed(6)}
                     </p>
@@ -230,7 +232,7 @@ const Emergency = () => {
                     className="border-red-300 text-red-700"
                   >
                     <Copy className="h-4 w-4 mr-2" />
-                    Share
+                    {t("common.share", "Share")}
                   </Button>
                 </div>
               </div>
@@ -241,7 +243,7 @@ const Emergency = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Emergency Contacts */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-6">Emergency Contacts</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("emergency.emergencyContacts", "Emergency Contacts")}</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {emergencyContacts.map((contact) => (
                 <Card key={contact.category} className="hover:shadow-md transition-shadow">
@@ -270,7 +272,7 @@ const Emergency = () => {
                         variant="default"
                       >
                         <Phone className="h-4 w-4 mr-2" />
-                        Call Now
+                        {t("common.callNow", "Call Now")}
                       </Button>
                       <Button
                         onClick={() => copyToClipboard(contact.number, 'Number')}
@@ -288,19 +290,19 @@ const Emergency = () => {
 
           {/* Important Locations */}
           <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold mb-6">Important Locations</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("emergency.importantLocations", "Important Locations")}</h2>
             <div className="space-y-4">
               {importantLocations.map((location, index) => (
                 <Card key={index}>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{location.name}</CardTitle>
-                    <Badge variant="secondary">{location.type}</Badge>
+                    <CardTitle className="text-base">{t("emergency.locationName." + location.name.toLowerCase().replace(/[^a-z0-9]/g, ""), location.name)}</CardTitle>
+                    <Badge variant="secondary">{t("emergency.locationType." + location.type.toLowerCase().replace(" ", ""), location.type)}</Badge>
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="text-sm space-y-1">
                       <div className="flex items-start gap-2">
                         <MapPin className="h-3 w-3 mt-1 text-primary" />
-                        <span className="text-muted-foreground">{location.address}</span>
+                        <span className="text-muted-foreground">{t("emergency.locationAddress." + location.name.toLowerCase().replace(/[^a-z0-9]/g, ""), location.address)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="h-3 w-3 text-primary" />
@@ -314,7 +316,7 @@ const Emergency = () => {
                         variant="outline"
                         className="text-xs"
                       >
-                        Call
+                        {t("common.call", "Call")}
                       </Button>
                       <Button
                         onClick={() => copyToClipboard(location.coordinates, 'Coordinates')}
@@ -322,7 +324,7 @@ const Emergency = () => {
                         variant="outline"
                         className="text-xs"
                       >
-                        Copy Location
+                        {t("common.copyLocation", "Copy Location")}
                       </Button>
                     </div>
                   </CardContent>
@@ -335,35 +337,35 @@ const Emergency = () => {
         {/* Safety Tips */}
         <Card className="mt-8">
           <CardHeader>
-            <CardTitle>Safety Tips for Travelers</CardTitle>
+            <CardTitle>{t("emergency.safetyTips", "Safety Tips for Travelers")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
               <div className="space-y-2">
-                <h4 className="font-semibold text-primary">Before Traveling</h4>
+                <h4 className="font-semibold text-primary">{t("emergency.beforeTraveling", "Before Traveling")}</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Share your itinerary with family/friends</li>
-                  <li>• Keep emergency contacts handy</li>
-                  <li>• Check weather conditions</li>
-                  <li>• Carry sufficient cash</li>
+                  <li>• {t("emergency.tip1", "Share your itinerary with family/friends")}</li>
+                  <li>• {t("emergency.tip2", "Keep emergency contacts handy")}</li>
+                  <li>• {t("emergency.tip3", "Check weather conditions")}</li>
+                  <li>• {t("emergency.tip4", "Carry sufficient cash")}</li>
                 </ul>
               </div>
               <div className="space-y-2">
-                <h4 className="font-semibold text-primary">During Emergency</h4>
+                <h4 className="font-semibold text-primary">{t("emergency.duringEmergency", "During Emergency")}</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Stay calm and assess the situation</li>
-                  <li>• Call appropriate emergency number</li>
-                  <li>• Share your exact location</li>
-                  <li>• Follow local authority instructions</li>
+                  <li>• {t("emergency.tip5", "Stay calm and assess the situation")}</li>
+                  <li>• {t("emergency.tip6", "Call appropriate emergency number")}</li>
+                  <li>• {t("emergency.tip7", "Share your exact location")}</li>
+                  <li>• {t("emergency.tip8", "Follow local authority instructions")}</li>
                 </ul>
               </div>
               <div className="space-y-2">
-                <h4 className="font-semibold text-primary">Medical Emergency</h4>
+                <h4 className="font-semibold text-primary">{t("emergency.medicalEmergencyTips", "Medical Emergency")}</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Call 108 immediately</li>
-                  <li>• Provide clear medical details</li>
-                  <li>• Keep medical documents ready</li>
-                  <li>• Note nearest hospital location</li>
+                  <li>• {t("emergency.tip9", "Call 108 immediately")}</li>
+                  <li>• {t("emergency.tip10", "Provide clear medical details")}</li>
+                  <li>• {t("emergency.tip11", "Keep medical documents ready")}</li>
+                  <li>• {t("emergency.tip12", "Note nearest hospital location")}</li>
                 </ul>
               </div>
             </div>

@@ -8,6 +8,7 @@ import PageLayout from "@/components/PageLayout";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Sections now butt directly against one another and are separated by
@@ -25,6 +26,8 @@ import { ArrowUpRight } from "lucide-react";
  * for, and it can't go unnoticed the way a slow whole-page fraction can.
  */
 const Index = () => {
+  const { t } = useTranslation();
+
   return (
     <PageLayout noTopPadding noBackground>
       <main className="overflow-x-hidden bg-transparent">
@@ -39,22 +42,22 @@ const Index = () => {
             <div className="flex items-center gap-3">
               <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
               <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
-                The Circuit
+                {t("index.theCircuit")}
               </span>
             </div>
 
             <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-foreground/10 pt-8">
               <h2 className="font-display text-4xl tracking-tight text-foreground md:text-5xl">
-                Four monasteries,
+                {t("index.fourMonasteries")}
                 <span className="block text-muted-foreground">
-                  four centuries of practice
+                  {t("index.fourCenturies")}
                 </span>
               </h2>
               <Link
                 to="/explore"
                 className="group inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
               >
-                All monasteries
+                {t("index.allMonasteries")}
                 <ArrowUpRight
                   className="h-3.5 w-3.5 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   strokeWidth={1.5}
@@ -68,8 +71,8 @@ const Index = () => {
 
             <div className="mt-24 border-t border-foreground/10 pt-16">
               <h3 className="font-display text-3xl tracking-tight text-foreground md:text-4xl">
-                Make the Most of Your Visit
-                <span className="block mt-2 text-xl font-sans text-muted-foreground">Eat. Stay. Explore. Shop.</span>
+                {t("index.makeTheMost")}
+                <span className="block mt-2 text-xl font-sans text-muted-foreground">{t("index.eatStayExploreShop")}</span>
               </h3>
               <div className="mt-10">
                 <LocalExperiencesCarousel />

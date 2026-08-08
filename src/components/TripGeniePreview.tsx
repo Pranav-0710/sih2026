@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
+import { useTranslation } from "react-i18next";
 
 /**
  * Kora preview.
@@ -11,6 +12,8 @@ import ScrollReveal from "@/components/ScrollReveal";
  * replies in prose.
  */
 const KoraPreview = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="bg-gray-900 py-24 md:py-32">
       <ScrollReveal className="container mx-auto px-6 lg:px-8">
@@ -19,29 +22,26 @@ const KoraPreview = () => {
             <div className="flex items-center gap-3">
               <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
               <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
-                AI Monastery Guide
+                {t("koraPreview.label")}
               </span>
             </div>
 
             <h2 className="mt-8 font-display text-4xl leading-[1.1] tracking-tight text-white md:text-5xl">
-              Meet Kora,
-              <span className="block text-white/55">your circuit guide</span>
+              {t("koraPreview.meetKora")}
+              <span className="block text-white/55">{t("koraPreview.yourCircuitGuide")}</span>
             </h2>
 
             <p className="mt-6 text-lg leading-relaxed text-white/60">
-              Named for the ritual circuit walked clockwise around a monastery,
-              Kora answers questions on history, lineage, festivals, etiquette,
-              and helps you discover Sikkim's rich Buddhist heritage with intelligent,
-              personalized guidance.
+              {t("koraPreview.description")}
             </p>
 
             {/* Concrete capabilities with real answers behind them, rather
                 than the previous generic "24/7 support" style claims. */}
             <dl className="mt-10 space-y-0 border-t border-white/10">
               {[
-                { term: "Grounded", detail: "Answers limited to the four monasteries — it says so when it doesn't know." },
-                { term: "Streaming", detail: "Replies arrive word by word, first token in under a second." },
-                { term: "Contextual", detail: "Remembers your budget, dates and interests across the conversation." },
+                { term: t("koraPreview.grounded"), detail: t("koraPreview.groundedDetail") },
+                { term: t("koraPreview.streaming"), detail: t("koraPreview.streamingDetail") },
+                { term: t("koraPreview.contextual"), detail: t("koraPreview.contextualDetail") },
               ].map((item) => (
                 <div
                   key={item.term}
@@ -62,7 +62,7 @@ const KoraPreview = () => {
               style={{ "--wipe": "hsl(var(--heritage))" } as React.CSSProperties}
               className="btn-wipe group mt-10 inline-flex items-center gap-3 border border-white/30 px-8 py-4 text-[13px] font-medium uppercase tracking-[0.18em] text-white hover:border-transparent hover:text-[#1a1207]"
             >
-              Chat with Kora
+              {t("koraPreview.chatWithKora")}
               <ArrowUpRight
                 className="h-4 w-4 transition-transform duration-500 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 strokeWidth={1.5}
@@ -73,33 +73,29 @@ const KoraPreview = () => {
           <div className="lg:col-span-6 lg:col-start-7">
             <div className="rounded-sm border border-white/10 bg-white/[0.03] p-6 md:p-8">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <span className="font-display text-lg text-white">Kora</span>
+                <span className="font-display text-lg text-white">{t("nav.tripGenie")}</span>
                 <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
                   <span className="h-1.5 w-1.5 rounded-full bg-heritage" />
-                  Online
+                  {t("common.online")}
                 </span>
               </div>
 
               <div className="mt-6 space-y-5 text-sm">
                 <div className="flex justify-end">
                   <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
-                    I only have 2 days and I'm starting in Gangtok — which
-                    monastery should I visit first?
+                    {t("koraPreview.mockQuestion1")}
                   </p>
                 </div>
 
                 <div className="max-w-[92%] border-l-2 border-heritage pl-4">
                   <p className="leading-relaxed text-white/75">
-                    Start with the two closest to Gangtok. Rumtek, the seat of
-                    the Karma Kagyu lineage, sits about 24&nbsp;km out across the
-                    valley. Enchey is barely 3&nbsp;km from town and is known for
-                    its masked Cham dances. Both fit comfortably into one day.
+                    {t("koraPreview.mockAnswer1")}
                   </p>
                 </div>
 
                 <div className="flex justify-end">
                   <p className="max-w-[85%] rounded-sm bg-white/10 px-4 py-3 text-white/85">
-                    Perfect, and what about day two?
+                    {t("koraPreview.mockQuestion2")}
                   </p>
                 </div>
 
@@ -108,7 +104,7 @@ const KoraPreview = () => {
                   <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.15s]" />
                   <span className="h-1 w-1 animate-bounce rounded-full bg-heritage [animation-delay:0.3s]" />
                   <span className="ml-2 text-[11px] uppercase tracking-[0.18em] text-white/40">
-                    Kora is typing
+                    {t("koraPreview.koraIsTyping")}
                   </span>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { HeroMediaCarousel } from "./HeroMediaCarousel";
 import RotatingText from "./RotatingText";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * "Sikkim" through the languages actually spoken there.
@@ -59,6 +60,7 @@ const fadeUp = {
 };
 
 const HeroSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const reduceMotion = useReducedMotion();
   const [nameIndex, setNameIndex] = useState(0);
@@ -75,6 +77,13 @@ const HeroSection = () => {
   const lineVariants = reduceMotion
     ? { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.5 } } }
     : line;
+
+  const headlineWords = [
+    t("hero.discover"),
+    t("hero.the"),
+    t("hero.soul"),
+    t("hero.of")
+  ];
 
   return (
     <section ref={ref} id="home" className="relative min-h-screen overflow-hidden">
@@ -98,9 +107,9 @@ const HeroSection = () => {
                   The pb/-mb pair stops the mask clipping descenders and the
                   italic overhang on "Sikkim". */}
               <span className="block">
-                {HEADLINE_WORDS.map((word) => (
+                {headlineWords.map((word, idx) => (
                   <span
-                    key={word}
+                    key={`${word}-${idx}`}
                     className="mr-[0.25em] inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom"
                   >
                     <motion.span variants={lineVariants} className="inline-block">
@@ -175,8 +184,7 @@ const HeroSection = () => {
               variants={fadeUp}
               className="mt-6 max-w-xl text-lg font-light leading-relaxed text-gray-200 md:text-xl"
             >
-              Step inside centuries-old monasteries, explore Himalayan Buddhist
-              heritage, and help preserve it for the next generation.
+              {t("hero.subtitle")}
             </motion.p>
           </motion.div>
         </div>

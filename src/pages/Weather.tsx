@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Sun, Cloud, CloudRain, Snowflake, Wind, Droplet, Thermometer } from 'lucide-react';
 import Navigation from '../components/Navigation';
+import { useTranslation } from "react-i18next";
 interface WeatherData {
   name: string;
   main: {
@@ -36,6 +37,7 @@ interface ForecastData {
 }
 
 const Weather: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [city, setCity] = useState<string>('');
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [forecast, setForecast] = useState<ForecastData[]>([]);
@@ -102,9 +104,9 @@ const Weather: React.FC = () => {
 
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || 'Could not fetch weather data.');
+        setError(err.response.data.message || t('weather.errorFetch', 'Could not fetch weather data.'));
       } else {
-        setError('An unexpected error occurred.');
+        setError(t('weather.errorUnexpected', 'An unexpected error occurred.'));
       }
     } finally {
       setLoading(false);
@@ -120,12 +122,12 @@ const Weather: React.FC = () => {
     <>
     <Navigation />
     <div className="container mx-auto p-4 pt-24">
-      <h1 className="text-3xl font-bold text-center mb-6">Weather Dashboard</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">{t("weather.title", "Weather Dashboard")}</h1>
 
       <div className="flex justify-center mb-6 space-x-2">
         <Input
           type="text"
-          placeholder="Enter city name"
+          placeholder={t("weather.cityPlaceholder", "Enter city name")}
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="max-w-sm"
@@ -135,10 +137,10 @@ const Weather: React.FC = () => {
             }
           }}
         />
-        <Button onClick={fetchWeather}>Get Weather</Button>
+        <Button onClick={fetchWeather}>{t("weather.getWeather", "Get Weather")}</Button>
       </div>
 
-      {loading && <p className="text-center text-lg">Loading weather data...</p>}
+      {loading && <p className="text-center text-lg">{t("weather.loading", "Loading weather data...")}</p>}
       {error && <p className="text-center text-red-500 text-lg">{error}</p>}
 
       {weather && (
@@ -151,11 +153,11 @@ const Weather: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-5xl font-bold mb-2">{Math.round(weather.main.temp)}°C</p>
-            <p className="text-xl mb-1">Feels like: {Math.round(weather.main.feels_like)}°C</p>
+            <p className="text-xl mb-1">{t("weather.feelsLike", "Feels like")}: {Math.round(weather.main.feels_like)}°C</p>
             <p className="text-lg capitalize mb-4">{weather.weather[0].description}</p>
             <div className="grid grid-cols-2 gap-2 text-md">
-              <p className="flex items-center"><Wind className="mr-2" size={20} /> Wind: {weather.wind.speed} m/s</p>
-              <p className="flex items-center"><Droplet className="mr-2" size={20} /> Humidity: {weather.main.humidity}%</p>
+              <p className="flex items-center"><Wind className="mr-2" size={20} /> {t("weather.wind", "Wind")}: {weather.wind.speed} m/s</p>
+              <p className="flex items-center"><Droplet className="mr-2" size={20} /> {t("weather.humidity", "Humidity")}: {weather.main.humidity}%</p>
             </div>
           </CardContent>
         </Card>
@@ -163,13 +165,13 @@ const Weather: React.FC = () => {
 
       {forecast.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold mb-4">5-Day Forecast</h2>
+          <h2 className="text-2xl font-bold mb-4">{t("weather.forecastTitle", "5-Day Forecast")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {forecast.map((day) => (
               <Card key={day.dt} className="text-center">
                 <CardHeader>
                   <CardTitle className="text-lg">
-                    {new Date(day.dt * 1000).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                    {new Date(day.dt * 1000).toLocaleDateString(i18n.language || 'en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center">

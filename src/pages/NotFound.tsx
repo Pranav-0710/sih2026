@@ -3,8 +3,10 @@ import { useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Compass, Home } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
+import { useTranslation } from "react-i18next";
 
 const NotFound = () => {
+  const { t } = useTranslation();
   const location = useLocation();
 
   useEffect(() => {
@@ -25,14 +27,14 @@ const NotFound = () => {
             404
           </p>
           <h1 className="mt-4 text-xl font-semibold text-white">
-            This trail doesn't lead anywhere
+            {t("notfound.heading", "This trail doesn't lead anywhere")}
           </h1>
           <p className="mx-auto mt-2 max-w-sm text-sm text-white/60">
-            The page at{" "}
+            {t("notfound.pageAt", "The page at")}{" "}
             <code className="rounded bg-white/10 px-1.5 py-0.5 text-white/80">
               {location.pathname}
             </code>{" "}
-            doesn't exist. It may have moved, or the link was mistyped.
+            {t("notfound.desc", "doesn't exist. It may have moved, or the link was mistyped.")}
           </p>
           <Button
             asChild
@@ -40,7 +42,7 @@ const NotFound = () => {
           >
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              Back to Monastery360
+              {t("notfound.backHome", "Back to Monastery360")}
             </Link>
           </Button>
         </div>

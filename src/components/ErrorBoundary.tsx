@@ -1,6 +1,7 @@
 import React from "react";
+import { withTranslation, WithTranslation } from "react-i18next";
 
-interface Props {
+interface Props extends WithTranslation {
   children: React.ReactNode;
 }
 
@@ -32,17 +33,17 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     const { error } = this.state;
+    const { t } = this.props;
     if (!error) return this.props.children;
 
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-lg">
           <h1 className="font-display text-2xl font-semibold text-foreground">
-            Something went wrong
+            {t("errorBoundary.title", "Something went wrong")}
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            This part of Monastery360 hit an unexpected error. The rest of the
-            site is still fine.
+            {t("errorBoundary.description", "This part of Monastery360 hit an unexpected error. The rest of the site is still fine.")}
           </p>
 
           {/* Surfaced in dev only — end users get the friendly message above. */}
@@ -57,13 +58,13 @@ class ErrorBoundary extends React.Component<Props, State> {
               onClick={this.handleReset}
               className="rounded-xl bg-gradient-to-r from-primary to-accent px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             >
-              Try again
+              {t("errorBoundary.reload", "Try again")}
             </button>
             <a
               href="/"
               className="rounded-xl border border-border px-5 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
             >
-              Go home
+              {t("nav.home", "Go home")}
             </a>
           </div>
         </div>
@@ -72,4 +73,4 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);

@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { archiveItems, archiveCategories, type ArchiveItem } from "@/data/archive";
+import { useTranslation } from "react-i18next";
 
 /**
  * Factual Tibetan-Buddhist synonyms, added so plain-English queries can reach
@@ -53,6 +54,7 @@ const keywordText = (item: ArchiveItem) =>
   [item.title, item.monasteryName, item.category, item.description].filter(Boolean).join(" ");
 
 const DigitalArchive = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
@@ -109,8 +111,8 @@ const DigitalArchive = () => {
       setRanking(null);
       setSemantic(false);
       toast({
-        title: "Showing keyword results",
-        description: "AI search is unavailable right now.",
+        title: t("archive.toastKeywordTitle", "Showing keyword results"),
+        description: t("archive.toastKeywordDesc", "AI search is unavailable right now."),
       });
     } finally {
       setSearching(false);
@@ -136,15 +138,14 @@ const DigitalArchive = () => {
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
               <ArchiveIcon className="h-3.5 w-3.5" />
-              Digital Archive
+              {t("archive.label", "Digital Archive")}
             </span>
             <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Murals, Shrines &{" "}
-              <span className="text-gradient-heritage">Sacred Objects</span>
+              {t("archive.titlePrefix", "Murals, Shrines &")}{" "}
+              <span className="text-gradient-heritage">{t("archive.titleHighlight", "Sacred Objects")}</span>
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-white/60">
-              {archiveItems.length} openly-licensed images of Sikkim's monastic
-              heritage, searchable by meaning rather than keywords.
+              {archiveItems.length} {t("archive.subtitle", "openly-licensed images of Sikkim's monastic heritage, searchable by meaning rather than keywords.")}
             </p>
           </div>
 
@@ -161,7 +162,7 @@ const DigitalArchive = () => {
                     setSemantic(false);
                   }}
                   onKeyDown={(e) => e.key === "Enter" && runSemanticSearch()}
-                  placeholder="Try: cylinders devotees spin for merit"
+                  placeholder={t("archive.searchPlaceholder", "Try: cylinders devotees spin for merit")}
                   className="border-white/15 bg-white/5 pl-9 pr-9 text-white placeholder:text-white/40 focus-visible:ring-heritage/40"
                 />
                 {query && (
@@ -184,14 +185,14 @@ const DigitalArchive = () => {
                 ) : (
                   <Sparkles className="h-4 w-4" />
                 )}
-                <span className="ml-2 hidden sm:inline">AI Search</span>
+                <span className="ml-2 hidden sm:inline">{t("archive.aiSearch", "AI Search")}</span>
               </Button>
             </div>
 
             {semantic && (
               <p className="mt-2 flex items-center gap-1.5 text-xs text-heritage">
                 <Sparkles className="h-3 w-3" />
-                Ranked by meaning — results need not contain your words.
+                {t("archive.rankedByMeaning", "Ranked by meaning — results need not contain your words.")}
               </p>
             )}
           </div>
@@ -209,7 +210,7 @@ const DigitalArchive = () => {
                     : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
                 )}
               >
-                {cat}
+                {t("archive.category." + cat.toLowerCase().replace(/[^a-z0-9]/g, ""), cat)}
               </button>
             ))}
           </div>
@@ -217,59 +218,62 @@ const DigitalArchive = () => {
           {/* Results */}
           {visible.length === 0 ? (
             <p className="text-center text-sm text-white/50">
-              Nothing matched. Try a broader description.
+              {t("archive.noResults", "Nothing matched. Try a broader description.")}
             </p>
           ) : (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {visible.map((item, index) => (
-                <motion.a
-                  key={item.id}
-                  href={item.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: Math.min(index, 8) * 0.03 }}
-                  className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-white/25"
-                >
-                  <div className="relative">
-                    <ProgressiveImage
-                      src={item.image}
-                      alt={item.title}
-                      wrapperClassName="aspect-[4/3]"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
-                      {item.category}
-                    </span>
-                    {ranking && (
-                      <span className="absolute right-3 top-3 rounded-full bg-heritage/90 px-2 py-1 text-[10px] font-semibold text-black">
-                        {Math.round((ranking[item.id] ?? 0) * 100)}%
+              {visible.map((item, index) => {
+                const catKey = item.category.toLowerCase().replace(/[^a-z0-9]/g, "");
+                return (
+                  <motion.a
+                    key={item.id}
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: Math.min(index, 8) * 0.03 }}
+                    className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-white/25"
+                  >
+                    <div className="relative">
+                      <ProgressiveImage
+                        src={item.image}
+                        alt={item.title}
+                        wrapperClassName="aspect-[4/3]"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
+                        {t("archive.category." + catKey, item.category)}
                       </span>
-                    )}
-                  </div>
+                      {ranking && (
+                        <span className="absolute right-3 top-3 rounded-full bg-heritage/90 px-2 py-1 text-[10px] font-semibold text-black">
+                          {Math.round((ranking[item.id] ?? 0) * 100)}%
+                        </span>
+                      )}
+                    </div>
 
-                  <div className="p-4">
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 text-xs text-white/50">{item.monasteryName}</p>
+                    <div className="p-4">
+                      <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 text-xs text-white/50">
+                        {t("monasteries." + item.monasteryId + ".name", item.monasteryName)}
+                      </p>
 
-                    {/* CC BY / CC BY-SA both require visible attribution. */}
-                    <p className="mt-3 border-t border-white/10 pt-2 text-[10px] leading-relaxed text-white/40">
-                      {item.author} · {item.license}
-                      <ExternalLink className="ml-1 inline h-2.5 w-2.5" />
-                    </p>
-                  </div>
-                </motion.a>
-              ))}
+                      {/* CC BY / CC BY-SA both require visible attribution. */}
+                      <p className="mt-3 border-t border-white/10 pt-2 text-[10px] leading-relaxed text-white/40">
+                        {item.author} · {item.license}
+                        <ExternalLink className="ml-1 inline h-2.5 w-2.5" />
+                      </p>
+                    </div>
+                  </motion.a>
+                );
+              })}
             </div>
           )}
 
           <p className="mx-auto mt-14 max-w-2xl text-center text-xs leading-relaxed text-white/35">
-            All images are sourced from Wikimedia Commons under Creative Commons
-            licences and remain the copyright of their photographers. Each entry
-            links to its source page for full licence terms.
+            {t("archive.copyrightDisclaimer", "All images are sourced from Wikimedia Commons under Creative Commons licences and remain the copyright of their photographers. Each entry links to its source page for full licence terms.")}
           </p>
         </div>
       </div>
