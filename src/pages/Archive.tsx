@@ -134,15 +134,15 @@ const DigitalArchive = () => {
         <div className="relative z-10 container mx-auto px-4 pt-28 pb-24">
           {/* Header */}
           <div className="mx-auto mb-10 max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/70 backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground backdrop-blur">
               <ArchiveIcon className="h-3.5 w-3.5" />
               Digital Archive
             </span>
-            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+            <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
               Murals, Shrines &{" "}
               <span className="text-gradient-heritage">Sacred Objects</span>
             </h1>
-            <p className="mt-4 text-lg leading-relaxed text-white/60">
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {archiveItems.length} openly-licensed images of Sikkim's monastic
               heritage, searchable by meaning rather than keywords.
             </p>
@@ -152,7 +152,7 @@ const DigitalArchive = () => {
           <div className="mx-auto mb-6 max-w-2xl">
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={query}
                   onChange={(e) => {
@@ -162,13 +162,13 @@ const DigitalArchive = () => {
                   }}
                   onKeyDown={(e) => e.key === "Enter" && runSemanticSearch()}
                   placeholder="Try: cylinders devotees spin for merit"
-                  className="border-white/15 bg-white/5 pl-9 pr-9 text-white placeholder:text-white/40 focus-visible:ring-heritage/40"
+                  className="border-border bg-card pl-9 pr-9 text-foreground placeholder:text-muted-foreground focus-visible:ring-heritage/40"
                 />
                 {query && (
                   <button
                     onClick={clearSearch}
                     aria-label="Clear search"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -177,7 +177,7 @@ const DigitalArchive = () => {
               <Button
                 onClick={runSemanticSearch}
                 disabled={searching || !query.trim()}
-                className="bg-gradient-to-r from-primary to-accent font-semibold text-white hover:opacity-90"
+                className="bg-gradient-to-r from-primary to-accent font-semibold text-foreground hover:opacity-90"
               >
                 {searching ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -206,7 +206,7 @@ const DigitalArchive = () => {
                   "rounded-full px-3.5 py-1.5 text-xs font-medium transition-all",
                   category === cat
                     ? "bg-heritage text-black"
-                    : "border border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                    : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 {cat}
@@ -216,7 +216,7 @@ const DigitalArchive = () => {
 
           {/* Results */}
           {visible.length === 0 ? (
-            <p className="text-center text-sm text-white/50">
+            <p className="text-center text-sm text-muted-foreground">
               Nothing matched. Try a broader description.
             </p>
           ) : (
@@ -230,7 +230,7 @@ const DigitalArchive = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: Math.min(index, 8) * 0.03 }}
-                  className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-white/25"
+                  className="group overflow-hidden rounded-2xl border border-border bg-card backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-foreground/30"
                 >
                   <div className="relative">
                     <ProgressiveImage
@@ -250,13 +250,13 @@ const DigitalArchive = () => {
                   </div>
 
                   <div className="p-4">
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground">
                       {item.title}
                     </h3>
-                    <p className="mt-1 text-xs text-white/50">{item.monasteryName}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{item.monasteryName}</p>
 
                     {/* CC BY / CC BY-SA both require visible attribution. */}
-                    <p className="mt-3 border-t border-white/10 pt-2 text-[10px] leading-relaxed text-white/40">
+                    <p className="mt-3 border-t border-border pt-2 text-[10px] leading-relaxed text-muted-foreground">
                       {item.author} · {item.license}
                       <ExternalLink className="ml-1 inline h-2.5 w-2.5" />
                     </p>
@@ -266,7 +266,7 @@ const DigitalArchive = () => {
             </div>
           )}
 
-          <p className="mx-auto mt-14 max-w-2xl text-center text-xs leading-relaxed text-white/35">
+          <p className="mx-auto mt-14 max-w-2xl text-center text-xs leading-relaxed text-muted-foreground">
             All images are sourced from Wikimedia Commons under Creative Commons
             licences and remain the copyright of their photographers. Each entry
             links to its source page for full licence terms.
