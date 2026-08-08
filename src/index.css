@@ -47,9 +47,13 @@
     --accent: 22 78% 46%;
     --accent-foreground: 40 40% 96%;
 
-    /* Butter-lamp gold. Darkened from the old 55% so it is actually
-       legible as text on parchment instead of glowing illegibly. */
-    --heritage: 36 78% 38%;
+    /* Butter-lamp gold, light theme.
+       Measured, not eyeballed: at 38% this rendered the small uppercase
+       eyebrow labels at 3.83:1 on the card surface — below the 4.5:1 WCAG
+       AA floor for text that size. 32% gives 5.09:1 both as text on card
+       AND as a button background under the near-white foreground below.
+       (Dark mode measured separately — see the .dark block.) */
+    --heritage: 36 78% 32%;
     --heritage-foreground: 40 40% 96%;
 
     --nature: 145 40% 30%;
@@ -70,6 +74,16 @@
     /* Near-square. Soft 12px corners on everything is a strong tell of a
        generated layout; architecture here is rectilinear. */
     --radius: 0.125rem;
+
+    /*
+     * Ink — the one warm near-black used by surfaces that are dark in BOTH
+     * themes (footer, the Kora panel, fullscreen viewers, 404). Those were
+     * previously a mix of #0a0e1a (a blue-black) and Tailwind's bg-gray-900
+     * (a cool grey), neither of which matches this palette — which is why
+     * pages visibly failed to look like the same site. Fixed, not themed:
+     * these surfaces stay dark when the rest of the page goes parchment.
+     */
+    --ink: 20 30% 6%;
 
     /* Prayer flags — fixed across themes, canonical order */
     --flag-blue: 205 65% 42%;

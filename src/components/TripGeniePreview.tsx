@@ -15,7 +15,7 @@ const KoraPreview = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-gray-900 py-24 md:py-32">
+    <section className="bg-ink py-24 md:py-32">
       <ScrollReveal className="container mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
           <div className="lg:col-span-5">

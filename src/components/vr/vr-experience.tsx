@@ -5,7 +5,7 @@ import { TriviaQuiz } from "./trivia-quiz"
 import { StoryMode } from "./story-mode"
 import { locations } from "@/data/monasteries"
 import { getStory } from "@/data/stories"
-import ScrollReveal from "@/components/ScrollReveal"
+import { StackedCards, StackCard } from "@/components/StackedCards"
 
 /**
  * Virtual experience index.
@@ -77,8 +77,8 @@ export function VRExperience() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-20 md:py-28">
-      <ScrollReveal className="container mx-auto px-6 lg:px-8">
+    <div className="min-h-screen bg-background pb-10 pt-24 md:pt-28">
+      <div className="container mx-auto px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <span className="prayer-flags prayer-flags-lg" aria-hidden><span /><span /><span /><span /><span /></span>
           <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-heritage">
@@ -87,95 +87,113 @@ export function VRExperience() {
         </div>
 
         <div className="mt-8 grid gap-8 border-t border-foreground/10 pt-8 md:grid-cols-12">
-          <h1 className="font-display text-4xl tracking-tight text-foreground md:col-span-7 md:text-5xl">
-            Step inside four monasteries
+          <h1 className="font-display text-5xl leading-[1.05] tracking-tight text-foreground md:col-span-7 md:text-7xl">
+            Step inside
+            <span className="block text-muted-foreground">four monasteries</span>
           </h1>
-          <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-2">
-            Take a narrated story tour through each monastery's history, explore
-            the photography up close, or test what you remember afterwards.
+          <p className="text-base leading-relaxed text-muted-foreground md:col-span-5 md:pt-3">
+            Take a narrated story tour through each monastery's history, look
+            around in 360°, or test what you remember afterwards.
           </p>
         </div>
+      </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
+      <div className="container mx-auto mt-16 px-6 lg:px-8">
+        <StackedCards>
           {locations.map((location, i) => {
             const story = getStory(location.id)
             const score = scores[location.id]
 
             return (
-              <article key={location.id} className="group">
-                <button
-                  type="button"
-                  onClick={() => story && setStoryLocationId(location.id)}
-                  className="relative block w-full overflow-hidden rounded-sm text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                  aria-label={`Begin the story tour of ${location.name}`}
-                >
-                  <div className="relative aspect-[3/2] overflow-hidden">
-                    <img
-                      src={location.image}
-                      alt={location.name}
-                      className="h-full w-full object-cover transition-transform [transition-duration:1400ms] ease-out group-hover:scale-[1.05]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+              <StackCard key={location.id} index={i}>
+                <article className="lamp-edge relative h-[74vh] min-h-[30rem] overflow-hidden rounded-sm border border-foreground/10 bg-card">
+                  <img
+                    src={location.image}
+                    alt={location.name}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  {/* Same explicit-stop scrim as /explore — see the note
+                      there on why Tailwind's three-stop gradient wasn't
+                      enough over the brighter photographs. */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(8,6,5,0.97) 0%, rgba(8,6,5,0.90) 30%, rgba(8,6,5,0.62) 55%, rgba(8,6,5,0.20) 100%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(8,6,5,0.85) 0%, rgba(8,6,5,0.15) 45%, rgba(8,6,5,0.55) 100%)",
+                    }}
+                  />
 
-                    <span className="absolute left-4 top-4 font-mono text-[11px] tabular-nums tracking-widest text-white/70">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-
-                    {score !== undefined && (
-                      <span className="absolute right-4 top-4 border border-white/30 px-2.5 py-1 font-mono text-[10px] tabular-nums tracking-widest text-white/85">
-                        {score} PTS
+                  <div className="relative flex h-full flex-col justify-between p-7 md:p-12">
+                    <div className="flex items-start justify-between">
+                      <span className="prayer-flags prayer-flags-lg" aria-hidden>
+                        <span /><span /><span /><span /><span />
                       </span>
-                    )}
+                      <div className="flex items-center gap-3">
+                        {score !== undefined && (
+                          <span className="border border-heritage/50 px-2.5 py-1 font-mono text-[10px] tabular-nums tracking-widest text-heritage">
+                            {score} PTS
+                          </span>
+                        )}
+                        <span className="font-mono text-[11px] tabular-nums tracking-widest text-white/55">
+                          {String(i + 1).padStart(2, "0")} / {String(locations.length).padStart(2, "0")}
+                        </span>
+                      </div>
+                    </div>
 
-                    <div className="absolute inset-x-4 bottom-4">
-                      <h2 className="font-display text-2xl leading-none text-white md:text-3xl">
-                        {location.name}
-                      </h2>
-                      <span className="mt-3 block h-px w-8 bg-heritage transition-all duration-500 ease-out group-hover:w-16" />
-                      <p className="mt-3 text-[11px] uppercase tracking-[0.2em] text-white/65">
+                    <div className="max-w-2xl">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-heritage">
                         {location.type}
                       </p>
+                      <h2 className="mt-3 font-display text-4xl leading-[1.02] tracking-tight text-white md:text-6xl">
+                        {location.name.replace(" Monastery", "")}
+                      </h2>
+                      <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 md:text-base">
+                        {location.description}
+                      </p>
+
+                      {/* Three explicit ways in, rather than one ambiguous CTA. */}
+                      <div className="mt-8 grid max-w-xl grid-cols-3 border-t border-white/15">
+                        <EntryAction
+                          icon={BookOpen}
+                          label="Story"
+                          detail={story ? `${story.chapters.length} chapters` : "Coming soon"}
+                          disabled={!story}
+                          onClick={() => story && setStoryLocationId(location.id)}
+                        />
+                        <EntryAction
+                          icon={Compass}
+                          label="360° view"
+                          detail={`${location.hotspots?.length ?? 0} hotspots`}
+                          onClick={() => {
+                            setCurrentLocation(location.id)
+                            setAudioEnabled(true)
+                          }}
+                        />
+                        <EntryAction
+                          icon={HelpCircle}
+                          label="Quiz"
+                          detail={`${location.educationalContent?.quiz.length ?? 0} questions`}
+                          onClick={() => {
+                            setCurrentLocation(location.id)
+                            setShowTriviaQuiz(true)
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </button>
-
-                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-                  {location.description}
-                </p>
-
-                {/* Three explicit ways in, rather than one ambiguous CTA. */}
-                <div className="mt-5 grid grid-cols-3 border-t border-foreground/10">
-                  <EntryAction
-                    icon={BookOpen}
-                    label="Story"
-                    detail={story ? `${story.chapters.length} chapters` : "Coming soon"}
-                    disabled={!story}
-                    onClick={() => story && setStoryLocationId(location.id)}
-                  />
-                  <EntryAction
-                    icon={Compass}
-                    label="Explore"
-                    detail={`${location.hotspots?.length ?? 0} hotspots`}
-                    onClick={() => {
-                      setCurrentLocation(location.id)
-                      setAudioEnabled(true)
-                    }}
-                  />
-                  <EntryAction
-                    icon={HelpCircle}
-                    label="Quiz"
-                    detail={`${location.educationalContent?.quiz.length ?? 0} questions`}
-                    onClick={() => {
-                      setCurrentLocation(location.id)
-                      setShowTriviaQuiz(true)
-                    }}
-                  />
-                </div>
-              </article>
+                </article>
+              </StackCard>
             )
           })}
-        </div>
-      </ScrollReveal>
+        </StackedCards>
+      </div>
     </div>
   )
 }
@@ -193,24 +211,27 @@ const EntryAction = ({
   onClick: () => void
   disabled?: boolean
 }) => (
+  // These now sit on dark photography rather than the page background, so
+  // they use fixed white-alpha tones instead of foreground/muted tokens —
+  // the tokens flip with the theme and would go dark-on-dark in light mode.
   <button
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className="group/action flex flex-col items-start gap-1 border-r border-foreground/10 py-4 pr-4 text-left last:border-r-0 disabled:cursor-not-allowed disabled:opacity-40"
+    className="group/action flex flex-col items-start gap-1 border-r border-white/15 py-4 pr-4 text-left transition-colors last:border-r-0 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-40"
   >
     <span className="flex items-center gap-2">
-      <Icon className="h-3.5 w-3.5 text-foreground/60" strokeWidth={1.5} />
-      <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground">
+      <Icon className="h-3.5 w-3.5 text-heritage" strokeWidth={1.5} />
+      <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-white">
         {label}
       </span>
       {!disabled && (
         <ArrowUpRight
-          className="h-3 w-3 text-foreground/40 transition-transform duration-500 ease-out group-hover/action:-translate-y-0.5 group-hover/action:translate-x-0.5"
+          className="h-3 w-3 text-white/45 transition-transform duration-500 ease-out group-hover/action:-translate-y-0.5 group-hover/action:translate-x-0.5"
           strokeWidth={1.5}
         />
       )}
     </span>
-    <span className="text-[11px] text-muted-foreground">{detail}</span>
+    <span className="text-[11px] text-white/55">{detail}</span>
   </button>
 )

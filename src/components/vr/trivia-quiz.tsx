@@ -254,7 +254,7 @@ export function TriviaQuiz({ isVisible, onClose, locationId, locationName, onCom
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center">
-      <Card className="w-full max-w-2xl bg-gray-900 border-gray-700 text-white">
+      <Card className="w-full max-w-2xl bg-ink border-gray-700 text-white">
         <CardContent className="p-0">
           {/* Header */}
           <div className="p-6 bg-gray-800 border-b border-gray-700">

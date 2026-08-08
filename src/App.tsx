@@ -52,7 +52,13 @@ const App = () => (
             not merely a supported alternative, so it is the default rather
             than deferring to the OS. The toggle still works, and light mode
             is a warm parchment rather than white. */}
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme" attribute="class" enableSystem={false}>
+        {/* storageKey deliberately bumped from "vite-ui-theme". next-themes
+            treats a stored value as authoritative over defaultTheme, so
+            anyone who had loaded the site before kept their old light/system
+            preference and never saw the dark art direction — the page still
+            came up off-white for them. A new key retires those stale values
+            once; the toggle then persists under the new key as normal. */}
+        <ThemeProvider defaultTheme="dark" storageKey="monastery360-theme" attribute="class" enableSystem={false}>
           <TooltipProvider>
             <Toaster />
             <Sonner />
