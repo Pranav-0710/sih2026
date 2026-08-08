@@ -156,7 +156,7 @@ export const Heritage: React.FC = () => {
 
   return (
     <PageLayout noTopPadding noBackground>
-      <div className="relative min-h-screen overflow-hidden bg-[#0a0e1a]">
+      <div className="relative min-h-screen overflow-hidden bg-background">
         {/* Ambient light — keeps the dark canvas from reading as empty space */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-40 left-1/4 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />

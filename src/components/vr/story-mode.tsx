@@ -144,7 +144,7 @@ export function StoryMode({ story, image, monasteryName, onClose }: StoryModePro
     // z-60 sits above the app's floating SOS / report-condition buttons,
     // which are fixed at z-50. At equal z-index they win on DOM order and
     // land on top of this overlay's own controls in the bottom-right.
-    <div className="fixed inset-0 z-[60] flex flex-col bg-[#0b0908]">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-ink">
       {/* Ken Burns image. The drift targets the chapter's focal point so the
           camera settles on whatever the narration is describing. */}
       <div className="absolute inset-0 overflow-hidden">
@@ -168,7 +168,13 @@ export function StoryMode({ story, image, monasteryName, onClose }: StoryModePro
             }}
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0908] via-[#0b0908]/70 to-[#0b0908]/40" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(0deg, hsl(var(--ink)) 0%, hsl(var(--ink) / 0.72) 45%, hsl(var(--ink) / 0.42) 100%)",
+          }}
+        />
       </div>
 
       {/* Chapter progress, one segment per chapter */}

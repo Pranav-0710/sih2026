@@ -13,7 +13,7 @@ const NotFound = () => {
 
   return (
     <PageLayout noTopPadding noBackground>
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0a0e1a] px-4">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -top-40 left-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-primary/25 blur-[130px]" />
           <div className="absolute bottom-0 right-0 h-[26rem] w-[26rem] translate-x-1/3 rounded-full bg-heritage/15 blur-[130px]" />

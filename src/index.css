@@ -71,6 +71,16 @@
        generated layout; architecture here is rectilinear. */
     --radius: 0.125rem;
 
+    /*
+     * Ink — the one warm near-black used by surfaces that are dark in BOTH
+     * themes (footer, the Kora panel, fullscreen viewers, 404). Those were
+     * previously a mix of #0a0e1a (a blue-black) and Tailwind's bg-gray-900
+     * (a cool grey), neither of which matches this palette — which is why
+     * pages visibly failed to look like the same site. Fixed, not themed:
+     * these surfaces stay dark when the rest of the page goes parchment.
+     */
+    --ink: 20 30% 6%;
+
     /* Prayer flags — fixed across themes, canonical order */
     --flag-blue: 205 65% 42%;
     --flag-white: 40 30% 88%;

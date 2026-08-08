@@ -50,6 +50,8 @@ export default {
           DEFAULT: "hsl(var(--heritage))",
           foreground: "hsl(var(--heritage-foreground))",
         },
+        /* Warm near-black for surfaces that stay dark in both themes. */
+        ink: "hsl(var(--ink))",
         nature: {
           DEFAULT: "hsl(var(--nature))",
           foreground: "hsl(var(--nature-foreground))",
